@@ -1,0 +1,29 @@
+{
+  "name": "pipeliner",
+  "version": "0.1.0",
+  "description": "A simple client to call agents from Everest and Other Tools to deliver workflow AI calls",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/humansinstitute/everest-pipeliner.git"
+  },
+  "keywords": [
+    "everest",
+    "ai",
+    "bitcoin",
+    "workflows",
+    "agents"
+  ],
+  "author": "pw21",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/humansinstitute/everest-pipeliner/issues"
+  },
+  "homepage": "https://github.com/humansinstitute/everest-pipeliner#readme"
+}
