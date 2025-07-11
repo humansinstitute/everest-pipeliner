@@ -3,11 +3,15 @@
   "version": "0.1.0",
   "description": "A simple client to call agents from Everest and Other Tools to deliver workflow AI calls",
   "main": "index.js",
+  "type": "module",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
     "test": "npm test"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
   },
   "repository": {
     "type": "git",

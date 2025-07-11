@@ -1,16 +1,46 @@
-Plannning:
+Product Metadata:
+Name: Everest/Pipeliner
+Description: Pipeliner will be a terminal first product that allows us to run specific workflow pipelines using everest agents.
+
+Document Review:
+
+- Product planning, requirements and architecture reviews are conducted outside of the repoistory and can be accessed via the Obsidian MCP
+- Always review the product level documentation and feature level specifics for the feature we are currently working on
+- If the feature is not clear in the initial prompt ask for feedback
+- If a feature is spliut into phases always pay close attention to the in / out of scope and only implement what you are currently being tasked with for this feature, otherwise you wil confuse and break code from other members of the team.
+- Product Docuemntation in Obsidian is structured as follows:
+
+```
+product/
+	- vision.md // describe the mission, vision, values of the product
+	- architecture.md // stack, architecture patterns and frameworks
+	user_guides/
+		- a_feature.md // The state of installed features and how to use it and how to integrate it
+	integrations/
+		- everest_ref.md // An example to include a reference from alternative projects explaining how the integration works.
+feature/
+// WIP space to develop and plan out new features. Include in folder current state, ref number and feature. Each feature can have multiple phase imlementation or multiple features may build upon each other
+	/(active)_001_sendViaNostr
+		- prd_sendViaNostr.md
+		-
+		- phasingPlan_sendViaNostr.md
+	/(backlog)_002_
+	/(complete)_003_ -
+```
+
+Planning:
 
 - Always attempt to generate a plan prior to implementation.
-- Plans should be staged with human testable outputs at each stage
-- Follow test driven developement patterns and iuse the firt stage to genreate unit tests (these qwill be expected to fail)
-- Unit test should use JEST
+- Plans should be staged with human testable outputs and you should stop and ask me to check
+- Follow test driven developement patterns and use the firt stage to genreate unit tests (these will be expected to fail)
+- Unit test should use JEST and have a centrally integrated test suite with parallel test execution, dont create random files.
 - Always review files as needed in plan mode to improve your plan, don't leave this to the act phase
 - When planning your tasks always start with back end first the process should be "Data models > CRUD data management > Logic and processing > UI"
 - To facilitate testing, consider mocks and hooks that can facilitate a human check at each stage and then remove in the following step once confirmed.
 - Each stage in a plan should include the test plan for the human manager to execute.
-- A stage should focus on making one change at a time.
+- A stage should focus on making one change at a time think og this as a simple PR that can be tested and merged before continuing.
 - Confirmation and checking for mistakes as you go is critical to high momentum software development, don't skip this.
-- The final plan prior to implementation should be a detailed and verbose plan with relevant code / psudo code examnples that a junior develper could follow.
+- The final plan prior to implementation should be a detailed and verbose plan with relevant code / psudo code examples that a junior develper could follow.
 
 Act:
 
@@ -23,8 +53,8 @@ Act:
 
 DevOps:
 
-- The project uses PM2 to manage services, start, end, restart loggin etc.
-- When testing the prohect it is already likely running locally using PM2
+- The project uses PM2 to manage services, start, end, restart logging etc.
+- When testing the project it is already likely running locally using PM2
 - Project can be fully setup with PM2 restart ecosystem.config.cjs
 - PM2 is always run from the root of the project direcory and uses the root as the working directory of the project.
 
