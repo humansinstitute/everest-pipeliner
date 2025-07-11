@@ -8,10 +8,22 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "npm test"
+    "start": "node index.js",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "test:watch": "npm test -- --watch",
+    "test:coverage": "npm test -- --coverage",
+    "dev": "node --watch index.js",
+    "pipeline:simple": "node src/pipelines/simpleChatPipeline.js",
+    "pipeline:test": "node -e \"import('./src/pipelines/simpleChatPipeline.js').then(m => m.simpleChatPipeline().then(console.log))\""
   },
   "dependencies": {
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "node-fetch": "^3.3.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "@jest/globals": "^29.7.0"
   },
   "repository": {
     "type": "git",
