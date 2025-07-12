@@ -10,6 +10,7 @@ output/
 # Ignore Docs folders
 docs/
 
+.DS_Store
 # Gateways
 # Ignore WhatsApp Web related folders
 *.wwebjs*
