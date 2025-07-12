@@ -1,5 +1,9 @@
 import fetch from "node-fetch";
+import dotenv from "dotenv";
 import { addStepResult } from "../utils/pipelineData.js";
+
+// Load environment variables
+dotenv.config();
 
 /**
  * Calls the Everest agent API with pipeline integration
@@ -10,17 +14,14 @@ import { addStepResult } from "../utils/pipelineData.js";
  * @returns {Promise<Object>} - The response from the Everest API or error object
  */
 async function callEverest(agentConfig, pipelineData, stepId, fetchFn = fetch) {
-  const baseUrl =
-    process.env.EVEREST_API_BASE || "https://api.everest.example.com";
-  const apiKey = process.env.EVEREST_API || "demo-api-key";
+  const baseUrl = process.env.EVEREST_API_BASE;
+  const apiKey = process.env.EVEREST_API;
 
   // Check if environment variables are properly configured
-  if (!process.env.EVEREST_API_BASE || !process.env.EVEREST_API) {
-    console.warn(
-      `[Everest Service] Warning: Environment variables not configured. Using demo values.`
-    );
-    console.warn(`[Everest Service] EVEREST_API_BASE: ${baseUrl}`);
-    console.warn(`[Everest Service] EVEREST_API: ${apiKey.substring(0, 8)}...`);
+  if (!baseUrl || !apiKey) {
+    const errorMessage = `[Everest Service] Error: Required environment variables not configured. Please set EVEREST_API_BASE and EVEREST_API in your .env file.`;
+    console.error(errorMessage);
+    throw new Error(errorMessage);
   }
 
   const url = `${baseUrl.replace(/\/$/, "")}/v2/agent`;
