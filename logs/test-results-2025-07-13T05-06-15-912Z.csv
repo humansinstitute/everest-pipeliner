@@ -1,0 +1,13 @@
+timestamp,suite_name,status,duration_seconds,memory_peak_mb,test_cases_total,test_cases_passed,test_cases_failed,exit_code
+2025-07-13T05:06:15.891Z,"Main Integration Tests",PASSED,155.17,4.36,114,105,3,0
+2025-07-13T05:06:15.891Z,"Phase 2 File Input Tests",PASSED,0.18,0.00,13,11,2,0
+2025-07-13T05:06:15.891Z,"Pipeline Cost Tracking Tests",PASSED,0.16,0.00,17,15,2,0
+
+# Summary Metrics
+metric,value
+total_execution_time,155.17
+sequential_time_estimate,155.51
+efficiency_factor,1
+memory_peak_mb,4.36
+cpu_efficiency_percent,33.4
+parallel_processes,3

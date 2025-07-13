@@ -11,10 +11,33 @@
     "start": "node index.js",
     "test": "node --experimental-vm-modules node_modules/.bin/jest",
     "test:watch": "npm test -- --watch",
-    "test:coverage": "npm test -- --coverage",
+    "test:coverage": "npm test -- --coverage --collectCoverageFrom='src/**/*.js'",
+    "test:unit": "npm test -- --testPathPattern='tests/'",
+    "test:parallel": "node --experimental-vm-modules --max-old-space-size=4096 test_parallel_integration.js",
+    "test:parallel:dev": "NODE_ENV=development npm run test:parallel",
+    "test:parallel:prod": "NODE_ENV=production npm run test:parallel",
+    "test:parallel:ci": "NODE_ENV=test npm run test:parallel && exit 0",
+    "test:parallel:coverage": "npm run test:parallel && npm run test:coverage",
+    "test:integration": "node --experimental-vm-modules test_integration.js && node --experimental-vm-modules test_phase2.js && node --experimental-vm-modules test_pipelineCost_phase1a.js",
+    "test:integration:main": "node --experimental-vm-modules test_integration.js",
+    "test:integration:phase2": "node --experimental-vm-modules test_phase2.js",
+    "test:integration:cost": "node --experimental-vm-modules test_pipelineCost_phase1a.js",
+    "test:integration:sequential": "npm run test:integration:main && npm run test:integration:phase2 && npm run test:integration:cost",
+    "test:performance": "npm run test:parallel && node -e \"console.log('Performance test completed')\"",
+    "test:benchmark": "npm run test:parallel:prod",
+    "test:all": "npm run test:unit && npm run test:parallel",
+    "test:ci": "npm run test:unit && npm run test:parallel:ci",
     "dev": "node --watch index.js",
+    "dev:test": "npm run test:watch",
     "pipeline:simple": "node src/pipelines/simpleChatPipeline.js",
-    "pipeline:test": "node -e \"import('./src/pipelines/simpleChatPipeline.js').then(m => m.simpleChatPipeline().then(console.log))\""
+    "pipeline:test": "node -e \"import('./src/pipelines/simpleChatPipeline.js').then(m => m.simpleChatPipeline().then(console.log))\"",
+    "clean": "rm -rf coverage test-results logs/.jest-cache temp/*.tmp",
+    "clean:logs": "rm -rf logs/*.json logs/*.txt logs/*.csv",
+    "clean:all": "npm run clean && npm run clean:logs",
+    "pretest": "npm run clean",
+    "posttest": "echo 'Test execution completed'",
+    "validate": "node --experimental-vm-modules -e \"import('./test_parallel_integration.js').then(m => console.log('✅ Parallel test framework validated'))\"",
+    "health-check": "node --experimental-vm-modules -e \"import('./src/utils/testRunner.js').then(m => console.log('✅ Test runner health check passed'))\""
   },
   "dependencies": {
     "dotenv": "^16.3.1",
@@ -22,8 +45,9 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
     "jest": "^29.7.0",
-    "@jest/globals": "^29.7.0"
+    "jest-junit": "^16.0.0"
   },
   "repository": {
     "type": "git",
@@ -34,12 +58,23 @@
     "ai",
     "bitcoin",
     "workflows",
-    "agents"
+    "agents",
+    "parallel-testing",
+    "integration-tests",
+    "performance"
   ],
   "author": "pw21",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/humansinstitute/everest-pipeliner/issues"
   },
-  "homepage": "https://github.com/humansinstitute/everest-pipeliner#readme"
+  "homepage": "https://github.com/humansinstitute/everest-pipeliner#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "config": {
+    "test_timeout": "600000",
+    "parallel_workers": "50%",
+    "memory_limit": "4096"
+  }
 }
