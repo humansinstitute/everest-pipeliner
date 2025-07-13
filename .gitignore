@@ -6,6 +6,7 @@ node_modules/
 
 # Ignore output Folder 
 output/
+temp/ 
 
 # Ignore Docs folders
 docs/

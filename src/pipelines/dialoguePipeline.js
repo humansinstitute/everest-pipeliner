@@ -9,6 +9,7 @@ import {
   completePipeline,
   addStepResult,
 } from "../utils/pipelineData.js";
+import { formatCostSummary } from "../utils/pipelineCost.js";
 
 // Load environment variables
 dotenv.config();
@@ -140,6 +141,40 @@ async function ensureDirectoryExists(dirPath) {
 }
 
 /**
+ * Generates a unique timestamped folder name with collision handling
+ * @param {string} baseDir - Base directory path
+ * @returns {Promise<string>} - Unique folder name in format YY_MM_DD_HH_MM_SS_ID
+ */
+async function generateTimestampedFolderName(baseDir) {
+  const now = new Date();
+  const yy = now.getFullYear().toString().slice(-2);
+  const mm = (now.getMonth() + 1).toString().padStart(2, "0");
+  const dd = now.getDate().toString().padStart(2, "0");
+  const hh = now.getHours().toString().padStart(2, "0");
+  const min = now.getMinutes().toString().padStart(2, "0");
+  const ss = now.getSeconds().toString().padStart(2, "0");
+
+  const baseTimestamp = `${yy}_${mm}_${dd}_${hh}_${min}_${ss}`;
+
+  // Handle collisions by incrementing ID
+  for (let id = 1; id <= 100; id++) {
+    const folderName = `${baseTimestamp}_${id}`;
+    const fullPath = path.join(baseDir, folderName);
+
+    try {
+      await fs.access(fullPath);
+      // Folder exists, try next ID
+      continue;
+    } catch (error) {
+      // Folder doesn't exist, we can use this name
+      return folderName;
+    }
+  }
+
+  throw new Error("Unable to generate unique folder name after 100 attempts");
+}
+
+/**
  * Generates conversation markdown file
  * @param {Array} conversationArray - Array of conversation entries
  * @param {Object} config - Pipeline configuration
@@ -151,7 +186,8 @@ function generateConversationMarkdown(
   conversationArray,
   config,
   runId,
-  timestamp
+  timestamp,
+  pipelineData
 ) {
   const { sourceText, discussionPrompt, iterations } = config;
 
@@ -162,6 +198,9 @@ function generateConversationMarkdown(
 - **Generated**: ${timestamp}
 - **Iterations**: ${iterations}
 - **Discussion Prompt**: ${discussionPrompt}
+
+## Cost Summary
+${formatCostSummary(pipelineData)}
 
 ## Source Material
 ${sourceText}
@@ -199,7 +238,13 @@ ${entry.content}
  * @param {string} timestamp - Formatted timestamp
  * @returns {string} - Markdown content
  */
-function generateSummaryMarkdown(summaryData, config, runId, timestamp) {
+function generateSummaryMarkdown(
+  summaryData,
+  config,
+  runId,
+  timestamp,
+  pipelineData
+) {
   const { sourceText, discussionPrompt, iterations } = config;
 
   return `# Dialogue Pipeline Summary
@@ -209,6 +254,9 @@ function generateSummaryMarkdown(summaryData, config, runId, timestamp) {
 - **Generated**: ${timestamp}
 - **Summary Focus**: ${summaryData.focus}
 - **Discussion Prompt**: ${discussionPrompt}
+
+## Cost Summary
+${formatCostSummary(pipelineData)}
 
 ## Summary
 
@@ -244,6 +292,7 @@ function generateJSONOutput(
     conversation: conversationArray,
     summary: summaryData,
     config,
+    costs: pipelineData.costs,
     pipeline: {
       ...pipelineData,
       generatedAt: timestamp,
@@ -268,20 +317,31 @@ async function generateOutputFiles(
   config
 ) {
   const runId = pipelineData.runId;
-  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-  const outputDir = path.join("output", "dialogue");
+  const timestamp = new Date().toISOString();
+  const baseOutputDir = path.join("output", "dialogue");
 
   console.log(`[FileGeneration] Starting file generation for run ${runId}`);
 
   try {
-    // Ensure output directory exists
-    await ensureDirectoryExists(outputDir);
-    console.log(`[FileGeneration] ✅ Output directory created: ${outputDir}`);
+    // Ensure base output directory exists
+    await ensureDirectoryExists(baseOutputDir);
 
-    // Generate file names
-    const conversationFile = `conversation_${runId}_${timestamp}.md`;
-    const summaryFile = `summary_${runId}_${timestamp}.md`;
-    const dataFile = `data_${runId}_${timestamp}.json`;
+    // Generate unique timestamped folder name
+    const timestampedFolder = await generateTimestampedFolderName(
+      baseOutputDir
+    );
+    const outputDir = path.join(baseOutputDir, timestampedFolder);
+
+    // Create the timestamped directory
+    await ensureDirectoryExists(outputDir);
+    console.log(
+      `[FileGeneration] ✅ Timestamped directory created: ${outputDir}`
+    );
+
+    // Generate simplified file names (no runId or timestamp)
+    const conversationFile = "conversation.md";
+    const summaryFile = "summary.md";
+    const dataFile = "data.json";
 
     const conversationPath = path.join(outputDir, conversationFile);
     const summaryPath = path.join(outputDir, summaryFile);
@@ -292,13 +352,15 @@ async function generateOutputFiles(
       conversationArray,
       config,
       runId,
-      timestamp
+      timestamp,
+      pipelineData
     );
     const summaryMarkdown = generateSummaryMarkdown(
       summaryData,
       config,
       runId,
-      timestamp
+      timestamp,
+      pipelineData
     );
     const jsonOutput = generateJSONOutput(
       pipelineData,
@@ -317,12 +379,15 @@ async function generateOutputFiles(
     ]);
 
     console.log(`[FileGeneration] ✅ All files generated successfully`);
+    console.log(`[FileGeneration] - Folder: ${outputDir}`);
     console.log(`[FileGeneration] - Conversation: ${conversationPath}`);
     console.log(`[FileGeneration] - Summary: ${summaryPath}`);
     console.log(`[FileGeneration] - Data: ${dataPath}`);
 
     return {
       success: true,
+      folder: timestampedFolder,
+      outputDir,
       files: {
         conversation: conversationPath,
         summary: summaryPath,
@@ -767,4 +832,108 @@ if (isMain) {
     });
 }
 
-export { dialoguePipeline, validateDialogueConfig };
+/**
+ * Lists available source files from output/dialogue/ip directory
+ * @returns {Promise<Array>} - Array of file objects with name, path, and metadata
+ */
+async function listSourceFiles() {
+  const sourceDir = path.join("output", "dialogue", "ip");
+
+  try {
+    // Check if directory exists
+    await fs.access(sourceDir);
+  } catch (error) {
+    console.warn(`[FileInput] Source directory does not exist: ${sourceDir}`);
+    return [];
+  }
+
+  try {
+    const files = await fs.readdir(sourceDir);
+    const sourceFiles = files
+      .filter((file) => file.endsWith(".md") || file.endsWith(".txt"))
+      .map((file, index) => ({
+        index: index + 1,
+        name: file,
+        path: path.join(sourceDir, file),
+        extension: path.extname(file),
+        basename: path.basename(file, path.extname(file)),
+      }));
+
+    console.log(
+      `[FileInput] Found ${sourceFiles.length} source files in ${sourceDir}`
+    );
+    return sourceFiles;
+  } catch (error) {
+    console.error(
+      `[FileInput] Error reading source directory: ${error.message}`
+    );
+    return [];
+  }
+}
+
+/**
+ * Reads content from a source file
+ * @param {string} filePath - Path to the source file
+ * @returns {Promise<string>} - File content
+ */
+async function readSourceFile(filePath) {
+  try {
+    // Validate file exists and is readable
+    await fs.access(filePath, fs.constants.R_OK);
+
+    const content = await fs.readFile(filePath, "utf8");
+    const trimmedContent = content.trim();
+
+    if (!trimmedContent) {
+      throw new Error("File is empty or contains only whitespace");
+    }
+
+    console.log(
+      `[FileInput] Successfully read file: ${filePath} (${trimmedContent.length} characters)`
+    );
+    return trimmedContent;
+  } catch (error) {
+    console.error(`[FileInput] Error reading file ${filePath}:`, error.message);
+    throw new Error(`Failed to read source file: ${error.message}`);
+  }
+}
+
+/**
+ * Validates that a source file path is valid and accessible
+ * @param {string} filePath - Path to validate
+ * @returns {Promise<boolean>} - True if file is valid
+ */
+async function validateSourceFile(filePath) {
+  try {
+    const stats = await fs.stat(filePath);
+
+    if (!stats.isFile()) {
+      throw new Error("Path is not a file");
+    }
+
+    const extension = path.extname(filePath).toLowerCase();
+    if (extension !== ".md" && extension !== ".txt") {
+      throw new Error("File must be .md or .txt format");
+    }
+
+    // Check if file is readable
+    await fs.access(filePath, fs.constants.R_OK);
+
+    return true;
+  } catch (error) {
+    console.error(
+      `[FileInput] File validation failed for ${filePath}:`,
+      error.message
+    );
+    return false;
+  }
+}
+
+export {
+  dialoguePipeline,
+  validateDialogueConfig,
+  generateTimestampedFolderName,
+  listSourceFiles,
+  readSourceFile,
+  validateSourceFile,
+};

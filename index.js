@@ -1,7 +1,11 @@
 import readline from "readline";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
-import { dialoguePipeline } from "./src/pipelines/dialoguePipeline.js";
+import {
+  dialoguePipeline,
+  listSourceFiles,
+  readSourceFile,
+} from "./src/pipelines/dialoguePipeline.js";
 
 // Load environment variables
 dotenv.config();
@@ -144,6 +148,117 @@ function confirmAction(prompt) {
 }
 
 /**
+ * Displays available source files and allows user to select one
+ * @returns {Promise<string|null>} - Selected file content or null if cancelled
+ */
+async function selectSourceFile() {
+  try {
+    console.log("\n📁 Loading available source files...");
+    const sourceFiles = await listSourceFiles();
+
+    if (sourceFiles.length === 0) {
+      console.log("❌ No source files found in output/dialogue/ip directory.");
+      console.log(
+        "💡 Tip: Place .txt or .md files in output/dialogue/ip/ to use file input."
+      );
+      return null;
+    }
+
+    console.log("\n📋 Available source files:");
+    sourceFiles.forEach((file) => {
+      console.log(`${file.index}. ${file.name} (${file.extension})`);
+    });
+    console.log("0. Cancel and return to text input");
+
+    const choice = await collectNumberInput(
+      "Select a file",
+      1,
+      0,
+      sourceFiles.length
+    );
+
+    if (choice === 0) {
+      console.log("📝 Switching to manual text input...");
+      return null;
+    }
+
+    const selectedFile = sourceFiles[choice - 1];
+    console.log(`\n📖 Reading file: ${selectedFile.name}`);
+
+    const fileContent = await readSourceFile(selectedFile.path);
+
+    // Show preview of file content
+    const preview =
+      fileContent.length > 200
+        ? fileContent.substring(0, 200) + "..."
+        : fileContent;
+
+    console.log(`\n📄 File preview (${fileContent.length} characters):`);
+    console.log("-".repeat(50));
+    console.log(preview);
+    console.log("-".repeat(50));
+
+    const confirmed = await confirmAction("Use this file as source material?");
+
+    if (!confirmed) {
+      console.log("❌ File selection cancelled. Returning to text input...");
+      return null;
+    }
+
+    console.log(`✅ Using file: ${selectedFile.name}`);
+    return fileContent;
+  } catch (error) {
+    console.error(`❌ Error selecting source file: ${error.message}`);
+    console.log("📝 Falling back to manual text input...");
+    return null;
+  }
+}
+
+/**
+ * Collects source text either from file selection or manual input
+ * @returns {Promise<string|null>} - Source text or null if cancelled
+ */
+async function collectSourceText() {
+  console.log("\n📝 === Source Material Input ===");
+  console.log("1. Select from available files");
+  console.log("2. Input text directly");
+  console.log("0. Cancel");
+
+  const inputChoice = await collectNumberInput("Choose input method", 1, 0, 2);
+
+  switch (inputChoice) {
+    case 0:
+      return null; // User cancelled
+
+    case 1:
+      // File selection
+      const fileContent = await selectSourceFile();
+      if (fileContent) {
+        return fileContent;
+      }
+      // If file selection failed/cancelled, fall through to manual input
+      console.log("\n📝 === Manual Text Input ===");
+
+    case 2:
+      // Manual text input
+      const sourceText = await collectMultilineInput(
+        "Enter your source material (end with '###' on a new line):"
+      );
+
+      if (!sourceText.trim()) {
+        console.log("❌ Source text cannot be empty.");
+        return null;
+      }
+
+      return sourceText;
+
+    default:
+      console.log("❌ Invalid choice.");
+      return null;
+  }
+}
+
+/**
  * Displays pipeline results in a formatted way
  * @param {Object} result - The pipeline result object
  */
@@ -218,13 +333,11 @@ async function runDialoguePipeline() {
   try {
     console.log("\n🗣️  === Dialogue Pipeline ===");
 
-    // Collect source text
-    const sourceText = await collectMultilineInput(
-      "Enter your source material (end with '###' on a new line):"
-    );
+    // Collect source text (either from file or manual input)
+    const sourceText = await collectSourceText();
 
-    if (!sourceText.trim()) {
-      console.log("❌ Source text cannot be empty. Returning to menu.");
+    if (!sourceText) {
+      console.log("❌ No source text provided. Returning to menu.");
       showMenu();
       return;
     }
