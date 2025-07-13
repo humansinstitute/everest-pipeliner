@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { initializePipelineCosts, formatCostSummary } from "./pipelineCost.js";
 
 /**
  * Creates a new pipeline data object
@@ -17,6 +18,8 @@ function createPipelineData(runId = null) {
       created: new Date().toISOString(),
     },
   };
+
+  initializePipelineCosts(pipelineData);
 
   console.log(`[PipelineData] Created new pipeline: ${pipelineData.runId}`);
   return pipelineData;
@@ -118,6 +121,8 @@ function completePipeline(pipelineData, status = "completed") {
     `[PipelineData] Pipeline ${pipelineData.runId} completed with status: ${status}`
   );
   console.log(`[PipelineData] Statistics:`, pipelineData.statistics);
+  console.log(`[PipelineData] Cost Summary:`);
+  console.log(formatCostSummary(pipelineData));
 }
 
 /**

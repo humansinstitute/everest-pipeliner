@@ -28,6 +28,10 @@ feature/
 	/(complete)_003_ -
 ```
 
+- test reports and implementation reports should live int he obsidian vault for the feature we are delivering
+  - e.g.productdir/featuredir/reports/testreport1.md
+  - e.g.productdir/featuredir/reports/deliveryreport2.md
+
 Planning:
 
 - Always attempt to generate a plan prior to implementation.
@@ -44,12 +48,14 @@ Planning:
 
 Act:
 
+- Always implement with the orchestrator role to assign only the required chanegs to the coding tools
 - When acting on a plan, follow the stage plan and the scope of changes you have been asked to make.
 - Always stop at the end of a stage and seek confirmation from the user that human testing has passed
 - Always restate the testing steps and the remaining stages of the plan on completion of a stage implementaiton.
 - Always state the next action from the plan and the remaining planing steps in your completion message.
 - Note all aspects of the system are run from the PM2 ecosystem.config.cjs
 - Please be aware that processes may already be running and need stopping / restarting to test effectively
+- if you need to create tempoary files creat them inside the tempoary directory strucutre at temp/ this will ensure they do not get copied to git
 
 DevOps:
 

@@ -53,10 +53,10 @@ async function conversationAgent(message, context, history) {
   const callDetails = {
     callID: uuidv4(),
     model: {
-      provider: "groq", // *** SET THIS FOR AN AGENT - will tell call which SDK client to pick. "groq" | "openai"
+      provider: "openrouter", // *** SET THIS FOR AN AGENT - will tell call which SDK client to pick. "groq" | "openai | openrouter"
       // model: "meta-llama/llama-4-scout-17b-16e-instruct",
-      model: "meta-llama/llama-4-scout-17b-16e-instruct", // // *** SET THIS FOR AN AGENT "gpt-4o" "meta-llama/llama-4-scout-17b-16e-instruct" default model can be overridden at run time.
-      callType: "This is a chat Call", // *** SET THIS FOR AN AGENT
+      model: "anthropic/claude-sonnet-4", // // *** SET THIS FOR AN AGENT "gpt-4o" "meta-llama/llama-4-scout-17b-16e-instruct" default model can be overridden at run time.
+      callType: "chat", // *** SET THIS FOR AN AGENT
       type: "completion",
       // max_tokens: 4096,
       temperature: 0.8, // *** SET THIS FOR AN AGENT

@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
 import dotenv from "dotenv";
 import { addStepResult } from "../utils/pipelineData.js";
+import { addStepCost } from "../utils/pipelineCost.js";
 
 // Load environment variables
 dotenv.config();
@@ -125,6 +126,9 @@ async function callEverest(agentConfig, pipelineData, stepId, fetchFn = fetch) {
     }
 
     const apiResponse = await response.json();
+
+    // Add cost tracking for successful API response
+    addStepCost(pipelineData, stepId, apiResponse);
 
     // Add successful step to pipeline data
     const executionTime = Date.now() - stepStartTime;
