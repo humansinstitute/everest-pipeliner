@@ -1,20 +1,35 @@
 import dotenv from "dotenv";
+import {
+  convertPrivateKey,
+  convertPublicKeys,
+  validateKeyFormat,
+} from "../utils/keyConversion.js";
 
 // Load environment variables
 dotenv.config();
 
 export function loadConfig() {
+  // Convert and set the private key for nostrmq library compatibility
+  const privateKey = convertPrivateKeyFromEnv(process.env.NOSTRMQ_PRIVKEY);
+
+  // Set NOSTR_PRIVKEY for nostrmq library if we have a converted private key
+  if (privateKey && !process.env.NOSTR_PRIVKEY) {
+    process.env.NOSTR_PRIVKEY = privateKey;
+  }
+
   const config = {
     // Existing configuration (if any)
 
     // NostrMQ Configuration (using published API env vars)
-    privateKey: process.env.NOSTRMQ_PRIVKEY,
+    privateKey: privateKey,
     relays: parseRelays(process.env.NOSTRMQ_RELAYS),
     powDifficulty: parseInt(process.env.NOSTRMQ_POW_DIFFICULTY) || 0,
     powThreads: parseInt(process.env.NOSTRMQ_POW_THREADS) || 4,
 
     // Pipeliner-specific NostrMQ configuration
-    authorizedPubkeys: process.env.NOSTRMQ_AUTHORIZED_PUBKEYS,
+    authorizedPubkeys: convertPublicKeysFromEnv(
+      process.env.NOSTRMQ_AUTHORIZED_PUBKEYS
+    ),
     maxConcurrentJobs: parseInt(process.env.NOSTRMQ_MAX_CONCURRENT_JOBS) || 3,
     jobTimeout: parseInt(process.env.NOSTRMQ_JOB_TIMEOUT) || 300000,
     sendRetries: parseInt(process.env.NOSTRMQ_SEND_RETRIES) || 3,
@@ -32,6 +47,42 @@ export function loadConfig() {
   }
 
   return config;
+}
+
+function convertPrivateKeyFromEnv(envKey) {
+  if (!envKey) {
+    return null;
+  }
+
+  try {
+    return convertPrivateKey(envKey);
+  } catch (error) {
+    console.warn(
+      `⚠️  Warning: Failed to convert private key: ${error.message}`
+    );
+    console.warn(
+      `💡 Tip: Ensure your NOSTRMQ_PRIVKEY is either nsec1... or 64-character hex format`
+    );
+    return null;
+  }
+}
+
+function convertPublicKeysFromEnv(envKeys) {
+  if (!envKeys) {
+    return null;
+  }
+
+  try {
+    return convertPublicKeys(envKeys);
+  } catch (error) {
+    console.warn(
+      `⚠️  Warning: Failed to convert public keys: ${error.message}`
+    );
+    console.warn(
+      `💡 Tip: Ensure your NOSTRMQ_AUTHORIZED_PUBKEYS are either npub1... or 64-character hex format`
+    );
+    return null;
+  }
 }
 
 function parseRelays(relaysString) {

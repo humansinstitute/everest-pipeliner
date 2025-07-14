@@ -42,8 +42,20 @@ export class AuthValidator {
 
     this.logger.info("Authorization check", {
       pubkey: pubkey.substring(0, 8),
+      fullPubkey: pubkey,
       authorized: isAuthorized,
+      authorizedCount: this.authorizedPubkeys.size,
     });
+
+    // Log additional details for unauthorized attempts
+    if (!isAuthorized) {
+      this.logger.warn("Unauthorized pubkey attempted access", {
+        attemptedPubkey: pubkey,
+        authorizedPubkeys: Array.from(this.authorizedPubkeys).map((key) =>
+          key.substring(0, 8)
+        ),
+      });
+    }
 
     this.updateCache(pubkey, isAuthorized);
     return isAuthorized;

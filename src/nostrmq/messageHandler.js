@@ -108,6 +108,13 @@ export class MessageHandler {
       timestamp: new Date().toISOString(),
     };
 
+    this.logger.warn("Unauthorized access attempt", {
+      sender: sender.substring(0, 8),
+      fullSender: sender,
+      requestId,
+      responseStatus: "unauthorized",
+    });
+
     await this.sendNostrMQResponse(sender, response);
   }
 
