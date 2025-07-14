@@ -1,16 +1,16 @@
 {
-  "totalExecutionTime": 356,
-  "completedAt": "2025-07-13T10:01:21.671Z",
+  "totalExecutionTime": 230,
+  "completedAt": "2025-07-14T05:19:29.879Z",
   "environment": {
     "nodeVersion": "v20.19.2",
     "platform": "darwin",
     "arch": "arm64",
     "memory": {
-      "rss": 132792320,
-      "heapTotal": 74448896,
-      "heapUsed": 29696672,
-      "external": 3801137,
-      "arrayBuffers": 1215036
+      "rss": 121487360,
+      "heapTotal": 70762496,
+      "heapUsed": 39049776,
+      "external": 3823418,
+      "arrayBuffers": 1238972
     }
   },
   "configuration": {

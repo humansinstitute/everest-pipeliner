@@ -1,11 +1,13 @@
-# Pipeliner - Parallel Integration Test Framework
+# Pipeliner - AI-Powered Content Pipeline Framework
 
-A high-performance, production-ready parallel test execution framework for Everest Agent workflows with intelligent scheduling, comprehensive error handling, and advanced performance optimization.
+A comprehensive AI-powered pipeline framework for Everest Agent workflows featuring parallel test execution, dialogue processing, and content transformation capabilities with intelligent scheduling, comprehensive error handling, and advanced performance optimization.
 
 ## 🚀 Features
 
 ### Core Capabilities
 
+- **Content Waterfall Pipeline**: Transform long-form content into LinkedIn posts and YouTube Reels concepts
+- **Dialogue Processing**: AI-powered conversation generation with optional facilitator intervention
 - **Parallel Test Execution**: Run multiple integration tests simultaneously with up to 60-80% performance improvement
 - **Intelligent Test Scheduling**: AI-driven test ordering based on historical performance data
 - **Advanced Error Handling**: Comprehensive error categorization, retry mechanisms, and circuit breaker patterns
@@ -24,6 +26,9 @@ A high-performance, production-ready parallel test execution framework for Evere
 
 - [Installation](#installation)
 - [Quick Start](#quick-start)
+- [Pipeline Features](#pipeline-features)
+  - [Content Waterfall Pipeline](#content-waterfall-pipeline)
+  - [Dialogue Pipelines](#dialogue-pipelines)
 - [Configuration](#configuration)
 - [Usage Examples](#usage-examples)
 - [Performance Optimization](#performance-optimization)
@@ -58,7 +63,35 @@ npm run validate
 
 ## ⚡ Quick Start
 
-### Basic Parallel Test Execution
+### Interactive Pipeline Menu
+
+```bash
+# Start the interactive pipeline menu
+node index.js
+
+# Menu options:
+# 1. Run Simple Chat Pipeline (Coming Soon)
+# 2. Run Dialogue Pipeline
+# 3. Run Facilitated Dialogue Pipeline
+# 4. Run Content Waterfall Pipeline
+# 5. Manage Agents (Coming Soon)
+# 0. Exit
+```
+
+### Direct Pipeline Execution
+
+```bash
+# Run Content Waterfall Pipeline directly
+node src/pipelines/contentWaterfallPipeline.js
+
+# Run Dialogue Pipeline directly
+node src/pipelines/dialoguePipeline.js
+
+# Run Facilitated Dialogue Pipeline directly
+node src/pipelines/facilitatedDialoguePipeline.js
+```
+
+### Testing and Development
 
 ```bash
 # Run all integration tests in parallel
@@ -72,32 +105,103 @@ npm run test:parallel:prod
 
 # Run for CI/CD with proper exit codes
 npm run test:parallel:ci
-```
-
-### Individual Test Suites
-
-```bash
-# Run specific test suites
-npm run test:integration:main
-npm run test:integration:phase2
-npm run test:integration:cost
 
 # Run all tests (unit + integration)
 npm run test:all
-```
 
-### Performance Testing
-
-```bash
 # Run performance benchmarks
 npm run test:benchmark
-
-# Run with coverage analysis
-npm run test:parallel:coverage
 
 # Health check
 npm run health-check
 ```
+
+## 🌊 Pipeline Features
+
+### Content Waterfall Pipeline
+
+The Content Waterfall Pipeline transforms long-form content into structured social media outputs through a three-stage AI agent workflow.
+
+#### Overview
+
+- **Input**: Articles, transcripts, interviews, blog posts (1K-10K words optimal)
+- **Output**: 4 topics → 4 LinkedIn posts → 8 YouTube Reels concepts
+- **Processing Time**: Typically 2-3 minutes for standard content
+- **Cost**: ~$0.02-0.05 per pipeline execution
+
+#### Key Features
+
+- **Automated Topic Extraction**: AI-powered analysis extracts 4 distinct, compelling topics
+- **LinkedIn Optimization**: Posts follow embedded style guides for maximum professional engagement
+- **Video Content Planning**: Detailed Reels concepts with production guidance and visual suggestions
+- **Organized Output**: Timestamped directories with individual files for each deliverable
+
+#### Usage Example
+
+```bash
+# Start interactive menu
+node index.js
+
+# Select option 4: Run Content Waterfall Pipeline
+# Choose input method:
+#   1. Select from files in output/waterfall/ip/
+#   2. Input text directly via CLI
+# Optional: Add custom focus areas
+# Review generated content in output/waterfall/YY_MM_DD_HH_MM_SS_ID/
+```
+
+#### Input Methods
+
+1. **File Input**: Place `.txt` or `.md` files in `output/waterfall/ip/` directory
+2. **Direct Input**: Type or paste content directly into CLI (end with `###`)
+
+#### Generated Output Structure
+
+```
+output/waterfall/25_01_14_13_45_23_1/
+├── topic_extractions.md          # Detailed topic analysis
+├── linkedin_posts/               # Individual LinkedIn posts
+│   ├── post_1_[topic].md
+│   ├── post_2_[topic].md
+│   ├── post_3_[topic].md
+│   └── post_4_[topic].md
+├── reels_concepts/               # Individual Reels concepts
+│   ├── concept_1_[type].md
+│   ├── concept_2_[type].md
+│   ├── ... (8 total)
+│   └── concept_8_[type].md
+├── summary.md                    # Comprehensive summary
+└── data.json                     # Technical metadata
+```
+
+#### Agent Workflow
+
+1. **Content Analyzer**: Extracts 4 distinct topics with insights and context
+2. **LinkedIn Creator**: Transforms topics into optimized LinkedIn posts with varied approaches
+3. **Reels Generator**: Creates 2 YouTube Reels concepts per LinkedIn post with production guidance
+
+### Dialogue Pipelines
+
+#### Standard Dialogue Pipeline
+
+- **Purpose**: Generate AI-powered conversations between two agents on a given topic
+- **Input**: Source material + discussion prompt + iteration count
+- **Output**: Structured conversation with summary and analysis
+- **Use Cases**: Exploring different perspectives, generating discussion content, idea development
+
+#### Facilitated Dialogue Pipeline
+
+- **Purpose**: Enhanced dialogue with optional facilitator agent intervention
+- **Features**: Facilitator can intervene to improve discussion quality and prevent agreement bias
+- **Configuration**: Even iteration counts required when facilitator is enabled
+- **Benefits**: Higher quality discussions, thorough exploration of ideas, guided conversation focus
+
+#### Common Features
+
+- **File Input Support**: Use files from `output/dialogue/ip/` directory
+- **Flexible Configuration**: Customizable iteration counts, summary focus, and discussion prompts
+- **Comprehensive Output**: Conversation transcripts, summaries, and metadata
+- **Cost Tracking**: Detailed cost analysis for each pipeline execution
 
 ## ⚙️ Configuration
 
@@ -418,11 +522,53 @@ node --inspect test_parallel_integration.js
 ```
 pipeliner/
 ├── src/
-│   ├── utils/
-│   │   └── testRunner.js          # Core test execution framework
+│   ├── pipelines/                 # Pipeline implementations
+│   │   ├── contentWaterfallPipeline.js    # Content transformation pipeline
+│   │   ├── dialoguePipeline.js            # Standard dialogue pipeline
+│   │   ├── facilitatedDialoguePipeline.js # Facilitated dialogue pipeline
+│   │   └── simpleChatPipeline.js          # Simple chat pipeline (planned)
 │   ├── agents/                    # Everest agent implementations
-│   └── pipelines/                 # Pipeline implementations
-├── tests/
+│   │   ├── waterfall/             # Content waterfall agents
+│   │   │   ├── contentAnalyzer.js         # Topic extraction agent
+│   │   │   ├── linkedinCreator.js         # LinkedIn post generation
+│   │   │   └── reelsGenerator.js          # Reels concept generation
+│   │   ├── dialogue/              # Dialogue pipeline agents
+│   │   │   ├── DialogueAg1.js             # First dialogue agent
+│   │   │   ├── DialogueAg2.js             # Second dialogue agent
+│   │   │   ├── facilitator.js             # Facilitator agent
+│   │   │   └── summariseConversation.js   # Conversation summarizer
+│   │   ├── conversationAgent.js           # General conversation agent
+│   │   ├── converstationAnalysis.js       # Conversation analysis
+│   │   └── intentAgent.js                 # Intent detection agent
+│   ├── services/                  # Core services
+│   │   ├── everest.service.js             # Everest API communication
+│   │   └── agentLoader.service.js         # Agent loading and configuration
+│   └── utils/                     # Utility functions
+│       ├── testRunner.js                  # Core test execution framework
+│       ├── pipelineData.js                # Pipeline execution tracking
+│       └── pipelineCost.js                # Cost monitoring and reporting
+├── output/                        # Pipeline output directories
+│   ├── waterfall/                 # Content waterfall outputs
+│   │   ├── ip/                            # Input files directory
+│   │   └── YY_MM_DD_HH_MM_SS_ID/         # Timestamped output folders
+│   └── dialogue/                  # Dialogue pipeline outputs
+│       ├── ip/                            # Input files directory
+│       └── YY_MM_DD_HH_MM_SS_ID/         # Timestamped output folders
+├── tests/                         # Test suites
+│   ├── pipelines/                 # Pipeline tests
+│   │   ├── contentWaterfallPipeline.test.js   # Waterfall pipeline tests
+│   │   ├── dialoguePipeline.test.js           # Dialogue pipeline tests
+│   │   └── facilitatedDialoguePipeline.test.js # Facilitated dialogue tests
+│   ├── agents/                    # Agent tests
+│   │   └── waterfall.test.js              # Waterfall agent tests
+│   ├── services/                  # Service tests
+│   │   └── everest.service.test.js        # Everest service tests
+│   ├── utils/                     # Utility tests
+│   │   ├── pipelineData.test.js           # Pipeline data tests
+│   │   ├── pipelineCost.test.js           # Cost tracking tests
+│   │   └── waterfallTestHelpers.js        # Waterfall test utilities
+│   ├── fixtures/                  # Test fixtures
+│   │   └── waterfall/                     # Waterfall test content
 │   ├── setup.js                   # Jest test setup
 │   ├── globalSetup.js            # Global test environment setup
 │   ├── globalTeardown.js         # Global test cleanup
@@ -431,8 +577,10 @@ pipeliner/
 ├── test-results/                  # CI/CD test results
 ├── coverage/                      # Test coverage reports
 ├── test_*.js                      # Integration test files
+├── index.js                       # Main CLI interface
 ├── jest.config.js                 # Jest configuration
 ├── package.json                   # Project configuration and scripts
+├── CONTENT_WATERFALL_FEATURE_DOCUMENTATION.md  # Waterfall pipeline docs
 └── README.md                      # This documentation
 ```
 
