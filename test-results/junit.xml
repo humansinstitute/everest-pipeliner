@@ -1,65 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="30" failures="0" errors="0" time="0.337">
-  <testsuite name="Facilitated Dialogue Pipeline" errors="0" failures="0" skipped="0" timestamp="2025-07-13T10:01:21" time="0.314" tests="30">
-    <testcase classname="Facilitated Dialogue Pipeline › Configuration Validation › validateFacilitatedDialogueConfig" name="should validate required fields successfully with facilitator enabled" time="0.002">
+<testsuites name="jest tests" tests="36" failures="0" errors="0" time="0.301">
+  <testsuite name="Job ID Generation" errors="0" failures="0" skipped="0" timestamp="2025-07-14T03:10:29" time="0.223" tests="14">
+    <testcase classname="Job ID Generation › generateJobId" name="should generate a job ID" time="0.002">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Configuration Validation › validateFacilitatedDialogueConfig" name="should validate required fields successfully with facilitator disabled" time="0.001">
+    <testcase classname="Job ID Generation › generateJobId" name="should generate unique job IDs" time="0.034">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Configuration Validation › validateFacilitatedDialogueConfig" name="should default facilitatorEnabled to false when not provided" time="0.002">
+    <testcase classname="Job ID Generation › generateJobId" name="should generate job IDs with consistent format" time="0">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Configuration Validation › validateFacilitatedDialogueConfig" name="should fail validation for invalid facilitatorEnabled type" time="0.001">
+    <testcase classname="Job ID Generation › generateJobId" name="should generate job IDs with timestamp component" time="0">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Configuration Validation › validateFacilitatedDialogueConfig" name="should inherit all base dialogue pipeline validation rules" time="0.001">
+    <testcase classname="Job ID Generation › generateJobId" name="should generate job IDs with random component" time="0.001">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Configuration Validation › validateFacilitatedDialogueConfig" name="should require even number of iterations when facilitator enabled" time="0.001">
+    <testcase classname="Job ID Generation › generateJobId" name="should generate job IDs with reasonable length" time="0">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Configuration Validation › validateFacilitatedDialogueConfig" name="should allow odd iterations when facilitator disabled" time="0.002">
+    <testcase classname="Job ID Generation › generateJobId" name="should generate job IDs that are URL-safe" time="0.001">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Facilitator Integration Logic › facilitator timing" name="should call facilitator at correct intervals (2, 4, 6, 8)" time="0.001">
+    <testcase classname="Job ID Generation › generateJobId" name="should generate job IDs in chronological order when called sequentially" time="0.01">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Facilitator Integration Logic › facilitator context preparation" name="should prepare correct context for facilitator agent" time="0.001">
+    <testcase classname="Job ID Generation › generateJobId" name="should handle rapid generation without collisions" time="0.001">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Pipeline Execution › facilitatedDialoguePipeline" name="should have correct function signature" time="0">
+    <testcase classname="Job ID Generation › generateJobId" name="should generate consistent format across multiple calls" time="0.002">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Pipeline Execution › facilitatedDialoguePipeline" name="should handle invalid configuration gracefully" time="0.001">
+    <testcase classname="Job ID Generation › generateJobId" name="should generate job IDs with sufficient entropy" time="0.026">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Pipeline Execution › facilitatedDialoguePipeline" name="should return proper structure for valid config with facilitator enabled" time="0.056">
+    <testcase classname="Job ID Generation › generateJobId" name="should generate job IDs that sort chronologically by string comparison" time="0.012">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Pipeline Execution › facilitatedDialoguePipeline" name="should return proper structure for valid config with facilitator disabled" time="0.017">
+    <testcase classname="Job ID Generation › edge cases" name="should handle system clock changes gracefully" time="0.001">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Pipeline Execution › facilitator agent integration" name="should load facilitator agent when enabled" time="0.008">
+    <testcase classname="Job ID Generation › edge cases" name="should generate valid job IDs under high load simulation" time="0.002">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Pipeline Execution › facilitator agent integration" name="should not load facilitator agent when disabled" time="0.004">
+  </testsuite>
+  <testsuite name="Message Validation" errors="0" failures="0" skipped="0" timestamp="2025-07-14T03:10:29" time="0.049" tests="22">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should validate complete valid request" time="0.001">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Output Generation › enhanced output with facilitator tracking" name="should include facilitator interventions in conversation output" time="0.002">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should validate minimal valid request" time="0">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Output Generation › enhanced output with facilitator tracking" name="should include facilitator metadata in JSON output" time="0">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should reject missing type" time="0.001">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Output Generation › enhanced output with facilitator tracking" name="should generate timestamped folder with facilitator suffix" time="0.004">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should reject invalid type" time="0.001">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Error Handling › facilitator agent failures" name="should gracefully degrade when facilitator agent fails" time="0.019">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should reject missing pipeline" time="0.001">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Error Handling › facilitator agent failures" name="should handle facilitator API errors gracefully" time="0.022">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should reject empty pipeline" time="0">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Error Handling › configuration edge cases" name="should handle facilitator enabled with minimum iterations" time="0">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should reject non-string pipeline" time="0.001">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Error Handling › configuration edge cases" name="should handle facilitator enabled with maximum iterations" time="0.001">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should reject missing parameters" time="0">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Performance and Integration › performance requirements" name="should track facilitator call costs separately" time="0.001">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should reject null parameters" time="0.001">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Performance and Integration › performance requirements" name="should maintain performance within 30% of standard pipeline" time="0.001">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should reject non-object parameters" time="0">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › Performance and Integration › backward compatibility" name="should maintain all existing dialogue pipeline functionality" time="0.031">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should accept array parameters (arrays are objects in JS)" time="0">
     </testcase>
-    <testcase classname="Facilitated Dialogue Pipeline › CLI Integration Requirements › facilitator configuration" name="should accept facilitator configuration from CLI" time="0.002">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should accept valid requestId" time="0">
     </testcase>
-    <testcase classname="Human Testing Scenarios › Stage 1 Validation" name="TDD Red Phase - All tests should initially fail" time="0.001">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should reject non-string requestId" time="0">
     </testcase>
-    <testcase classname="Human Testing Scenarios › Human Test Cases for Stage 2" name="TC001: Basic facilitated pipeline execution" time="0.002">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should accept empty requestId (empty string is still a string)" time="0.001">
     </testcase>
-    <testcase classname="Human Testing Scenarios › Human Test Cases for Stage 2" name="TC002: Facilitator disabled mode validation" time="0.001">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should accept valid options object" time="0.002">
     </testcase>
-    <testcase classname="Human Testing Scenarios › Human Test Cases for Stage 2" name="TC006: Error handling for missing facilitator agent" time="0">
+    <testcase classname="Message Validation › validatePipelineRequest" name="should reject non-object options" time="0.001">
+    </testcase>
+    <testcase classname="Message Validation › validatePipelineRequest" name="should accept null options (null is falsy, so validation skips)" time="0">
+    </testcase>
+    <testcase classname="Message Validation › validatePipelineRequest" name="should accept array options (arrays are objects in JS)" time="0">
+    </testcase>
+    <testcase classname="Message Validation › validatePipelineRequest" name="should collect multiple validation errors" time="0.001">
+    </testcase>
+    <testcase classname="Message Validation › validatePipelineRequest" name="should handle undefined payload" time="0">
+    </testcase>
+    <testcase classname="Message Validation › validatePipelineRequest" name="should handle null payload" time="0">
+    </testcase>
+    <testcase classname="Message Validation › validatePipelineRequest" name="should handle empty object payload" time="0.001">
     </testcase>
   </testsuite>
 </testsuites>

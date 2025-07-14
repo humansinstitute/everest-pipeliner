@@ -7,6 +7,7 @@ import {
   readSourceFile,
 } from "./src/pipelines/dialoguePipeline.js";
 import { facilitatedDialoguePipeline } from "./src/pipelines/facilitatedDialoguePipeline.js";
+import { startNostrMQService } from "./src/nostrmq/index.js";
 
 // Load environment variables
 dotenv.config();
@@ -26,6 +27,7 @@ function displayMenu() {
   console.log("2. Run Dialogue Pipeline");
   console.log("3. Run Facilitated Dialogue Pipeline");
   console.log("4. Manage Agents");
+  console.log("5. Start NostrMQ Service");
   console.log("0. Exit");
   console.log("======================");
 }
@@ -45,6 +47,9 @@ function handleMenuChoice(choice) {
     case "4":
       console.log("\n🤖 Manage Agents - Coming soon!");
       showMenu();
+      break;
+    case "5":
+      startNostrMQServiceFromCLI();
       break;
     case "0":
       console.log("\nGoodbye!");
@@ -598,6 +603,26 @@ async function runFacilitatedDialoguePipeline() {
   rl.question("", () => {
     showMenu();
   });
+}
+
+// Add new function for NostrMQ service startup
+async function startNostrMQServiceFromCLI() {
+  try {
+    console.log("\n🌐 Starting NostrMQ Pipeline Service...");
+
+    const service = await startNostrMQService();
+
+    console.log("✅ NostrMQ service started successfully!");
+    console.log("📡 Listening for pipeline trigger messages...");
+    console.log("🔐 Authorized pubkeys loaded from .env");
+    console.log("\nPress Ctrl+C to stop the service");
+
+    // Service is now running - don't return to menu
+  } catch (error) {
+    console.error("❌ Failed to start NostrMQ service:", error.message);
+    console.log("Returning to menu...");
+    showMenu();
+  }
 }
 
 function main() {
