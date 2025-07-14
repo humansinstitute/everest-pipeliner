@@ -42,6 +42,7 @@ export class AuthValidator {
 
     this.logger.info("Authorization check", {
       pubkey: pubkey.substring(0, 8),
+<<<<<<< HEAD
       fullPubkey: pubkey,
       authorized: isAuthorized,
       authorizedCount: this.authorizedPubkeys.size,
@@ -57,6 +58,11 @@ export class AuthValidator {
       });
     }
 
+=======
+      authorized: isAuthorized,
+    });
+
+>>>>>>> 855d7527ea2fc900418c1ca7a658dfba57f80bbb
     this.updateCache(pubkey, isAuthorized);
     return isAuthorized;
   }

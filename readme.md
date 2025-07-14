@@ -1,11 +1,17 @@
 # Pipeliner - Distributed Pipeline Execution Platform
 
+<<<<<<< HEAD
 A comprehensive AI-powered pipeline framework for Everest Agent workflows featuring parallel test execution, dialogue processing, and content transformation capabilities with intelligent scheduling, comprehensive error handling, and advanced performance optimization.
+=======
+A high-performance, production-ready platform for executing Everest Agent workflows both locally and remotely via NostrMQ. Features parallel test execution, distributed pipeline triggering, intelligent scheduling, and comprehensive monitoring.
+>>>>>>> 855d7527ea2fc900418c1ca7a658dfba57f80bbb
 
 ## 🚀 Features
 
 ### Core Capabilities
 
+- **Local Pipeline Execution**: Interactive CLI for running dialogue and facilitated dialogue pipelines
+- **Distributed Pipeline Triggering**: Remote pipeline execution via NostrMQ messaging protocol
 - **Parallel Test Execution**: Run multiple integration tests simultaneously with up to 60-80% performance improvement
 - **Intelligent Test Scheduling**: AI-driven test ordering based on historical performance data
 - **Advanced Error Handling**: Comprehensive error categorization, retry mechanisms, and circuit breaker patterns
@@ -34,6 +40,7 @@ A comprehensive AI-powered pipeline framework for Everest Agent workflows featur
 
 - [Installation](#installation)
 - [Quick Start](#quick-start)
+- [NostrMQ Pipeline Triggering](#nostrmq-pipeline-triggering)
 - [Configuration](#configuration)
 - [Usage Examples](#usage-examples)
 - [Performance Optimization](#performance-optimization)
@@ -97,6 +104,7 @@ npm start
 node index.js --nostrmq
 ```
 
+<<<<<<< HEAD
 ### Interactive Pipeline Menu
 
 ```bash
@@ -126,6 +134,9 @@ node src/pipelines/facilitatedDialoguePipeline.js
 ```
 
 ### Testing and Development
+=======
+### Basic Parallel Test Execution
+>>>>>>> 855d7527ea2fc900418c1ca7a658dfba57f80bbb
 
 ```bash
 # Run all integration tests in parallel
@@ -149,6 +160,108 @@ npm run test:benchmark
 # Health check
 npm run health-check
 ```
+
+## 🌐 NostrMQ Pipeline Triggering
+
+### Overview
+
+The NostrMQ Pipeline Triggering feature transforms Pipeliner from a local CLI tool into a distributed, API-accessible service. This enables remote pipeline execution via the NostrMQ v0.3.0 messaging protocol.
+
+### Key Features
+
+- **Remote Pipeline Execution**: Trigger pipelines from anywhere via NostrMQ messages
+- **Secure Authorization**: Pubkey-based whitelist authentication with caching
+- **Two-Phase Responses**: Immediate acknowledgment + completion notification
+- **Asynchronous Processing**: Concurrent job execution with configurable limits
+- **Universal Interface**: All pipelines support both CLI and NostrMQ execution
+- **Comprehensive Logging**: Job-specific audit trails and security event tracking
+
+### Quick Setup
+
+1. **Configure Environment**:
+
+```bash
+cp .env.example .env
+# Edit .env with your NostrMQ credentials
+```
+
+2. **Set Required Variables**:
+
+```bash
+# NostrMQ Configuration
+NOSTRMQ_PRIVATE_KEY=your_private_key_hex
+NOSTRMQ_RELAYS=wss://relay1.com,wss://relay2.com
+
+# Authorization (comma-separated pubkeys)
+NOSTRMQ_AUTHORIZED_PUBKEYS=pubkey1,pubkey2,pubkey3
+
+# Optional Configuration
+NOSTRMQ_MAX_CONCURRENT_JOBS=5
+NOSTRMQ_JOB_TIMEOUT=300000
+```
+
+3. **Start Service**:
+
+```bash
+npm start
+# Select option 5: "Start NostrMQ Service"
+```
+
+### Message Format
+
+Send `pipeline-trigger` messages to execute pipelines:
+
+```json
+{
+  "type": "pipeline-trigger",
+  "pipeline": "dialogue",
+  "parameters": {
+    "topic": "AI Ethics",
+    "participants": ["Alice", "Bob"]
+  }
+}
+```
+
+### Response Pattern
+
+**Immediate Acknowledgment**:
+
+```json
+{
+  "type": "pipeline-ack",
+  "jobId": "job_abc123",
+  "status": "accepted",
+  "message": "Pipeline execution started"
+}
+```
+
+**Completion Response**:
+
+```json
+{
+  "type": "pipeline-response",
+  "jobId": "job_abc123",
+  "status": "completed",
+  "result": {
+    /* pipeline output */
+  },
+  "executionTime": 45.67
+}
+```
+
+### Supported Pipelines
+
+- **dialogue**: Interactive dialogue pipeline
+- **facilitatedDialogue**: Facilitated dialogue with moderator
+
+### Security
+
+- **Pubkey Authorization**: Only whitelisted pubkeys can trigger pipelines
+- **Request Validation**: All messages validated against schema
+- **Audit Logging**: Complete security and execution audit trail
+- **Error Handling**: Secure error responses without sensitive data exposure
+
+For detailed documentation, see [`NOSTRMQ_FEATURE_DOCUMENTATION.md`](NOSTRMQ_FEATURE_DOCUMENTATION.md).
 
 ## ⚙️ Configuration
 
@@ -476,11 +589,30 @@ node --inspect test_parallel_integration.js
 ```
 pipeliner/
 ├── src/
-│   ├── utils/
-│   │   └── testRunner.js          # Core test execution framework
-│   ├── agents/                    # Everest agent implementations
-│   └── pipelines/                 # Pipeline implementations
+│   ├── nostrmq/                   # NostrMQ service implementation
+│   │   ├── index.js              # Main NostrMQ service class
+│   │   ├── authValidator.js      # Pubkey authorization system
+│   │   ├── messageHandler.js     # Message processing and validation
+│   │   └── jobManager.js         # Asynchronous job execution
+│   ├── pipelines/                 # Pipeline implementations
+│   │   ├── registry/             # Pipeline discovery system
+│   │   ├── dialoguePipeline.js   # Dialogue pipeline with NostrMQ support
+│   │   └── facilitatedDialoguePipeline.js # Facilitated dialogue
+│   ├── services/                  # Core services
+│   │   ├── config.js             # Configuration management
+│   │   ├── logger.js             # Application logging
+│   │   └── jobLogger.js          # Job-specific logging
+│   ├── utils/                     # Utility functions
+│   │   ├── testRunner.js         # Core test execution framework
+│   │   ├── jobId.js              # Job ID generation
+│   │   └── messageValidation.js  # Message validation schemas
+│   └── agents/                    # Everest agent implementations
 ├── tests/
+│   ├── nostrmq/                   # NostrMQ feature tests
+│   │   ├── authValidator.test.js # Authorization tests
+│   │   ├── integration.test.js   # End-to-end integration tests
+│   │   ├── security.test.js      # Security validation tests
+│   │   └── *.test.js             # Additional NostrMQ tests
 │   ├── setup.js                   # Jest test setup
 │   ├── globalSetup.js            # Global test environment setup
 │   ├── globalTeardown.js         # Global test cleanup
@@ -489,6 +621,8 @@ pipeliner/
 ├── test-results/                  # CI/CD test results
 ├── coverage/                      # Test coverage reports
 ├── test_*.js                      # Integration test files
+├── .env.example                   # Environment configuration template
+├── NOSTRMQ_FEATURE_DOCUMENTATION.md # NostrMQ feature documentation
 ├── jest.config.js                 # Jest configuration
 ├── ecosystem.config.cjs           # PM2 process management
 ├── package.json                   # Project configuration and scripts

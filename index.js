@@ -7,11 +7,14 @@ import {
   readSourceFile,
 } from "./src/pipelines/dialoguePipeline.js";
 import { facilitatedDialoguePipeline } from "./src/pipelines/facilitatedDialoguePipeline.js";
+<<<<<<< HEAD
 import {
   contentWaterfallPipeline,
   listWaterfallSourceFiles,
   readWaterfallSourceFile,
 } from "./src/pipelines/contentWaterfallPipeline.js";
+=======
+>>>>>>> 855d7527ea2fc900418c1ca7a658dfba57f80bbb
 import { startNostrMQService } from "./src/nostrmq/index.js";
 
 // Load environment variables
@@ -31,9 +34,14 @@ function displayMenu() {
   console.log("1. Run Simple Chat Pipeline");
   console.log("2. Run Dialogue Pipeline");
   console.log("3. Run Facilitated Dialogue Pipeline");
+<<<<<<< HEAD
   console.log("4. Run Content Waterfall Pipeline");
   console.log("5. Manage Agents");
   console.log("6. Start NostrMQ Service");
+=======
+  console.log("4. Manage Agents");
+  console.log("5. Start NostrMQ Service");
+>>>>>>> 855d7527ea2fc900418c1ca7a658dfba57f80bbb
   console.log("0. Exit");
   console.log("======================");
 }
@@ -57,7 +65,11 @@ function handleMenuChoice(choice) {
       console.log("\n🤖 Manage Agents - Coming soon!");
       showMenu();
       break;
+<<<<<<< HEAD
     case "6":
+=======
+    case "5":
+>>>>>>> 855d7527ea2fc900418c1ca7a658dfba57f80bbb
       startNostrMQServiceFromCLI();
       break;
     case "0":
@@ -661,6 +673,7 @@ async function runFacilitatedDialoguePipeline() {
   });
 }
 
+<<<<<<< HEAD
 /**
  * Runs the content waterfall pipeline with user input collection
  */
@@ -785,6 +798,8 @@ async function runContentWaterfallPipeline() {
   });
 }
 
+=======
+>>>>>>> 855d7527ea2fc900418c1ca7a658dfba57f80bbb
 // Add new function for NostrMQ service startup
 async function startNostrMQServiceFromCLI() {
   try {
