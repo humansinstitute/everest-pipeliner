@@ -7,6 +7,11 @@ import {
   readSourceFile,
 } from "./src/pipelines/dialoguePipeline.js";
 import { facilitatedDialoguePipeline } from "./src/pipelines/facilitatedDialoguePipeline.js";
+import {
+  contentWaterfallPipeline,
+  listWaterfallSourceFiles,
+  readWaterfallSourceFile,
+} from "./src/pipelines/contentWaterfallPipeline.js";
 
 // Load environment variables
 dotenv.config();
@@ -25,7 +30,8 @@ function displayMenu() {
   console.log("1. Run Simple Chat Pipeline");
   console.log("2. Run Dialogue Pipeline");
   console.log("3. Run Facilitated Dialogue Pipeline");
-  console.log("4. Manage Agents");
+  console.log("4. Run Content Waterfall Pipeline");
+  console.log("5. Manage Agents");
   console.log("0. Exit");
   console.log("======================");
 }
@@ -43,6 +49,9 @@ function handleMenuChoice(choice) {
       runFacilitatedDialoguePipeline();
       break;
     case "4":
+      runContentWaterfallPipeline();
+      break;
+    case "5":
       console.log("\n🤖 Manage Agents - Coming soon!");
       showMenu();
       break;
@@ -154,17 +163,29 @@ function confirmAction(prompt) {
 
 /**
  * Displays available source files and allows user to select one
+ * @param {string} pipelineType - Type of pipeline ('dialogue' or 'waterfall')
  * @returns {Promise<string|null>} - Selected file content or null if cancelled
  */
-async function selectSourceFile() {
+async function selectSourceFile(pipelineType = "dialogue") {
   try {
     console.log("\n📁 Loading available source files...");
-    const sourceFiles = await listSourceFiles();
+
+    let sourceFiles, readFileFunction, directoryPath;
+
+    if (pipelineType === "waterfall") {
+      sourceFiles = await listWaterfallSourceFiles();
+      readFileFunction = readWaterfallSourceFile;
+      directoryPath = "output/waterfall/ip";
+    } else {
+      sourceFiles = await listSourceFiles();
+      readFileFunction = readSourceFile;
+      directoryPath = "output/dialogue/ip";
+    }
 
     if (sourceFiles.length === 0) {
-      console.log("❌ No source files found in output/dialogue/ip directory.");
+      console.log(`❌ No source files found in ${directoryPath} directory.`);
       console.log(
-        "💡 Tip: Place .txt or .md files in output/dialogue/ip/ to use file input."
+        `💡 Tip: Place .txt or .md files in ${directoryPath}/ to use file input.`
       );
       return null;
     }
@@ -190,7 +211,7 @@ async function selectSourceFile() {
     const selectedFile = sourceFiles[choice - 1];
     console.log(`\n📖 Reading file: ${selectedFile.name}`);
 
-    const fileContent = await readSourceFile(selectedFile.path);
+    const fileContent = await readFileFunction(selectedFile.path);
 
     // Show preview of file content
     const preview =
@@ -221,9 +242,10 @@ async function selectSourceFile() {
 
 /**
  * Collects source text either from file selection or manual input
+ * @param {string} pipelineType - Type of pipeline ('dialogue' or 'waterfall')
  * @returns {Promise<string|null>} - Source text or null if cancelled
  */
-async function collectSourceText() {
+async function collectSourceText(pipelineType = "dialogue") {
   console.log("\n📝 === Source Material Input ===");
   console.log("1. Select from available files");
   console.log("2. Input text directly");
@@ -237,7 +259,7 @@ async function collectSourceText() {
 
     case 1:
       // File selection
-      const fileContent = await selectSourceFile();
+      const fileContent = await selectSourceFile(pipelineType);
       if (fileContent) {
         return fileContent;
       }
@@ -308,52 +330,86 @@ function displayPipelineResults(result) {
     }
   } else {
     console.log(`✅ Status: Completed successfully`);
-    console.log(
-      `💬 Conversation exchanges: ${result.conversation?.length || 0}`
-    );
+
+    // Handle waterfall pipeline results
+    if (result.topics || result.linkedinPosts || result.reelsConcepts) {
+      console.log(`\n🌊 === Content Waterfall Results ===`);
+      console.log(`📊 Topics extracted: ${result.topics?.topics?.length || 0}`);
+      console.log(
+        `📱 LinkedIn posts: ${result.linkedinPosts?.linkedinPosts?.length || 0}`
+      );
+      console.log(
+        `🎬 Reels concepts: ${result.reelsConcepts?.reelsConcepts?.length || 0}`
+      );
+
+      // Display file generation results for waterfall
+      if (result.fileGenerationStatus === "success" && result.files) {
+        console.log(`\n📁 === Generated Files ===`);
+        console.log(`✅ File generation: Successful`);
+        console.log(`📄 Topic Extractions: ${result.files.topicExtractions}`);
+        console.log(
+          `📱 LinkedIn Posts: ${result.files.linkedinPosts?.length || 0} files`
+        );
+        console.log(
+          `🎬 Reels Concepts: ${result.files.reelsConcepts?.length || 0} files`
+        );
+        console.log(`📋 Summary: ${result.files.summary}`);
+        console.log(`📊 Data (JSON): ${result.files.data}`);
+      } else if (result.fileGenerationStatus === "failed") {
+        console.log(`\n📁 === File Generation ===`);
+        console.log(`⚠️  File generation: Failed (non-critical)`);
+      }
+    } else {
+      // Handle dialogue pipeline results
+      console.log(
+        `💬 Conversation exchanges: ${result.conversation?.length || 0}`
+      );
+
+      // Display file generation results for dialogue
+      if (result.fileGenerationStatus === "success" && result.files) {
+        console.log(`\n📁 === Generated Files ===`);
+        console.log(`✅ File generation: Successful`);
+        console.log(`📄 Conversation: ${result.files.conversation}`);
+        console.log(`📋 Summary: ${result.files.summary}`);
+        console.log(`📊 Data (JSON): ${result.files.data}`);
+      } else if (result.fileGenerationStatus === "failed") {
+        console.log(`\n📁 === File Generation ===`);
+        console.log(`⚠️  File generation: Failed (non-critical)`);
+      }
+
+      if (result.summary?.content) {
+        console.log(`\n📝 === Summary ===`);
+        console.log(result.summary.content);
+      }
+
+      if (result.conversation && result.conversation.length > 0) {
+        console.log(`\n🗣️  === Conversation Preview ===`);
+        result.conversation.slice(0, 2).forEach((entry, index) => {
+          const preview =
+            entry.content.length > 100
+              ? entry.content.substring(0, 100) + "..."
+              : entry.content;
+
+          // Show facilitator interventions differently
+          if (entry.isFacilitator) {
+            console.log(`🎯 Facilitator (${entry.iteration}): ${preview}`);
+          } else {
+            console.log(`${entry.agent} (${entry.iteration}): ${preview}`);
+          }
+        });
+
+        if (result.conversation.length > 2) {
+          console.log(
+            `... and ${result.conversation.length - 2} more exchanges`
+          );
+        }
+      }
+    }
 
     // Display warnings if any
     if (result.warnings && result.warnings.length > 0) {
       console.log(`\n⚠️  === Warnings ===`);
       result.warnings.forEach((warning) => console.log(`   - ${warning}`));
-    }
-
-    // Display file generation results
-    if (result.fileGenerationStatus === "success" && result.files) {
-      console.log(`\n📁 === Generated Files ===`);
-      console.log(`✅ File generation: Successful`);
-      console.log(`📄 Conversation: ${result.files.conversation}`);
-      console.log(`📋 Summary: ${result.files.summary}`);
-      console.log(`📊 Data (JSON): ${result.files.data}`);
-    } else if (result.fileGenerationStatus === "failed") {
-      console.log(`\n📁 === File Generation ===`);
-      console.log(`⚠️  File generation: Failed (non-critical)`);
-    }
-
-    if (result.summary?.content) {
-      console.log(`\n📝 === Summary ===`);
-      console.log(result.summary.content);
-    }
-
-    if (result.conversation && result.conversation.length > 0) {
-      console.log(`\n🗣️  === Conversation Preview ===`);
-      result.conversation.slice(0, 2).forEach((entry, index) => {
-        const preview =
-          entry.content.length > 100
-            ? entry.content.substring(0, 100) + "..."
-            : entry.content;
-
-        // Show facilitator interventions differently
-        if (entry.isFacilitator) {
-          console.log(`🎯 Facilitator (${entry.iteration}): ${preview}`);
-        } else {
-          console.log(`${entry.agent} (${entry.iteration}): ${preview}`);
-        }
-      });
-
-      if (result.conversation.length > 2) {
-        console.log(`... and ${result.conversation.length - 2} more exchanges`);
-      }
     }
   }
 
@@ -588,6 +644,130 @@ async function runFacilitatedDialoguePipeline() {
   } catch (error) {
     console.error(
       "\n❌ Error running facilitated dialogue pipeline:",
+      error.message
+    );
+    console.log("Returning to menu.");
+  }
+
+  // Return to menu
+  console.log("\nPress Enter to return to menu...");
+  rl.question("", () => {
+    showMenu();
+  });
+}
+
+/**
+ * Runs the content waterfall pipeline with user input collection
+ */
+async function runContentWaterfallPipeline() {
+  try {
+    console.log("\n🌊 === Content Waterfall Pipeline ===");
+    console.log(
+      "Transform long-form content into LinkedIn posts and YouTube Reels concepts"
+    );
+    console.log(
+      "Suitable for: podcast transcripts, articles, interviews, blog posts"
+    );
+    console.log(
+      "Expected output: 4 topics → 4 LinkedIn posts → 8 Reels concepts"
+    );
+
+    // Collect source text (either from file or manual input)
+    const sourceText = await collectSourceText("waterfall");
+
+    if (!sourceText) {
+      console.log("❌ No source text provided. Returning to menu.");
+      showMenu();
+      return;
+    }
+
+    // Collect optional custom focus
+    const customFocus = await collectSingleLineInput(
+      "Custom focus areas (optional - press Enter to skip)",
+      ""
+    );
+
+    // Display configuration summary
+    console.log("\n📋 Configuration Summary:");
+    console.log(
+      `Source text: ${sourceText.substring(0, 100)}${
+        sourceText.length > 100 ? "..." : ""
+      }`
+    );
+    console.log(`Source length: ${sourceText.length} characters`);
+    if (customFocus.trim()) {
+      console.log(`Custom focus: ${customFocus}`);
+    } else {
+      console.log(`Custom focus: None (using default extraction strategy)`);
+    }
+
+    // Ask for confirmation
+    const confirmed = await confirmAction(
+      "\nProceed with Content Waterfall Pipeline?"
+    );
+
+    if (!confirmed) {
+      console.log("❌ Pipeline cancelled. Returning to menu.");
+      showMenu();
+      return;
+    }
+
+    // Run the pipeline with progress feedback
+    console.log("\n🚀 Starting Content Waterfall Pipeline...");
+
+    const config = {
+      sourceText,
+      customFocus: customFocus.trim() || undefined,
+    };
+
+    // Show progress during execution
+    console.log("📊 Step 1/4: Analyzing content and extracting topics...");
+
+    const result = await contentWaterfallPipeline(config);
+
+    // Display results
+    displayPipelineResults(result);
+
+    // Additional waterfall-specific result summary
+    if (!result.error) {
+      console.log("\n🎉 === Content Waterfall Summary ===");
+      console.log(
+        `✅ Content analysis complete (${
+          result.topics?.topics?.length || 0
+        } topics extracted)`
+      );
+      console.log(
+        `✅ LinkedIn posts generated (${
+          result.linkedinPosts?.linkedinPosts?.length || 0
+        } posts created)`
+      );
+      console.log(
+        `✅ Reels concepts generated (${
+          result.reelsConcepts?.reelsConcepts?.length || 0
+        } concepts created)`
+      );
+
+      if (result.fileGenerationStatus === "success") {
+        console.log(`✅ Output files generated`);
+        console.log(`📁 Output folder: output/waterfall/`);
+        console.log(
+          `📄 Files organized by type: topics, LinkedIn posts, Reels concepts`
+        );
+      }
+
+      // Display cost summary if available
+      if (result.pipeline?.costs) {
+        console.log(`\n💰 === Cost Summary ===`);
+        const totalCost = Object.values(result.pipeline.costs).reduce(
+          (sum, cost) => sum + (cost.total || 0),
+          0
+        );
+        console.log(`Total cost: $${totalCost.toFixed(4)}`);
+      }
+    }
+  } catch (error) {
+    console.error(
+      "\n❌ Error running Content Waterfall Pipeline:",
       error.message
     );
     console.log("Returning to menu.");
