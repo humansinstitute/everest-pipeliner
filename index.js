@@ -6,6 +6,7 @@ import {
   listSourceFiles,
   readSourceFile,
 } from "./src/pipelines/dialoguePipeline.js";
+import { facilitatedDialoguePipeline } from "./src/pipelines/facilitatedDialoguePipeline.js";
 
 // Load environment variables
 dotenv.config();
@@ -23,7 +24,8 @@ function displayMenu() {
   console.log("\n=== Pipeliner Menu ===");
   console.log("1. Run Simple Chat Pipeline");
   console.log("2. Run Dialogue Pipeline");
-  console.log("3. Manage Agents");
+  console.log("3. Run Facilitated Dialogue Pipeline");
+  console.log("4. Manage Agents");
   console.log("0. Exit");
   console.log("======================");
 }
@@ -38,6 +40,9 @@ function handleMenuChoice(choice) {
       runDialoguePipeline();
       break;
     case "3":
+      runFacilitatedDialoguePipeline();
+      break;
+    case "4":
       console.log("\n🤖 Manage Agents - Coming soon!");
       showMenu();
       break;
@@ -274,6 +279,23 @@ function displayPipelineResults(result) {
     }`
   );
 
+  // Display facilitator information if applicable
+  if (result.config?.facilitatorEnabled !== undefined) {
+    console.log(
+      `🎯 Facilitator: ${
+        result.config.facilitatorEnabled ? "Enabled" : "Disabled"
+      }`
+    );
+    if (
+      result.config.facilitatorEnabled &&
+      result.pipeline?.facilitatorInterventions
+    ) {
+      console.log(
+        `🎯 Facilitator interventions: ${result.pipeline.facilitatorInterventions.length}`
+      );
+    }
+  }
+
   if (result.error) {
     console.log(`❌ Status: Failed`);
     console.log(`🚨 Error: ${result.error}`);
@@ -289,6 +311,12 @@ function displayPipelineResults(result) {
     console.log(
       `💬 Conversation exchanges: ${result.conversation?.length || 0}`
     );
+
+    // Display warnings if any
+    if (result.warnings && result.warnings.length > 0) {
+      console.log(`\n⚠️  === Warnings ===`);
+      result.warnings.forEach((warning) => console.log(`   - ${warning}`));
+    }
 
     // Display file generation results
     if (result.fileGenerationStatus === "success" && result.files) {
@@ -314,7 +342,13 @@ function displayPipelineResults(result) {
           entry.content.length > 100
             ? entry.content.substring(0, 100) + "..."
             : entry.content;
-        console.log(`${entry.agent} (${entry.iteration}): ${preview}`);
+
+        // Show facilitator interventions differently
+        if (entry.isFacilitator) {
+          console.log(`🎯 Facilitator (${entry.iteration}): ${preview}`);
+        } else {
+          console.log(`${entry.agent} (${entry.iteration}): ${preview}`);
+        }
       });
 
       if (result.conversation.length > 2) {
@@ -407,6 +441,155 @@ async function runDialoguePipeline() {
     displayPipelineResults(result);
   } catch (error) {
     console.error("\n❌ Error running dialogue pipeline:", error.message);
+    console.log("Returning to menu.");
+  }
+
+  // Return to menu
+  console.log("\nPress Enter to return to menu...");
+  rl.question("", () => {
+    showMenu();
+  });
+}
+
+/**
+ * Runs the facilitated dialogue pipeline with user input collection including facilitator configuration
+ */
+async function runFacilitatedDialoguePipeline() {
+  try {
+    console.log("\n🎯 === Facilitated Dialogue Pipeline ===");
+
+    // Collect source text (either from file or manual input)
+    const sourceText = await collectSourceText();
+
+    if (!sourceText) {
+      console.log("❌ No source text provided. Returning to menu.");
+      showMenu();
+      return;
+    }
+
+    // Collect discussion prompt
+    const discussionPrompt = await collectSingleLineInput(
+      "Enter discussion prompt"
+    );
+
+    if (!discussionPrompt.trim()) {
+      console.log("❌ Discussion prompt cannot be empty. Returning to menu.");
+      showMenu();
+      return;
+    }
+
+    // Collect facilitator configuration
+    console.log("\n🎯 === Facilitator Configuration ===");
+    console.log("The facilitator agent can intervene during the dialogue to:");
+    console.log("• Improve discussion quality");
+    console.log("• Prevent agreement bias");
+    console.log("• Ensure thorough exploration of ideas");
+    console.log("• Guide conversation focus");
+
+    const facilitatorEnabled = await confirmAction(
+      "\nEnable facilitator interventions?"
+    );
+
+    // Collect iterations with facilitator-specific validation
+    let iterations;
+    if (facilitatorEnabled) {
+      console.log(
+        "\n📝 Note: When facilitator is enabled, iterations must be even (2, 4, 6, 8, 10)"
+      );
+      iterations = await collectNumberInput(
+        "Number of dialogue iterations",
+        4,
+        2,
+        10
+      );
+
+      // Validate even number for facilitator mode
+      if (iterations % 2 !== 0) {
+        console.log("⚠️  Adjusting to even number for facilitator mode...");
+        iterations = iterations + 1;
+        console.log(`✅ Adjusted to ${iterations} iterations`);
+      }
+    } else {
+      iterations = await collectNumberInput(
+        "Number of dialogue iterations",
+        3,
+        1,
+        10
+      );
+    }
+
+    // Collect summary focus (optional)
+    const defaultSummaryFocus = facilitatorEnabled
+      ? "Please provide a comprehensive summary of the key points, insights, and conclusions from this facilitated dialogue, highlighting how the facilitator interventions enhanced the discussion."
+      : "Please provide a comprehensive summary of the key points, insights, and conclusions from this dialogue.";
+
+    const summaryFocus = await collectSingleLineInput(
+      "Summary focus (press Enter for default)",
+      defaultSummaryFocus
+    );
+
+    // Display configuration summary
+    console.log("\n📋 Configuration Summary:");
+    console.log(
+      `Source text: ${sourceText.substring(0, 100)}${
+        sourceText.length > 100 ? "..." : ""
+      }`
+    );
+    console.log(`Discussion prompt: ${discussionPrompt}`);
+    console.log(
+      `Facilitator: ${facilitatorEnabled ? "🎯 Enabled" : "❌ Disabled"}`
+    );
+    console.log(`Iterations: ${iterations}`);
+    console.log(
+      `Summary focus: ${summaryFocus.substring(0, 80)}${
+        summaryFocus.length > 80 ? "..." : ""
+      }`
+    );
+
+    if (facilitatorEnabled) {
+      console.log(
+        `\n🎯 Facilitator will intervene at iterations: ${Array.from(
+          { length: Math.floor(iterations / 2) },
+          (_, i) => (i + 1) * 2
+        ).join(", ")}`
+      );
+    }
+
+    // Ask for confirmation
+    const confirmed = await confirmAction(
+      "\nProceed with facilitated dialogue pipeline?"
+    );
+
+    if (!confirmed) {
+      console.log("❌ Pipeline cancelled. Returning to menu.");
+      showMenu();
+      return;
+    }
+
+    // Run the pipeline
+    console.log(
+      `\n🚀 Starting ${
+        facilitatorEnabled ? "facilitated " : ""
+      }dialogue pipeline...`
+    );
+
+    const config = {
+      sourceText,
+      discussionPrompt,
+      iterations,
+      summaryFocus,
+      facilitatorEnabled,
+    };
+
+    const result = await facilitatedDialoguePipeline(config);
+
+    // Display results
+    displayPipelineResults(result);
+  } catch (error) {
+    console.error(
+      "\n❌ Error running facilitated dialogue pipeline:",
+      error.message
+    );
     console.log("Returning to menu.");
   }
 

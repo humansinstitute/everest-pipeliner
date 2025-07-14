@@ -1,0 +1,21 @@
+{
+  "totalExecutionTime": 356,
+  "completedAt": "2025-07-13T10:01:21.671Z",
+  "environment": {
+    "nodeVersion": "v20.19.2",
+    "platform": "darwin",
+    "arch": "arm64",
+    "memory": {
+      "rss": 132792320,
+      "heapTotal": 74448896,
+      "heapUsed": 29696672,
+      "external": 3801137,
+      "arrayBuffers": 1215036
+    }
+  },
+  "configuration": {
+    "parallelExecution": true,
+    "timeout": "600000",
+    "maxWorkers": "auto"
+  }
+}
