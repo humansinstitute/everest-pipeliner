@@ -1,10 +1,6 @@
 # Pipeliner - Distributed Pipeline Execution Platform
 
-<<<<<<< HEAD
 A comprehensive AI-powered pipeline framework for Everest Agent workflows featuring parallel test execution, dialogue processing, and content transformation capabilities with intelligent scheduling, comprehensive error handling, and advanced performance optimization.
-=======
-A high-performance, production-ready platform for executing Everest Agent workflows both locally and remotely via NostrMQ. Features parallel test execution, distributed pipeline triggering, intelligent scheduling, and comprehensive monitoring.
->>>>>>> 855d7527ea2fc900418c1ca7a658dfba57f80bbb
 
 ## 🚀 Features
 
@@ -104,7 +100,6 @@ npm start
 node index.js --nostrmq
 ```
 
-<<<<<<< HEAD
 ### Interactive Pipeline Menu
 
 ```bash
@@ -134,9 +129,6 @@ node src/pipelines/facilitatedDialoguePipeline.js
 ```
 
 ### Testing and Development
-=======
-### Basic Parallel Test Execution
->>>>>>> 855d7527ea2fc900418c1ca7a658dfba57f80bbb
 
 ```bash
 # Run all integration tests in parallel
