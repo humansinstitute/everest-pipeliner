@@ -1,4 +1,4 @@
-# Pipeliner - AI-Powered Content Pipeline Framework
+# Pipeliner - Distributed Pipeline Execution Platform
 
 A comprehensive AI-powered pipeline framework for Everest Agent workflows featuring parallel test execution, dialogue processing, and content transformation capabilities with intelligent scheduling, comprehensive error handling, and advanced performance optimization.
 
@@ -6,13 +6,23 @@ A comprehensive AI-powered pipeline framework for Everest Agent workflows featur
 
 ### Core Capabilities
 
-- **Content Waterfall Pipeline**: Transform long-form content into LinkedIn posts and YouTube Reels concepts
-- **Dialogue Processing**: AI-powered conversation generation with optional facilitator intervention
+- **Local Pipeline Execution**: Interactive CLI for running dialogue and facilitated dialogue pipelines
+- **Distributed Pipeline Triggering**: Remote pipeline execution via NostrMQ messaging protocol
 - **Parallel Test Execution**: Run multiple integration tests simultaneously with up to 60-80% performance improvement
 - **Intelligent Test Scheduling**: AI-driven test ordering based on historical performance data
 - **Advanced Error Handling**: Comprehensive error categorization, retry mechanisms, and circuit breaker patterns
 - **Memory Optimization**: Real-time memory monitoring and automatic garbage collection
 - **Performance Analytics**: Detailed performance metrics, trend analysis, and optimization recommendations
+
+### NostrMQ Integration (Feature 005)
+
+- **Remote Pipeline Triggering**: Execute pipelines remotely via NostrMQ v0.3.0 messaging
+- **Pubkey Authorization**: Secure access control with whitelist-based authentication
+- **Two-Phase Response Pattern**: Immediate acknowledgment + completion response
+- **Asynchronous Job Processing**: Concurrent pipeline execution with configurable limits
+- **Universal Pipeline Interface**: Standard API for all pipeline types
+- **Comprehensive Audit Logging**: Job-specific logs and security event tracking
+- **Automatic Pipeline Discovery**: Dynamic pipeline registry with hot-loading
 
 ### Phase 4 Enhancements
 
@@ -26,9 +36,7 @@ A comprehensive AI-powered pipeline framework for Everest Agent workflows featur
 
 - [Installation](#installation)
 - [Quick Start](#quick-start)
-- [Pipeline Features](#pipeline-features)
-  - [Content Waterfall Pipeline](#content-waterfall-pipeline)
-  - [Dialogue Pipelines](#dialogue-pipelines)
+- [NostrMQ Pipeline Triggering](#nostrmq-pipeline-triggering)
 - [Configuration](#configuration)
 - [Usage Examples](#usage-examples)
 - [Performance Optimization](#performance-optimization)
@@ -62,6 +70,35 @@ npm run validate
 ```
 
 ## ⚡ Quick Start
+
+### Interactive CLI
+
+```bash
+# Start the interactive CLI
+npm start
+
+# Available options:
+# 1. Run Dialogue Pipeline
+# 2. Run Facilitated Dialogue Pipeline
+# 3. Run Integration Tests
+# 4. Run Parallel Integration Tests
+# 5. Start NostrMQ Service (NEW!)
+```
+
+### NostrMQ Service
+
+```bash
+# Configure environment variables
+cp .env.example .env
+# Edit .env with your NostrMQ credentials and authorized pubkeys
+
+# Start NostrMQ service via CLI
+npm start
+# Select option 5: "Start NostrMQ Service"
+
+# Or start directly
+node index.js --nostrmq
+```
 
 ### Interactive Pipeline Menu
 
@@ -116,92 +153,107 @@ npm run test:benchmark
 npm run health-check
 ```
 
-## 🌊 Pipeline Features
+## 🌐 NostrMQ Pipeline Triggering
 
-### Content Waterfall Pipeline
+### Overview
 
-The Content Waterfall Pipeline transforms long-form content into structured social media outputs through a three-stage AI agent workflow.
+The NostrMQ Pipeline Triggering feature transforms Pipeliner from a local CLI tool into a distributed, API-accessible service. This enables remote pipeline execution via the NostrMQ v0.3.0 messaging protocol.
 
-#### Overview
+### Key Features
 
-- **Input**: Articles, transcripts, interviews, blog posts (1K-10K words optimal)
-- **Output**: 4 topics → 4 LinkedIn posts → 8 YouTube Reels concepts
-- **Processing Time**: Typically 2-3 minutes for standard content
-- **Cost**: ~$0.02-0.05 per pipeline execution
+- **Remote Pipeline Execution**: Trigger pipelines from anywhere via NostrMQ messages
+- **Secure Authorization**: Pubkey-based whitelist authentication with caching
+- **Two-Phase Responses**: Immediate acknowledgment + completion notification
+- **Asynchronous Processing**: Concurrent job execution with configurable limits
+- **Universal Interface**: All pipelines support both CLI and NostrMQ execution
+- **Comprehensive Logging**: Job-specific audit trails and security event tracking
 
-#### Key Features
+### Quick Setup
 
-- **Automated Topic Extraction**: AI-powered analysis extracts 4 distinct, compelling topics
-- **LinkedIn Optimization**: Posts follow embedded style guides for maximum professional engagement
-- **Video Content Planning**: Detailed Reels concepts with production guidance and visual suggestions
-- **Organized Output**: Timestamped directories with individual files for each deliverable
-
-#### Usage Example
+1. **Configure Environment**:
 
 ```bash
-# Start interactive menu
-node index.js
-
-# Select option 4: Run Content Waterfall Pipeline
-# Choose input method:
-#   1. Select from files in output/waterfall/ip/
-#   2. Input text directly via CLI
-# Optional: Add custom focus areas
-# Review generated content in output/waterfall/YY_MM_DD_HH_MM_SS_ID/
+cp .env.example .env
+# Edit .env with your NostrMQ credentials
 ```
 
-#### Input Methods
+2. **Set Required Variables**:
 
-1. **File Input**: Place `.txt` or `.md` files in `output/waterfall/ip/` directory
-2. **Direct Input**: Type or paste content directly into CLI (end with `###`)
+```bash
+# NostrMQ Configuration
+NOSTRMQ_PRIVATE_KEY=your_private_key_hex
+NOSTRMQ_RELAYS=wss://relay1.com,wss://relay2.com
 
-#### Generated Output Structure
+# Authorization (comma-separated pubkeys)
+NOSTRMQ_AUTHORIZED_PUBKEYS=pubkey1,pubkey2,pubkey3
 
-```
-output/waterfall/25_01_14_13_45_23_1/
-├── topic_extractions.md          # Detailed topic analysis
-├── linkedin_posts/               # Individual LinkedIn posts
-│   ├── post_1_[topic].md
-│   ├── post_2_[topic].md
-│   ├── post_3_[topic].md
-│   └── post_4_[topic].md
-├── reels_concepts/               # Individual Reels concepts
-│   ├── concept_1_[type].md
-│   ├── concept_2_[type].md
-│   ├── ... (8 total)
-│   └── concept_8_[type].md
-├── summary.md                    # Comprehensive summary
-└── data.json                     # Technical metadata
+# Optional Configuration
+NOSTRMQ_MAX_CONCURRENT_JOBS=5
+NOSTRMQ_JOB_TIMEOUT=300000
 ```
 
-#### Agent Workflow
+3. **Start Service**:
 
-1. **Content Analyzer**: Extracts 4 distinct topics with insights and context
-2. **LinkedIn Creator**: Transforms topics into optimized LinkedIn posts with varied approaches
-3. **Reels Generator**: Creates 2 YouTube Reels concepts per LinkedIn post with production guidance
+```bash
+npm start
+# Select option 5: "Start NostrMQ Service"
+```
 
-### Dialogue Pipelines
+### Message Format
 
-#### Standard Dialogue Pipeline
+Send `pipeline-trigger` messages to execute pipelines:
 
-- **Purpose**: Generate AI-powered conversations between two agents on a given topic
-- **Input**: Source material + discussion prompt + iteration count
-- **Output**: Structured conversation with summary and analysis
-- **Use Cases**: Exploring different perspectives, generating discussion content, idea development
+```json
+{
+  "type": "pipeline-trigger",
+  "pipeline": "dialogue",
+  "parameters": {
+    "topic": "AI Ethics",
+    "participants": ["Alice", "Bob"]
+  }
+}
+```
 
-#### Facilitated Dialogue Pipeline
+### Response Pattern
 
-- **Purpose**: Enhanced dialogue with optional facilitator agent intervention
-- **Features**: Facilitator can intervene to improve discussion quality and prevent agreement bias
-- **Configuration**: Even iteration counts required when facilitator is enabled
-- **Benefits**: Higher quality discussions, thorough exploration of ideas, guided conversation focus
+**Immediate Acknowledgment**:
 
-#### Common Features
+```json
+{
+  "type": "pipeline-ack",
+  "jobId": "job_abc123",
+  "status": "accepted",
+  "message": "Pipeline execution started"
+}
+```
 
-- **File Input Support**: Use files from `output/dialogue/ip/` directory
-- **Flexible Configuration**: Customizable iteration counts, summary focus, and discussion prompts
-- **Comprehensive Output**: Conversation transcripts, summaries, and metadata
-- **Cost Tracking**: Detailed cost analysis for each pipeline execution
+**Completion Response**:
+
+```json
+{
+  "type": "pipeline-response",
+  "jobId": "job_abc123",
+  "status": "completed",
+  "result": {
+    /* pipeline output */
+  },
+  "executionTime": 45.67
+}
+```
+
+### Supported Pipelines
+
+- **dialogue**: Interactive dialogue pipeline
+- **facilitatedDialogue**: Facilitated dialogue with moderator
+
+### Security
+
+- **Pubkey Authorization**: Only whitelisted pubkeys can trigger pipelines
+- **Request Validation**: All messages validated against schema
+- **Audit Logging**: Complete security and execution audit trail
+- **Error Handling**: Secure error responses without sensitive data exposure
+
+For detailed documentation, see [`NOSTRMQ_FEATURE_DOCUMENTATION.md`](NOSTRMQ_FEATURE_DOCUMENTATION.md).
 
 ## ⚙️ Configuration
 
@@ -254,6 +306,13 @@ const TEST_SUITES = [
 NODE_ENV=development  # Development mode with verbose logging
 NODE_ENV=production   # Production mode with optimizations
 NODE_ENV=test        # Test mode for CI/CD
+
+# NostrMQ Configuration
+NOSTRMQ_PRIVATE_KEY=your_private_key_hex
+NOSTRMQ_RELAYS=wss://relay1.com,wss://relay2.com
+NOSTRMQ_AUTHORIZED_PUBKEYS=pubkey1,pubkey2,pubkey3
+NOSTRMQ_MAX_CONCURRENT_JOBS=5
+NOSTRMQ_JOB_TIMEOUT=300000
 
 # Memory and performance tuning
 JEST_MAX_WORKERS=4           # Override worker count
@@ -522,53 +581,30 @@ node --inspect test_parallel_integration.js
 ```
 pipeliner/
 ├── src/
+│   ├── nostrmq/                   # NostrMQ service implementation
+│   │   ├── index.js              # Main NostrMQ service class
+│   │   ├── authValidator.js      # Pubkey authorization system
+│   │   ├── messageHandler.js     # Message processing and validation
+│   │   └── jobManager.js         # Asynchronous job execution
 │   ├── pipelines/                 # Pipeline implementations
-│   │   ├── contentWaterfallPipeline.js    # Content transformation pipeline
-│   │   ├── dialoguePipeline.js            # Standard dialogue pipeline
-│   │   ├── facilitatedDialoguePipeline.js # Facilitated dialogue pipeline
-│   │   └── simpleChatPipeline.js          # Simple chat pipeline (planned)
-│   ├── agents/                    # Everest agent implementations
-│   │   ├── waterfall/             # Content waterfall agents
-│   │   │   ├── contentAnalyzer.js         # Topic extraction agent
-│   │   │   ├── linkedinCreator.js         # LinkedIn post generation
-│   │   │   └── reelsGenerator.js          # Reels concept generation
-│   │   ├── dialogue/              # Dialogue pipeline agents
-│   │   │   ├── DialogueAg1.js             # First dialogue agent
-│   │   │   ├── DialogueAg2.js             # Second dialogue agent
-│   │   │   ├── facilitator.js             # Facilitator agent
-│   │   │   └── summariseConversation.js   # Conversation summarizer
-│   │   ├── conversationAgent.js           # General conversation agent
-│   │   ├── converstationAnalysis.js       # Conversation analysis
-│   │   └── intentAgent.js                 # Intent detection agent
+│   │   ├── registry/             # Pipeline discovery system
+│   │   ├── dialoguePipeline.js   # Dialogue pipeline with NostrMQ support
+│   │   └── facilitatedDialoguePipeline.js # Facilitated dialogue
 │   ├── services/                  # Core services
-│   │   ├── everest.service.js             # Everest API communication
-│   │   └── agentLoader.service.js         # Agent loading and configuration
-│   └── utils/                     # Utility functions
-│       ├── testRunner.js                  # Core test execution framework
-│       ├── pipelineData.js                # Pipeline execution tracking
-│       └── pipelineCost.js                # Cost monitoring and reporting
-├── output/                        # Pipeline output directories
-│   ├── waterfall/                 # Content waterfall outputs
-│   │   ├── ip/                            # Input files directory
-│   │   └── YY_MM_DD_HH_MM_SS_ID/         # Timestamped output folders
-│   └── dialogue/                  # Dialogue pipeline outputs
-│       ├── ip/                            # Input files directory
-│       └── YY_MM_DD_HH_MM_SS_ID/         # Timestamped output folders
-├── tests/                         # Test suites
-│   ├── pipelines/                 # Pipeline tests
-│   │   ├── contentWaterfallPipeline.test.js   # Waterfall pipeline tests
-│   │   ├── dialoguePipeline.test.js           # Dialogue pipeline tests
-│   │   └── facilitatedDialoguePipeline.test.js # Facilitated dialogue tests
-│   ├── agents/                    # Agent tests
-│   │   └── waterfall.test.js              # Waterfall agent tests
-│   ├── services/                  # Service tests
-│   │   └── everest.service.test.js        # Everest service tests
-│   ├── utils/                     # Utility tests
-│   │   ├── pipelineData.test.js           # Pipeline data tests
-│   │   ├── pipelineCost.test.js           # Cost tracking tests
-│   │   └── waterfallTestHelpers.js        # Waterfall test utilities
-│   ├── fixtures/                  # Test fixtures
-│   │   └── waterfall/                     # Waterfall test content
+│   │   ├── config.js             # Configuration management
+│   │   ├── logger.js             # Application logging
+│   │   └── jobLogger.js          # Job-specific logging
+│   ├── utils/                     # Utility functions
+│   │   ├── testRunner.js         # Core test execution framework
+│   │   ├── jobId.js              # Job ID generation
+│   │   └── messageValidation.js  # Message validation schemas
+│   └── agents/                    # Everest agent implementations
+├── tests/
+│   ├── nostrmq/                   # NostrMQ feature tests
+│   │   ├── authValidator.test.js # Authorization tests
+│   │   ├── integration.test.js   # End-to-end integration tests
+│   │   ├── security.test.js      # Security validation tests
+│   │   └── *.test.js             # Additional NostrMQ tests
 │   ├── setup.js                   # Jest test setup
 │   ├── globalSetup.js            # Global test environment setup
 │   ├── globalTeardown.js         # Global test cleanup
@@ -577,8 +613,10 @@ pipeliner/
 ├── test-results/                  # CI/CD test results
 ├── coverage/                      # Test coverage reports
 ├── test_*.js                      # Integration test files
-├── index.js                       # Main CLI interface
+├── .env.example                   # Environment configuration template
+├── NOSTRMQ_FEATURE_DOCUMENTATION.md # NostrMQ feature documentation
 ├── jest.config.js                 # Jest configuration
+├── ecosystem.config.cjs           # PM2 process management
 ├── package.json                   # Project configuration and scripts
 ├── CONTENT_WATERFALL_FEATURE_DOCUMENTATION.md  # Waterfall pipeline docs
 └── README.md                      # This documentation

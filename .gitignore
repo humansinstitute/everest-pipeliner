@@ -40,6 +40,8 @@ yarn-debug.log*
 yarn-error.log*
 logs/*
 
+.jest*
+test-*
 
 # Runtime data
 pids

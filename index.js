@@ -12,6 +12,7 @@ import {
   listWaterfallSourceFiles,
   readWaterfallSourceFile,
 } from "./src/pipelines/contentWaterfallPipeline.js";
+import { startNostrMQService } from "./src/nostrmq/index.js";
 
 // Load environment variables
 dotenv.config();
@@ -32,6 +33,7 @@ function displayMenu() {
   console.log("3. Run Facilitated Dialogue Pipeline");
   console.log("4. Run Content Waterfall Pipeline");
   console.log("5. Manage Agents");
+  console.log("6. Start NostrMQ Service");
   console.log("0. Exit");
   console.log("======================");
 }
@@ -54,6 +56,9 @@ function handleMenuChoice(choice) {
     case "5":
       console.log("\n🤖 Manage Agents - Coming soon!");
       showMenu();
+      break;
+    case "6":
+      startNostrMQServiceFromCLI();
       break;
     case "0":
       console.log("\nGoodbye!");
@@ -778,6 +783,26 @@ async function runContentWaterfallPipeline() {
   rl.question("", () => {
     showMenu();
   });
+}
+
+// Add new function for NostrMQ service startup
+async function startNostrMQServiceFromCLI() {
+  try {
+    console.log("\n🌐 Starting NostrMQ Pipeline Service...");
+
+    const service = await startNostrMQService();
+
+    console.log("✅ NostrMQ service started successfully!");
+    console.log("📡 Listening for pipeline trigger messages...");
+    console.log("🔐 Authorized pubkeys loaded from .env");
+    console.log("\nPress Ctrl+C to stop the service");
+
+    // Service is now running - don't return to menu
+  } catch (error) {
+    console.error("❌ Failed to start NostrMQ service:", error.message);
+    console.log("Returning to menu...");
+    showMenu();
+  }
 }
 
 function main() {

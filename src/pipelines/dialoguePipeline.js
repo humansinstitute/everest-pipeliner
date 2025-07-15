@@ -929,6 +929,104 @@ async function validateSourceFile(filePath) {
   }
 }
 
+/**
+ * NostrMQ execution interface for dialogue pipeline
+ * @param {Object} parameters - Pipeline parameters from NostrMQ request
+ * @param {Object} jobLogger - Job-specific logger instance
+ * @returns {Promise<Object>} - Pipeline execution result
+ */
+export async function executeViaNostrMQ(parameters, jobLogger) {
+  jobLogger.info("Dialogue pipeline execution started via NostrMQ", {
+    parameters,
+  });
+
+  try {
+    // Validate and prepare configuration
+    const config = {
+      sourceText: parameters.sourceText,
+      discussionPrompt: parameters.discussionPrompt,
+      iterations: parameters.iterations || 3,
+      summaryFocus:
+        parameters.summaryFocus ||
+        "Please provide a comprehensive summary of the key points, insights, and conclusions from this dialogue.",
+    };
+
+    // Execute the pipeline
+    const result = await dialoguePipeline(config);
+
+    jobLogger.info("Dialogue pipeline execution completed via NostrMQ", {
+      runId: result.runId,
+      status: result.error ? "failed" : "completed",
+      conversationLength: result.conversation?.length || 0,
+    });
+
+    return result;
+  } catch (error) {
+    jobLogger.error("Dialogue pipeline execution failed via NostrMQ", {
+      error: error.message,
+      stack: error.stack,
+    });
+    throw error;
+  }
+}
+
+/**
+ * Pipeline metadata for registry discovery
+ */
+export const pipelineInfo = {
+  name: "dialogue",
+  description:
+    "Multi-agent dialogue pipeline that orchestrates a conversation between two agents and summarizes the result",
+  version: "1.0.0",
+  parameters: {
+    required: ["sourceText", "discussionPrompt"],
+    optional: ["iterations", "summaryFocus"],
+    schema: {
+      sourceText: {
+        type: "string",
+        description: "Source material for the dialogue",
+        minLength: 10,
+      },
+      discussionPrompt: {
+        type: "string",
+        description: "Prompt to guide the discussion",
+        minLength: 10,
+      },
+      iterations: {
+        type: "integer",
+        description: "Number of dialogue iterations",
+        minimum: 1,
+        maximum: 10,
+        default: 3,
+      },
+      summaryFocus: {
+        type: "string",
+        description: "Focus for the summary generation",
+        default:
+          "Please provide a comprehensive summary of the key points, insights, and conclusions from this dialogue.",
+      },
+    },
+  },
+  capabilities: [
+    "multi-agent-dialogue",
+    "conversation-summary",
+    "file-generation",
+    "cost-tracking",
+  ],
+  outputs: {
+    conversation: "Array of dialogue exchanges",
+    summary: "Generated conversation summary",
+    files: "Generated output files (markdown, JSON)",
+    pipeline: "Execution metadata and statistics",
+  },
+  estimatedDuration: "60-180s",
+  resourceRequirements: {
+    memory: "low",
+    cpu: "medium",
+    network: "high", // Due to Everest API calls
+  },
+};
+
 export {
   dialoguePipeline,
   validateDialogueConfig,

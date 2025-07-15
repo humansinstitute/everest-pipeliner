@@ -1,0 +1,3438 @@
+00:00-00:04
+Alright, how you doing?
+
+00:04-00:06
+We are back, episode 12.
+
+00:06-00:07
+Something.
+
+00:07-00:10
+I'm starting to actually lose count.
+
+00:10-00:12
+This is a good sign, this is a good problem to have.
+
+00:12-00:13
+Hopefully.
+
+00:13-00:17
+How are you feeling after our inaugural guest last week?
+
+00:17-00:18
+I thought that was a good pun.
+
+00:18-00:19
+I enjoyed it.
+
+00:19-00:22
+It was nice to have somebody else around, no offense.
+
+00:22-00:24
+Yeah, non-taken.
+
+00:24-00:31
+It was interesting because I felt like I had way less talking, which is either good or bad.
+
+00:31-00:33
+I think it was probably like...
+
+00:33-00:35
+But it's obviously because there's three people.
+
+00:35-00:38
+It was a nice change of dynamic.
+
+00:38-00:39
+But I did listen back to it.
+
+00:39-00:41
+I thought it was pretty well balanced.
+
+00:41-00:43
+I thought we covered some interesting territory.
+
+00:43-00:46
+It's not at all where I thought it would go.
+
+00:46-00:47
+That was kind of cool.
+
+00:47-00:51
+Joel's obviously like a really good speaker and so it was great.
+
+00:51-00:56
+He's been thinking about this from dimensions that we probably haven't spent a whole lot of time on as well.
+
+00:56-00:58
+So I think that was really cool.
+
+00:58-00:59
+Yeah.
+
+00:59-01:05
+Just the two of us this week, but we've got some other guests in the queue coming up over the next few weeks.
+
+01:05-01:09
+So I think this is going to be a nice little back and forth dynamic.
+
+01:09-01:13
+Yeah, I think we'll do some of the two of us, some of the guests.
+
+01:13-01:16
+I like it as more of a discussion format than an interview.
+
+01:16-01:17
+Yeah, exactly.
+
+01:17-01:18
+I'm not...
+
+01:18-01:20
+Yeah, I think it works nicely.
+
+01:20-01:32
+There's a wide open space at the moment with so much going on that it's useful to just have, I think, a broad conversation about what's going on and why is it really interesting and just sort of share that excitement.
+
+01:32-01:39
+Well, a lot of podcasts seem like they're set up for everyone to have their monologues basically.
+
+01:39-01:45
+There's a bunch of questions and then I am obviously calling attention to All-In.
+
+01:45-01:49
+Again, that's my weekly favorite thing to do is to just shit on the All-In podcast.
+
+01:49-01:54
+But yeah, it's like everyone wants to get their short monologue out.
+
+01:54-01:57
+It's scripted and then you move on to the next one.
+
+01:57-01:59
+I don't know, it just feels like it's...
+
+01:59-02:04
+But even the All-In podcast, when it's actually really good is when they're locked in proper debate.
+
+02:04-02:06
+It's when Jason doesn't turn on that.
+
+02:06-02:18
+But you know, there's actually proper debate going on and it's like, you know, they've broken free of the pre-scripted remarks that they probably have set up in front of them.
+
+02:18-02:21
+And it feels a bit more dynamic.
+
+02:21-02:25
+But you know, that's kind of not necessarily edge where going for either.
+
+02:25-02:28
+It's more just free flowing fireside chats.
+
+02:28-02:30
+Obviously we're selling beach in front of a fire right now.
+
+02:30-02:34
+I think that's what I... When we are sat back at the beach, that's good.
+
+02:34-02:36
+It's a surprisingly nice day.
+
+02:36-02:39
+It looked like it was going to be a little bit rainy, but it's come good today.
+
+02:39-02:41
+It's a good morning down here.
+
+02:41-02:44
+Although the sea is just nonsense.
+
+02:44-02:45
+Bit rough today.
+
+02:45-02:48
+Well, it's just like flat. It's like super shallow and flat.
+
+02:48-02:53
+And then like a five meter wave like every four seconds, this comes and destroys you.
+
+02:53-02:56
+I didn't really spend a long time in there this morning.
+
+02:56-02:58
+I couldn't... I wasn't really feeling in a swimming mood.
+
+02:58-03:04
+So I couldn't be bothered to sit out there in the freezing cold water for a long time.
+
+03:04-03:07
+So I just played around in the waves for a bit and then came back in.
+
+03:07-03:09
+But it was nice.
+
+03:09-03:11
+Not bad to berth winter though.
+
+03:11-03:13
+Oh yeah, it's a pretty good day.
+
+03:13-03:15
+Alright.
+
+03:15-03:17
+Welcome to the good stuff then.
+
+03:17-03:18
+Yes, thank you.
+
+03:18-03:20
+We're back.
+
+03:20-03:28
+I think we wanted to just touch on some, I guess, misconceptions and myths that might exist around AI today.
+
+03:28-03:30
+I don't really know where we want to take this.
+
+03:30-03:32
+I think you had one that you were thinking about.
+
+03:32-03:40
+The one I suggested we start with, which I think you hear a lot, is I trained the model.
+
+03:40-03:41
+Oh yeah.
+
+03:41-03:45
+I'm like, "Oh right, cool. You just put some money behind this thing."
+
+03:45-03:47
+That's good.
+
+03:47-03:50
+How big is your GPU for it and the rest of it?
+
+03:50-03:55
+I always think it's interesting to kind of like try and get under the skin of like,
+
+03:55-03:58
+"What do people mean when they say I trained the model?
+
+03:58-04:01
+What are they actually trying to get out of it?
+
+04:01-04:04
+What do they think the model is doing?
+
+04:04-04:08
+And why would they retrain the model for something?"
+
+04:08-04:10
+I mean, there are reasons to do it.
+
+04:10-04:16
+I don't think, personally it's not something I'm particularly bothered about at all.
+
+04:16-04:24
+But I think what most people mean when they say I trained the model is usually they mean I attached a couple of PDFs.
+
+04:24-04:28
+That's often what is under the pin that says that.
+
+04:28-04:29
+Taylor Context.
+
+04:29-04:33
+Somebody's got a chatbot and the chatbot can do a few different things and they've said,
+
+04:33-04:42
+"Well here's my, you know, sometimes it's a system prompt and sometimes it's a system prompt plus documents that are in a knowledge store
+
+04:42-04:45
+and sometimes it's just documents in a knowledge store.
+
+04:45-04:51
+Now I can talk to it about my business or I can talk to it and tell it to be me."
+
+04:51-04:55
+I almost feel like it's more about what it doesn't say than what it does.
+
+04:55-04:58
+Because you are putting guardrails on what it's allowed to talk about.
+
+04:58-05:03
+If you've got a business chatbot, don't tell people who the president of the United States is.
+
+05:03-05:08
+Just answer questions that are related to the context that I've given you.
+
+05:08-05:11
+So maybe it's more along those lines I think.
+
+05:11-05:12
+Yeah.
+
+05:12-05:17
+I guess I find it funny because it's like, I mean training a model is a thing.
+
+05:17-05:27
+And the training of the model is like taking the source data and then creating the representation of all of the knowledge of humanity.
+
+05:27-05:32
+Building the actual large language model and all the weights that are associated with that.
+
+05:32-05:36
+And that's a very expensive specific thing to do.
+
+05:36-05:40
+I find it just kind of curious when people are talking about training it,
+
+05:40-05:46
+like are you actually assuming here that you're changing the model in some sort of way?
+
+05:46-05:48
+Or are you actually trying to change?
+
+05:48-05:53
+Because there are ways that you can do some sort of like edge reinforcement learning on the model and adjust some of the weights.
+
+05:53-06:00
+So you get more predictable like outputs for specific industries and verticals or areas.
+
+06:00-06:06
+Yeah, I guess I see it as a bit of a myth because it becomes one of these things where people,
+
+06:06-06:11
+I expect a lot more out of the thing than they've put in.
+
+06:11-06:16
+So you'd say like this model has been trained to be good in the legal industry.
+
+06:16-06:19
+And that sounds like that's better.
+
+06:19-06:25
+Because you'd say like, well chat GPT knows this and this one is the legal version of chat GPT.
+
+06:25-06:27
+So it's better in the legal area.
+
+06:27-06:32
+But then what do you think it means to be retrained in the legal area?
+
+06:32-06:38
+And what are you actually trying to get the LLM to do versus like another part of the system?
+
+06:38-06:43
+So one of the things I think we talk about a decent amount would be,
+
+06:43-06:49
+it's not that the whole computer is now the LLM, it's like a bit of an odd way to think about it.
+
+06:49-06:53
+Like the LLM inside is like part of the computer.
+
+06:53-06:59
+It's the bit that's really good at talking to the human or understanding what the human wants to do
+
+06:59-07:02
+or applying like just a minute bit of intelligence.
+
+07:02-07:05
+It's not the best bit at factory core.
+
+07:05-07:09
+So I think what often people are trying to do when they talk about training models is that
+
+07:09-07:15
+what they really want is I want the model to respond with certain facts.
+
+07:15-07:21
+I want it to know certain things that it doesn't know based from its base model.
+
+07:21-07:25
+And I think that's a reasonable want.
+
+07:25-07:33
+I guess I find the approach to it like a little bit counter-intuitive where,
+
+07:33-07:35
+I feel like I am rambling a bit here.
+
+07:35-07:37
+So if I am, stop me, but I'll keep going.
+
+07:37-07:39
+Interesting.
+
+07:39-07:44
+Another, this is like a related myth, which would be like, oh, the models get better.
+
+07:44-07:51
+And it comes to the same sort of thing where people will look at whether an LLM knows something
+
+07:51-07:57
+and use that as a proxy for whether it is intelligent or not and whether it needs to get better.
+
+07:57-08:01
+And I sort of recoil a little bit on this.
+
+08:01-08:06
+I think it's just entirely the wrong framing for how to deal with these things and what you need.
+
+08:06-08:09
+It shouldn't really be relying.
+
+08:09-08:10
+In fact, you know what?
+
+08:10-08:13
+I'm going to bring it back to something that's trending at the moment in the second,
+
+08:13-08:14
+which is context engineering.
+
+08:14-08:16
+So let's not forget about that.
+
+08:16-08:22
+Which is that it's not really the job of the model to know stuff.
+
+08:22-08:31
+And you probably shouldn't lean into that really because it is fallible in that sense.
+
+08:31-08:40
+It's just a probabilistic recalling of things and it will make mistakes and it will make hallucinations.
+
+08:40-08:42
+But it will talk to you nicely.
+
+08:42-08:46
+And there's just better ways of dealing with facts.
+
+08:46-08:52
+And the best way to get good factory core from these things is inside the context engineering.
+
+08:52-08:57
+And it's to come up with systems that tell the thing the facts prior to you asking the question.
+
+08:57-09:01
+So it's like, here's my question. Here's the answer. Now tell me the answer in a nice way.
+
+09:01-09:05
+And we can do all of that inside these systems.
+
+09:05-09:16
+It's just like expecting it to be somehow trained into the language model component is to me it's like trying to get like a hammer to screw in a nail.
+
+09:16-09:18
+Screw in a nail anyway.
+
+09:18-09:19
+You screw in a screw.
+
+09:19-09:22
+You can hammer a screw in.
+
+09:22-09:24
+It's just going to make a mess.
+
+09:24-09:29
+You'll get something roughly correct but you'd be better off with a screwdriver.
+
+09:29-09:30
+That's it.
+
+09:30-09:31
+In that instance of time.
+
+09:31-09:35
+How much of this do you think is just marketing speak though?
+
+09:35-09:44
+I mean, I think it is marketing speak but it kind of shows that there's just a misunderstanding there.
+
+09:44-09:52
+And it's a misunderstanding I think that holds people back from building what you should build.
+
+09:52-10:01
+Which is the version where you use the LLM for what it's good at which is the translation between like human language and machine world.
+
+10:01-10:03
+Like they're brilliant at this.
+
+10:03-10:04
+We can move from I can say things.
+
+10:04-10:06
+It can pick out the intent.
+
+10:06-10:08
+It can map it into like a structured data source.
+
+10:08-10:19
+We can process it like using normal tools that we would use instead of what you see getting thrown out there is like LLMs are an entirely new paradigm of computing.
+
+10:19-10:20
+Yeah.
+
+10:20-10:22
+And like everything changes now.
+
+10:22-10:25
+And it's like no, the interface changes massively.
+
+10:25-10:26
+Yeah.
+
+10:26-10:28
+Because we can talk to the computer.
+
+10:28-10:29
+Yeah.
+
+10:29-10:30
+Which we've said a million times on this podcast.
+
+10:30-10:32
+I think there's a myth there as well.
+
+10:32-10:36
+We can like we can explore later but no, I think this is really interesting.
+
+10:36-10:42
+Like the other aside to this maybe and I don't know if this is the right tangent to go down here.
+
+10:42-10:48
+But it's the notion that like you need the big frontier model for everything.
+
+10:48-10:53
+And I feel like everyone wants the Ferrari even though they're just driving to the shops.
+
+10:53-10:55
+You know, it's that kind of mentality.
+
+10:55-11:02
+I think like I was reading, I started reading, I haven't finished reading, but upon reflection, I feel like finishing this research paper would have been quite handy for today.
+
+11:02-11:15
+But there's an Nvidia research paper out where they were talking about the small language model is actually like the better, the better use case for like HNTKI.
+
+11:15-11:16
+Yeah.
+
+11:16-11:32
+And it's like the probable MVP for HNTKI in the future because you know, it is just, you don't need the big language model for everything on these like smaller repeatable tasks that are, you know, the kind of the mainstay of most commercial workflows.
+
+11:32-11:34
+You could just get the SLM.
+
+11:34-11:35
+Yeah.
+
+11:35-11:40
+And that will be more than functional but it's probably, you know, more economic as well to run.
+
+11:40-11:55
+It's almost like the lazy versus the person that's done the work in a way that like it's, you can, you can cover a lot of holes by just throwing a massive language model at it.
+
+11:55-11:58
+Doing everything with Sonnet 4.
+
+11:58-11:59
+Yes.
+
+11:59-12:05
+But it's more expensive but it's still so much cheaper than humans that you can buy an RY2C.
+
+12:05-12:18
+But like you can do like the bit that you're being lazy in is you're not decomposing the question and the intent and finding data that matches this and actually like engineering the context.
+
+12:18-12:19
+Yeah.
+
+12:19-12:28
+Building the context for the final response that you need and doing that is going to be, that could be like 20 LLM calls.
+
+12:28-12:45
+And you know they need to be thought through and you need to think about how you structure the agents in that way and it's easier to just go like, oh well I just ask Claude and take whatever it says as gospel and then like the agent, the model will get better and it will know more stuff and therefore I don't have to do any of the other things.
+
+12:45-12:46
+Yeah.
+
+12:46-12:52
+How I manage my data, how I build memory over time, how I build like a self-improving system here.
+
+12:52-12:57
+I just throw bigger and bigger models at it but they're cheaper than humans so who cares.
+
+12:57-13:04
+And like I mean it could be that that is just like a solid left curve approach to this that just steamrolls everything else.
+
+13:04-13:05
+Yeah.
+
+13:05-13:07
+Maybe I'm a bit of a big curve on this one.
+
+13:07-13:16
+But how much of this is just a byproduct of people's interactions with AI being through, you know, the chat GPT.
+
+13:16-13:26
+They're only using the one interface and so it's you know prompt response. Whereas if you think about it through the lens of like building plumbing, you know the plumbing of the business becomes agentic.
+
+13:26-13:31
+What's the right model for the various decomposed steps in the plumbing.
+
+13:31-13:43
+Then like and I know I led with it's potentially more economic to use the small language model but maybe the right animus is just to say like it's powerful enough and more operationally suitable to use the small language model for those tasks.
+
+13:43-13:44
+Yeah.
+
+13:44-14:02
+I think that's it like they're quicker as well. One of my favorite I tend to use models like either end of the curve where I'll go if I really want something where I want a good answer and it's predictable I will use like generally like Sonic 4.
+
+14:02-14:19
+If I use something where I'm just doing quick classifications, look up summarization, like adjustments of data, I'll use like a small alarm a model on GROC cloud because it's almost like 50 times quicker from the API response than getting it from open AI.
+
+14:19-14:28
+So in the time that I've sent like one request to open AI, I could have processed 10 different steps in a different cloud.
+
+14:28-14:30
+And that is that's meaningful.
+
+14:30-14:31
+It's meaningful.
+
+14:31-14:36
+It does like what you can do is like again like fractions of the cost.
+
+14:36-14:52
+I can actually do some quite complex analysis on like what is this person trying to achieve and then what supporting data can I bring to the table to help them here and then I can give that to Claude and then Claude gets like a nice concise final version.
+
+14:52-15:01
+So Claude doesn't need to retain any of the history of the conversation so we don't get these blowout costs because I can just have a cheaper model summarize the conversation so far.
+
+15:01-15:07
+It's like throw out all the details, give me just the bullet point list of what we've discussed in order in this conversation so far.
+
+15:07-15:09
+And that can go to Claude alongside it.
+
+15:09-15:14
+We can really like think about what we put into its context window.
+
+15:14-15:20
+Again, this is the other myth is that you know big context windows are great.
+
+15:20-15:21
+Yeah.
+
+15:21-15:22
+Mm, ish.
+
+15:22-15:23
+Yeah.
+
+15:23-15:32
+Like you don't you know like on you know on the whole yes maybe it's better but all you're doing is adding more nonsense into what you're telling you.
+
+15:32-15:40
+It's like saying like oh this is great because I can just I can just spout all of this shit into this context window and it'll still respond.
+
+15:40-15:46
+It's like yeah up to about 50% of filling the context window it can then it just goes massively downhill.
+
+15:46-15:59
+So on the margin it's better if it has this big context window but all you've really done is being a bit lazy in how you've implemented this and somebody else will just come along and do it for you know 10 for the price.
+
+15:59-16:05
+Which you know maybe right now if we're in that early adoption period it is probably less of an issue.
+
+16:05-16:06
+Yeah.
+
+16:06-16:14
+But like it's it's likely that you're going to end up having to redo it or somebody else will out compete you will get better responses because they're not putting nonsense.
+
+16:14-16:23
+Maybe on the margin it just means that that one in a thousand times like their model doesn't hallucinate but yours does because you just chuck everything into the context window.
+
+16:23-16:24
+Yeah.
+
+16:24-16:27
+You're just it's like it's a trade off balance always.
+
+16:27-16:33
+You want to put enough stuff in that you can get a really good answer to the question but not too much.
+
+16:33-16:34
+Yes.
+
+16:34-16:38
+Because anything else that you put in is just increases that risk of hallucinations.
+
+16:38-16:54
+As we see in all the examples of why AI is terrible like it's it's the hallucinations that the things that you know it doesn't matter that you process like a hundred support requests correctly it's the 101 where you then give away like $10,000 voucher.
+
+16:54-16:55
+That's true.
+
+16:55-16:56
+Yeah.
+
+16:56-16:57
+Control it properly.
+
+16:57-17:01
+Well I do think there's like an associated myth here with error tolerance expectations around.
+
+17:01-17:02
+Oh yeah.
+
+17:02-17:09
+And that's all versus like what we tolerate with the human in workplace anyway but let's park that one will come back to it because I think that's like another tangent.
+
+17:09-17:11
+I don't know what you're saying because we're not going to come back.
+
+17:11-17:12
+There's two.
+
+17:12-17:13
+There's two that I've got them.
+
+17:13-17:14
+I've got them mentally queued.
+
+17:14-17:18
+I'm probably going to forget this before the end of the episode but they're queued there mentally.
+
+17:18-17:19
+Yep.
+
+17:19-17:27
+No because this is really interesting because I think again this is like a byproduct of how people are using AI in their own day to day.
+
+17:27-17:40
+And maybe it's because we're thinking about it more from a like a workflow perspective and more from a commercial application perspective that we're just seeing that there's like a right time and place for different types of models.
+
+17:40-17:52
+And but there's also a marketing component or a sales component to this as well because every man and his dog who's trying to sell some sort of AI solution is trying to dress it up as the great big Ferrari.
+
+17:52-17:54
+It's the sexy beast that every business needs to have.
+
+17:54-17:55
+Yeah.
+
+17:55-18:10
+And you know that makes sense for them because they're selling something that's new and they're still we're still in this period where there's like great informational asymmetry that exists between the people who who actually understand AI and using it and people that don't but need it.
+
+18:10-18:13
+And so I think there's just like a byproduct there as well.
+
+18:13-18:24
+But yeah for me the question is also about like it's like a monolithic worldview around like the big model for everything versus like a more modular approach.
+
+18:24-18:32
+And I think this probably will come back a few times but I've been thinking about like modular applications just in the real world.
+
+18:32-18:44
+You know and having like when we build like buildings and things like that like can we build more modularly that is more I guess tailored to more individualistic requirements rather than here's like a house design.
+
+18:44-18:46
+This is how we always build them things like that.
+
+18:46-19:01
+And then I you know I was thinking about this through the lens of building software as well because software and you know Web 2.0 was always very and it's kind of like this inch deep mile wide approach because you just want to ship this one thing that works for as many people as possible.
+
+19:01-19:04
+And I think this big unlock is going to be.
+
+19:04-19:07
+I was also thinking about the similar paradigm and software.
+
+19:07-19:12
+But I was thinking from the view of like we might make microservices actually exist.
+
+19:12-19:13
+Finally.
+
+19:13-19:14
+Yeah.
+
+19:14-19:23
+This whole you know service service driven architectures and like API first.
+
+19:23-19:24
+Yeah.
+
+19:24-19:36
+There's all these like different architecture patterns and microservices for like how you should build businesses in a way and like all the software inside your business in a way that it's so loosely coupled and defined and everything's controlled by these different
+
+19:36-19:45
+interfaces so that you can you know you can alter this thing over here and you actually don't have to touch any of the other systems because they all respect their own interfaces and their lines.
+
+19:45-19:46
+Yes.
+
+19:46-19:58
+And stuff and it's everybody would get like super into this idea and then they try and implement it and then they just like throw it all away because it was just like so much like extra work to do this in a way.
+
+19:58-20:02
+But what's interesting is that we're not writing any of the code.
+
+20:02-20:03
+That's true.
+
+20:03-20:11
+So you can just but it is and it's almost perfect for this paradigm where you say all right I need to be able to change this thing.
+
+20:11-20:22
+And I'm reasonably I'm reasonably happy that this could fuck up but I need to make sure I'm not fucking up like the other 50 things relying on the line here.
+
+20:22-20:32
+So if you take that sort of and this I found this in my own building of things in the moment is like again I'm just taking like a very like micro service based approach to this.
+
+20:32-20:43
+Everything is just loosely coupled like extensive use of like message queues and structured API's to just pull different parts of the project parts.
+
+20:43-20:45
+I'm just implementing this API.
+
+20:45-20:47
+It makes it so much easier.
+
+20:47-20:51
+I guess it's like doing the context work we talked about earlier.
+
+20:51-20:54
+Big thing is like I just want you to build this.
+
+20:54-21:02
+And if this works I know it will fit into everything else because everything else is structured in a way that it just assumes if I give you this you give me that.
+
+21:02-21:13
+And there's no more of a contract than that going on that level that we can build things in small components and then just plug them all together which has been cool by.
+
+21:13-21:21
+Well it's never been like economically viable to build like that because everything's been you know basically been a byproduct of the venture capital model.
+
+21:21-21:31
+So you want to build the version of the thing that I don't think is a venture capital thing because of like the way I've seen it in enterprise IT is not capital driven.
+
+21:31-21:32
+It's exactly the same.
+
+21:32-21:34
+It's just cost constrained.
+
+21:34-21:46
+It's just like you had to you pave per line of code effectively right and people are slow at like writing lines of code and this is a much better way of structuring a program but just requires way more code.
+
+21:46-21:47
+Yes.
+
+21:47-21:57
+And so it was just on economical to get it done like timelines and pressures of project delivery would always push people into but we could just do this.
+
+21:57-22:00
+You don't have those pressures when you're building something from scratch.
+
+22:00-22:07
+You do have the cost consideration there but that is something that is essentially enabled by venture capital.
+
+22:07-22:09
+I'm not saying that venture capital is not bad and hasn't.
+
+22:09-22:12
+No, I'm just saying it's not venture capital thing.
+
+22:12-22:18
+I'm just validating my process around it because I do think like this is more of a more of a consideration for startups.
+
+22:18-22:21
+Like if you are building product from scratch like this is the animus.
+
+22:21-22:24
+If you're within the enterprise building something then you're right.
+
+22:24-22:28
+You've got a whole other like you've got a whole range of bureaucratic aspects as well.
+
+22:28-22:33
+It's a different set of constraints that also lead you down the same path of not doing it properly.
+
+22:33-22:34
+Yeah.
+
+22:34-22:35
+Yeah, exactly.
+
+22:35-22:44
+I mean you would think in some ways that you could justify it because you take a longer term view of it and you say well it's going to make it easier to maintain in the future.
+
+22:44-22:46
+And this is that's always why it starts like that.
+
+22:46-22:47
+Yeah.
+
+22:47-22:53
+But if anything like startups probably over invest a lot more in their tech and you probably have better tech specs and a lot of them.
+
+22:53-22:57
+And they throw them away more readily.
+
+22:57-22:58
+That's right.
+
+22:58-22:59
+Whereas enterprise, yeah.
+
+22:59-23:01
+So a different set of animus is like that one I wouldn't pin it.
+
+23:01-23:04
+I mean VCs do plenty of things that we can pin.
+
+23:04-23:05
+We can we can.
+
+23:05-23:07
+On plenty of stuff.
+
+23:07-23:08
+Not though.
+
+23:08-23:18
+I think the like the underlying myth here though if we're connecting it back to the theme is that maybe the GUI for AI shouldn't be necessarily chat based.
+
+23:18-23:24
+And I think everyone's kind of locked into chat as the GUI for AI longer term.
+
+23:24-23:30
+And I think I feel like the opportunity here is to build like these kind of more adaptive interfaces.
+
+23:30-23:41
+Because like if you think about it from like an education educational learning standpoint like we kind of have an understanding that everyone learns in different ways and everyone like interacts with information in different ways.
+
+23:41-23:52
+And so it's like the the chat interface is essentially trying to force everyone's working style through the same square hole.
+
+23:52-23:57
+And I just wonder like to what degree we'll get to a point where we can build more of these adaptive interfaces.
+
+23:57-24:00
+It sort of makes everything real time as well.
+
+24:00-24:11
+Like if you're working on like building a product with a team for instance like there's one style of working which is just like we're in Slack at the same time.
+
+24:11-24:17
+And we're just constantly talking and we just make the changes on the fly as we're talking here.
+
+24:17-24:21
+And we almost don't document everything like this Slack channel is our documentation.
+
+24:21-24:30
+And we go and it's it's it's almost like that I think when you're working in a chat interface constantly is that you're just assuming that everything is in the chat.
+
+24:30-24:31
+Yeah.
+
+24:31-24:43
+Yeah. I think one of the nice things about working in something like cursor or root code or whatever ID people are using these days is that it will because it has access to the terminal and the ability to write files.
+
+24:43-24:46
+It will just write out files that you can then look at.
+
+24:46-24:52
+OK. OK. That's the plan. And it feels different because you're writing is like you're writing a document together.
+
+24:52-24:54
+And that's like a slightly different way of doing it.
+
+24:54-24:56
+So that moves you out at the real time.
+
+24:56-25:00
+But it's still very I don't know it's still very in the moment and text based.
+
+25:00-25:12
+It's kind of hard to like sometimes remove yourself from that and then come back to it like a week later because I you know I've just had a wife spin away for a couple of weeks.
+
+25:12-25:20
+And so I had but it's been super like focused on the kids making sure everything's going well in the family and then like come back to stuff.
+
+25:20-25:27
+And I'm like what was I doing like it's just it becomes so much harder to pick stuff up where previously you were just in a flow.
+
+25:27-25:28
+Yeah constantly with it.
+
+25:28-25:34
+And then I found this week I've been after a shout out crispy friend of the pod.
+
+25:34-25:44
+I was asking about flow wise as a tool and I used it. I used it a lot in version one. I briefly looked at it in version two but I wasn't that fussed.
+
+25:44-25:49
+And I picked it up recently again with version three and the version three of it is really is really good.
+
+25:49-26:00
+They've resolved most of the problems that I had with the thing and it's a very like nice visual tool to build a agents.
+
+26:00-26:03
+And so I've been reacquainting myself with that a little bit.
+
+26:03-26:09
+I like this because as you said like going back to the education thing I'm a very visual person.
+
+26:09-26:17
+So when you if you remove me out of I can exist in a chat flow but really what I want is a massive whiteboard with all the stuff on it.
+
+26:17-26:18
+Yeah.
+
+26:18-26:20
+And so it's quite nice to come back to cursor.
+
+26:20-26:23
+I can just see the code visually.
+
+26:23-26:30
+And it just makes it so much easier to know what did I do. I had it that work again. Like what do they need to do.
+
+26:30-26:35
+I can't stare at code and then visualize it in the same way that I can using a tool like that.
+
+26:35-26:45
+So so I think you will get like I was very much of the opinion early doors that the UI disappears and it just becomes like I'm going to tell you to do this.
+
+26:45-26:46
+Yeah.
+
+26:46-26:49
+And you're going to do it instead and I don't have to do it anymore.
+
+26:49-26:55
+And therefore what I need is just a phone and I'll just tell you using my voice.
+
+26:55-26:58
+I think that's like the ideal use case.
+
+26:58-27:04
+But then that's the giving of the instruction and maybe the checking up of the instruction.
+
+27:04-27:09
+But even if I'm working in a team of a bunch of people what I really want is a massive fucking whiteboard.
+
+27:09-27:12
+That's all the stuff laid out on it that I can see what's going on.
+
+27:12-27:20
+I think this is the adaptive quality that I was talking about kicks in because you need to be able to essentially switch between different paradigms.
+
+27:20-27:23
+If you're working with a team you kind of need the interface to shift with you.
+
+27:23-27:26
+If you're working in isolation you kind of need to be something different.
+
+27:26-27:30
+And this is where I think like the modular building like it's kind of like having Lego blocks.
+
+27:30-27:41
+And I feel like if you can code faster this should just be more like viable now to just build out you know a series of modular Lego blocks that enable you to have an adaptive platform.
+
+27:41-27:51
+And you also mentioned flow state which I think we kind of glossed over but I feel like the best products just enable you to stay in flow state a lot longer.
+
+27:51-27:55
+You know like I think of something like I think spreadsheets do this like really well.
+
+27:55-28:04
+I spread sheets are a great example because there's so much technical complexity in what you can achieve using a spreadsheet.
+
+28:04-28:10
+But that doesn't limit the vast majority of people using a spreadsheet for whatever they kind of need to do with it.
+
+28:10-28:22
+You know what I mean like if I want to get like what I would use it for in a like a banking environment would be completely different to what someone might use it for and like their own day to day life to just track a bunch of stuff.
+
+28:22-28:30
+And what I love about it is you have the like this ability to just ramp up and ramp down and it just suits pretty much everyone to do everything.
+
+28:30-28:32
+I mean it's got a very simple UI.
+
+28:32-28:33
+Yeah.
+
+28:33-28:36
+Is that there's a grid of data.
+
+28:36-28:37
+Yep.
+
+28:37-28:42
+And the rules aren't enforced in any way.
+
+28:42-28:46
+There's this conventions for how you would expect the grid to behave.
+
+28:46-28:47
+Yeah.
+
+28:47-28:48
+But you can alter it.
+
+28:48-28:49
+It's malleable.
+
+28:49-28:50
+Yeah.
+
+28:50-28:51
+Yeah.
+
+28:51-28:58
+There's something about that interface that is very it's very quick to pick up and put down right.
+
+28:58-29:06
+You can look at a spreadsheet and again because of the conventions and the norms of how we've used it over time you kind of know what's going on.
+
+29:06-29:07
+Yeah.
+
+29:07-29:15
+I think there was this notion like for the last couple of decades really that if you could build something out in a spreadsheet it would make good piece of software.
+
+29:15-29:21
+And that's probably the thing you want to go and build but we never actually ask the question like should we not just use the spreadsheet.
+
+29:21-29:23
+Is that not suitable?
+
+29:23-29:25
+Is that not workable for some reason?
+
+29:25-29:27
+They were always problems to spread.
+
+29:27-29:30
+Again like there are a lot of like this is like a classic enterprise like TV.
+
+29:30-29:31
+Yeah.
+
+29:31-29:33
+Like just there's like the data control and stuff like that.
+
+29:33-29:34
+Yeah.
+
+29:34-29:47
+But I know as a Rolls Royce like they used to exist on spreadsheets and they are very advanced very complex spreadsheets very well looked at and really well version controlled.
+
+29:47-29:54
+But they ran like a massive like quality first organization entirely from spreadsheets.
+
+29:54-29:55
+Yeah.
+
+29:55-29:59
+It's not obvious that moving to SAP did the many things.
+
+29:59-30:15
+But it is like just an incredible incredibly durable tool like you can use it for just about anything like if you want to just like you know do like your own personal budget for the week you can do that or you can build like a massive you know financial model is really complex.
+
+30:15-30:18
+You like literally can scale it up and scale it down as you need.
+
+30:18-30:28
+And there isn't necessarily the constraint built into the product if you know what I mean like it's yeah it is like the closest thing to an adaptive product like that I can think of.
+
+30:28-30:29
+Yeah.
+
+30:29-30:30
+Yeah.
+
+30:30-30:33
+I mean I would there's something there about that.
+
+30:33-30:40
+I mean I guess when I think about like interfaces I mean I there's definitely like voice.
+
+30:40-30:41
+Yeah.
+
+30:41-30:52
+Like in the way that being able to dialogue backwards and forwards is better than me writing you a letter and writing for you to write me a letter back and doing everything via.
+
+30:52-30:53
+Yeah.
+
+30:53-30:57
+You know I am and yes because you can just interrupt people halfway through a phone call.
+
+30:57-31:02
+Sometimes it's good sometimes it's bad but you know you can but then you can quickly adjust for that.
+
+31:02-31:07
+And like so I think that's the the right paradigm for the communication but.
+
+31:07-31:10
+I did a project years ago.
+
+31:10-31:12
+That would side.
+
+31:12-31:14
+We looked at collaboration.
+
+31:14-31:18
+The idea was to take this like 50 year view of what's collaboration.
+
+31:18-31:22
+So this project was worth a hundred billion dollars.
+
+31:22-31:26
+They were working on and I guess they were working on the project.
+
+31:26-31:32
+And the question was like OK well if we're going to like have a collaboration system for the future what should it look like.
+
+31:32-31:37
+And so it's like OK well the way we'll approach this is we'll look at like everything that's going on.
+
+31:37-31:42
+We'll do it from first principles and we'll build up and say like well what does good.
+
+31:42-31:50
+Good collaboration look like and like one like just a little throwaway line I used a lot that seemed to resonate with people.
+
+31:50-32:00
+Like if you put a bunch of you just put a bunch of engineers in a room and ask them to design something like what do you think they're going to do.
+
+32:00-32:05
+And it would be like well first of all they're all going to stand up again they're not going to sit at the table.
+
+32:05-32:09
+They're going to walk over to that whiteboard and they're going to start drawing stuff.
+
+32:09-32:14
+It's like well this is really interesting as an idea because you go well why is this.
+
+32:14-32:22
+Why is it that we seek to draw stuff on a whiteboard and not the piece of paper in front of our desk.
+
+32:22-32:28
+Is it because like the piece of paper is too small like could we just have a big piece of paper.
+
+32:28-32:30
+If we have a big piece of paper what do we do with it.
+
+32:30-32:36
+It's like alright we orient ourselves around it and the paper becomes the focus and the same way the wall becomes the focus.
+
+32:36-32:43
+And you can start to build up that there's something about the idea that this is an unknown space of ideas.
+
+32:43-32:47
+And I can't really sort of model for how this works.
+
+32:47-32:55
+You have people and people have presence inside a conversation and then we have like a collaboration space that will just turn like a canvas.
+
+32:55-33:00
+People can put stuff on the canvas and when it's on the canvas that's owned by everybody.
+
+33:00-33:03
+That's like the group thing that we're all working on.
+
+33:03-33:07
+This is like collaboration documents, shared Google Docs and stuff like that.
+
+33:07-33:09
+Try and go down that way.
+
+33:09-33:15
+But then you also have like your stuff that you know and you can have stuff that you know and you can develop things in your own space.
+
+33:15-33:20
+You don't have to show anybody and that's like you writing in your own paper and pad and stuff.
+
+33:20-33:26
+And then you put it onto the canvas and then that's the bit that you share.
+
+33:26-33:34
+But it's when it goes into this shared space that it actually becomes you know like I don't know useful and collaborative in a way.
+
+33:34-33:39
+I think we need this is like to my mind like the end goal of some of the layers.
+
+33:39-33:42
+You can't ignore that.
+
+33:42-33:48
+Like if you've got like just AI agents and we're expecting to only talk to them and review stuff by a voice.
+
+33:48-33:56
+It's like you know bringing a bunch of engineers into a room telling them all to sit on their hands and saying you can't write anything down.
+
+33:56-34:02
+And it's like I'm going to make a bunch of things and then I might show you a video or I might just describe it to you using voice.
+
+34:02-34:04
+And you're like well that's clearly not going to work.
+
+34:04-34:11
+So there's clearly going to have to be like some sort of like visual component to how we get this feedback.
+
+34:11-34:19
+I mean I think there'll be a lot less sitting in front of specific screens in order to type stuff out.
+
+34:19-34:23
+And I think we can make this way more flexible.
+
+34:23-34:31
+But I don't think we get away from the idea of like we're going to need big screens to then like just review this stuff on.
+
+34:31-34:40
+And like think about okay well alright you're going to go and do the equivalent of a year's work and then give it back to me five minutes later.
+
+34:40-34:43
+I have the fuck to my review at all.
+
+34:43-34:45
+What is that form factor?
+
+34:45-34:55
+Well audio and transcription become valuable in that environment because you're able to just collect all of the minutes of what's being discussed collaboratively.
+
+34:55-35:02
+But you don't have someone sitting and typing them and that's being transcribed and ingested into a graph database potentially.
+
+35:02-35:07
+That's just a collaborative graph that you try to work your ideas into over time.
+
+35:07-35:16
+But I do think you end up with like these multiple input modalities rather than just voice.
+
+35:16-35:19
+You probably do have chat as well and you've got.
+
+35:19-35:20
+And output.
+
+35:20-35:22
+Yeah, yeah, yeah for sure.
+
+35:22-35:25
+Yeah, I think that is.
+
+35:25-35:34
+I think that makes sense but this is kind of also where I was thinking you know you probably end up with a more adaptive interface based on what you are actually doing with it and what you need it to do for you.
+
+35:34-35:39
+And what's the best input output modality when you're doing that thing.
+
+35:39-35:43
+Like there are definitely going to be times where it just makes sense to be speaking to it.
+
+35:43-35:48
+Using voice and then there are other times we like I just need like a quick recall look up.
+
+35:48-35:50
+Let me just type it in real real fast.
+
+35:50-35:51
+Yeah.
+
+35:51-35:58
+It's like the software thing right like the one way of doing it is that you sit in cursor and you drive it via an IDE.
+
+35:58-36:03
+And even then you're kind of a lot of the time we just sit in front of the idea watching it code.
+
+36:03-36:05
+Which is a bit weird.
+
+36:05-36:08
+He says having done quite a lot recently.
+
+36:08-36:18
+But the other way of doing it would be something like codex or various other programs where you just dictate it at the repo level and you say like build me this pull request and then you get back the pull request.
+
+36:18-36:24
+The nice bit of that is you don't see all the intermediate file changes and you just get back.
+
+36:24-36:26
+It's something that you can review.
+
+36:26-36:31
+And again there's something there where there's probably a reason why we have that human style workflow for that.
+
+36:31-36:32
+Yeah.
+
+36:32-36:37
+But it's actually just quite a nice way of defining work getting it done and then handed back.
+
+36:37-36:39
+I think a lot of the human patterns remain.
+
+36:39-36:41
+They just get done quicker.
+
+36:41-36:46
+It's like we talked about the software development methodology and it's like super quick waterfall.
+
+36:46-36:51
+We get back into a lot of super quick versions of otherwise human things.
+
+36:51-36:53
+We dictate work in the same way.
+
+36:53-36:57
+We spec work out before we give it to people because we know it gets better results.
+
+36:57-37:01
+When we deal with humans we'll do the same with machines.
+
+37:01-37:09
+I think again we got lazy there because they could interpret a lot and they will left to their own devices.
+
+37:09-37:14
+And then you go oh well what if I didn't do that and I did it properly.
+
+37:14-37:16
+And they go oh I got much better result.
+
+37:16-37:17
+Yeah.
+
+37:17-37:18
+Yeah.
+
+37:18-37:25
+I guess the question I would have is you've got this adaptive quality you want to tap into
+
+37:25-37:30
+but the environment is going to change depending on the people who are actually using that interface.
+
+37:30-37:35
+So for instance you gave the example of a bunch of engineers stood around and they'll go to the whiteboard right?
+
+37:35-37:36
+Yeah.
+
+37:36-37:41
+But if you ask the same or you ask a similar task of a group of lawyers are they going to go and stand in front of a whiteboard.
+
+37:41-37:42
+Like I don't know.
+
+37:42-37:43
+No.
+
+37:43-37:44
+I don't think they will.
+
+37:44-37:47
+So then it's like okay we just know they'll be jobless.
+
+37:47-37:48
+They'll be down the cafe.
+
+37:48-37:49
+Yeah.
+
+37:49-37:52
+You know but it's a welcome dream.
+
+37:52-37:53
+It's a valid question right.
+
+37:53-37:56
+You just take any group within society that isn't engineers.
+
+37:56-37:58
+It's like this is part of the problem with software development.
+
+37:58-38:03
+It's built by engineers who don't necessarily fully understand the problem they're trying to solve.
+
+38:03-38:11
+And so if you want this thing to be like perfectly adaptive like I don't know that that's necessarily the environment you want to build.
+
+38:11-38:20
+Well you don't want to build around that as the kind of the central like underlying process for that platform.
+
+38:20-38:27
+But what I would say is like I think this more interesting thing that you said there was around like tapping into flow state.
+
+38:27-38:33
+Because I feel like it's again really easy to get into flow state when you're using something like a spreadsheet.
+
+38:33-38:35
+Like you can just pick up where you left off super quickly.
+
+38:35-38:38
+I think that might be my version of the same bias.
+
+38:38-38:39
+Yeah.
+
+38:39-38:40
+It might be.
+
+38:40-38:42
+But I feel like it's easier to pick up.
+
+38:42-38:48
+But I almost want like when you've got these like variable input output modalities as well.
+
+38:48-38:57
+I just wonder if what we're describing is something more like a multiplayer game and we're able to tap into the dynamics that work in in game environments.
+
+38:57-39:07
+Because like it's you're obviously having to interact with different modalities but you're also interacting with other people and you're trying to achieve a common objective.
+
+39:07-39:16
+And there's like this kind of immediate responsive feedback that you're getting as well that keeps you in that flow state while you're playing the I'm not a big gamer.
+
+39:16-39:18
+So I'm like imagining some of this stuff.
+
+39:18-39:26
+Like I know I'm trying to like think this out on the fly but I wonder if like there's a lesson for like platform development there as well.
+
+39:26-39:32
+Where it just enables you to go and what are the what are the elements that help us tap into flow states.
+
+39:32-39:38
+And then how do we quickly switch to you know being in a flow state but then also collaborating with other people.
+
+39:38-39:39
+Yeah.
+
+39:39-39:44
+And what is the environment that enables us to do all of those things while trying to achieve something creative.
+
+39:44-39:48
+So sorry it's got some in my eye.
+
+39:48-39:50
+That's distracting.
+
+39:50-39:56
+I think there's a couple of things that are coming up like I get to flow state as point number two.
+
+39:56-40:02
+I guess like one point on the modalities is it's not that like I think that's the end goal modality.
+
+40:02-40:06
+I think we need like it's not obvious to me that we lose screens.
+
+40:06-40:07
+Yeah.
+
+40:07-40:12
+It's my only real point there is I think for the visual amongst us we still need that.
+
+40:12-40:21
+I think the on the flow state thing is kind of interesting because I don't find that spreadsheets make me enter a flow state necessarily.
+
+40:21-40:25
+I know you mean about they can just be so adaptive and they use all over the place.
+
+40:25-40:32
+But it's I think for your flow state what you want is it's almost like the ramp up ramp down.
+
+40:32-40:42
+Is like I can find this like certain times where I'll just be doing a task over the course of a couple of weeks and I'm just in it.
+
+40:42-40:43
+I know exactly what's going on.
+
+40:43-40:44
+I know where I left off.
+
+40:44-40:47
+I can get up the next day and I carry it on.
+
+40:47-40:50
+And it's you know I'm in that state.
+
+40:50-40:54
+And then you know wife goes away for a couple of weeks.
+
+40:54-40:56
+Mom and all of that.
+
+40:56-40:58
+And it's just gone.
+
+40:58-40:59
+Yeah.
+
+40:59-41:02
+And then I come back to and I'm like am I like an idiot.
+
+41:02-41:05
+Like what I've been writing everything down.
+
+41:05-41:07
+But why did I write down nonsense.
+
+41:07-41:09
+What is this stuff.
+
+41:09-41:12
+I don't know if you've been rewatching Red Dwarf recently.
+
+41:12-41:16
+But it's one where Rhym is in the exam and he's like I think it's in the first episode.
+
+41:16-41:19
+Has everything written on his body.
+
+41:19-41:22
+I feel a bit like that sometimes.
+
+41:22-41:37
+And I think maybe the goal like interface aside like the thing to solve would be the how do you ramp the person up and down quickly enough here that you can actually help it manage the work of the AI.
+
+41:37-41:50
+Because that's like what we're talking about is kind of like how do you as a human stay on top of the work that's being done by your fleet of robots that can just do so much that it's massively overwhelming.
+
+41:50-41:51
+Yeah.
+
+41:51-42:05
+And like again like when I'm if I'm there every step of the way with you know Rukot or whatever like when I'm building stuff and I'm forcing it to stop and give me opportunities to test and spec.
+
+42:05-42:06
+It's very real time.
+
+42:06-42:08
+It's very in flow state.
+
+42:08-42:11
+But as soon as you stop it's almost forgotten like what you did.
+
+42:11-42:12
+Yes.
+
+42:12-42:17
+You were too involved in the doing and not enough in the being of the situation.
+
+42:17-42:19
+Like there's there's a dichotomy there.
+
+42:19-42:22
+You can't be both of those things.
+
+42:22-42:29
+Maybe this is like where the real like goal of the vibe coding element of this is like you just have to let go.
+
+42:29-42:34
+If you're down there you're not up here.
+
+42:34-42:40
+If you're not up here then you're not dictating like where we're going and why we're doing stuff and you can't be both the executor of the job and the planner of the job.
+
+42:40-42:43
+They're just different mental constructs and you will drive yourself insane.
+
+42:43-42:45
+So you've got to let that bit go.
+
+42:45-42:47
+Just let it do its work.
+
+42:47-42:49
+So have a good process for how it does it.
+
+42:49-42:52
+But then you've got to operate at that sort of high level.
+
+42:52-42:53
+Yeah.
+
+42:53-42:58
+Like in some ways it's like forcing us to think in a new way.
+
+42:58-43:10
+You know I think there's maybe this is another myth that like we kind of tend to treat AI like a like a faster productivity tool.
+
+43:10-43:17
+You know it's like another it's another layer of productivity that we're like baking on top of all of the things that we do because we want to do it.
+
+43:17-43:21
+We want to do it faster at greater volume greater velocity.
+
+43:21-43:23
+You know I want to get the wrong thing quick.
+
+43:23-43:32
+Yeah it's like I want to send out a bunch more emails and I want to make I want to do them faster and I want to send them to more people and that's basically I think the paradigm that all the animus a lot of people are looking at this story.
+
+43:32-43:33
+It's true.
+
+43:33-43:35
+I see a lot of stuff on Twitter at the moment.
+
+43:35-43:44
+I scraped Twitter and TikTok and came up with the themes and then I produced a hundred thousand videos and then I just like I just kind of the problem.
+
+43:44-43:54
+Yeah while you were talking like the question that was running through my head was like how do we decide what to actually work on and like it's like that's fine.
+
+43:54-43:56
+I think that's like uniquely subjective.
+
+43:56-44:05
+I think that's going to be really cool to explore but that's maybe where this myth is because most people tend to view AI through the lens of productivity rather than creativity.
+
+44:05-44:15
+It's like if we enable AI to just go and do all of the things that keep us busy then we actually are liberated to go and think through the creative problems we want to go.
+
+44:15-44:17
+I think it's scary.
+
+44:17-44:19
+Yeah it's probably true.
+
+44:19-44:30
+I don't attribute it to most people being here to talk about it but I've had this discussion with a bunch of people where it's the that's the bit that's hard for people.
+
+44:30-44:32
+It's like agency is hard.
+
+44:32-44:34
+People don't generally have it.
+
+44:34-44:39
+It's scary to suddenly be in charge of your own time.
+
+44:39-44:47
+Yeah you know if you have to get up every day and decide what to do that's that's quite confronting to a lot of people.
+
+44:47-44:49
+I do think there's like just two.
+
+44:49-44:51
+I can't remember who who spoke about this.
+
+44:51-44:55
+I was listening to someone talk about convergent divergent thinking.
+
+44:55-44:57
+So I think maybe me.
+
+44:57-44:59
+Was it you in mind of me?
+
+44:59-45:05
+I think there's a lot like in terms of like delivery of like products projects ideas.
+
+45:05-45:08
+The role of convergent divergent thinking.
+
+45:08-45:14
+I think productivity tools tend to be like they tend to track us down and convergent thinking.
+
+45:14-45:20
+So I think if we think through AI through that lens then we're probably not going to realize all the value.
+
+45:20-45:28
+But if we think about it from the potential that it can create for more divergent thinking like where we are going and we're having more conversations with people.
+
+45:28-45:31
+We're interacting with more pain points.
+
+45:31-45:33
+We're experiencing the real world.
+
+45:33-45:36
+I think that opens you up to more ideas.
+
+45:36-45:38
+You know what this might be?
+
+45:38-45:42
+It's like learning a lot of ourselves if you know what I mean.
+
+45:42-45:46
+Because we you know I've been very solved for a long time on this is a productivity.
+
+45:46-45:48
+Yeah like miracle.
+
+45:48-45:49
+It's going to be huge.
+
+45:49-45:51
+It does a lot of the work.
+
+45:51-45:54
+But then if you look at like where we're spending a lot of our personal time.
+
+45:54-45:58
+Yeah these tools is not in being super productive.
+
+45:58-46:04
+It's all just like I'm going to create this like cool thing that I need to exist that's never existed before.
+
+46:04-46:10
+And it's it's the creativity of going like oh shit I can just imagine stuff and build it.
+
+46:10-46:12
+I don't need to convince anybody else.
+
+46:12-46:14
+I don't need to like write a pitch deck.
+
+46:14-46:16
+I can just build the fucking thing.
+
+46:16-46:18
+If we if we think about it.
+
+46:18-46:20
+It's like is this the depth of productivity.
+
+46:20-46:26
+Like if I can just do the thing at scale that we can't do and we've spent all of our time doing that thing.
+
+46:26-46:33
+What is productivity because it's basically maxing out productivity right like and it's always hyper productive.
+
+46:33-46:38
+And so I think what's like the more important lens for us that is how are we being creative.
+
+46:38-46:42
+How are we like enabling more divergent thinking.
+
+46:42-46:48
+I think it's like and there's also like a whole scope of problems that like emerge that we haven't been thinking about.
+
+46:48-46:55
+There's always like think about different and there's two forms of productivity right there's doing stuff quick and then there's doing the things that mattered in the first place.
+
+46:55-46:56
+Yes.
+
+46:56-47:01
+And so like I mean what I does it just maxes out the doing things quick.
+
+47:01-47:08
+The real like goal of productivity has always been stop doing the shit that you weren't supposed to do.
+
+47:08-47:09
+Yeah.
+
+47:09-47:15
+And like you know even on that it does because it will get rid of so much busy work.
+
+47:15-47:21
+But yeah like why why do I need to do it even if you didn't need to do it.
+
+47:21-47:22
+Well it doesn't matter.
+
+47:22-47:23
+It's just it's already done.
+
+47:23-47:24
+It's still being done.
+
+47:24-47:26
+If you can think of it it's it's already done.
+
+47:26-47:28
+So you just don't need to do it.
+
+47:28-47:30
+So I think most of that disappears.
+
+47:30-47:33
+This is the classic throwing back to the qualia stuff.
+
+47:33-47:34
+Yeah exactly.
+
+47:34-47:38
+Recently is like it's actually all about figuring out the problem and the thing to do.
+
+47:38-47:40
+It's the only thing that matters anymore.
+
+47:40-47:47
+But also I do think there is a limit to what AI can actually solve for us creatively.
+
+47:47-47:50
+So I think this is like a great point of re-engagement for you.
+
+47:50-47:56
+You know Rory Sutherland he's the British guy who was like head of Ogilvy maybe.
+
+47:56-48:00
+Oh yes yes yes I know he's like he's a super interesting guy.
+
+48:00-48:06
+And he tells a story about like how they were like people used to complain in their office building
+
+48:06-48:09
+the kind of the speed of the elevators that were too slow.
+
+48:09-48:11
+And so they started thinking about this and all that.
+
+48:11-48:15
+We could spend millions of dollars trying to like increase the speed of the elevators by 5%
+
+48:15-48:19
+and then what they did was just go and put mirrors in the elevators.
+
+48:19-48:21
+Because then people check themselves out and then realize yeah.
+
+48:21-48:23
+It's a purely it's a psychological application.
+
+48:23-48:25
+That is just amazing.
+
+48:25-48:26
+Fucking brilliant.
+
+48:26-48:29
+Yeah he's really good at this sort of reframing of problems and solutions.
+
+48:29-48:31
+Like he had another one with the trains.
+
+48:31-48:32
+Oh yeah.
+
+48:32-48:38
+Where he was like like resold first class train travel in the UK as being like a private office with Wi-Fi and ring of it.
+
+48:38-48:39
+Yeah.
+
+48:39-48:40
+It was brilliant.
+
+48:40-48:42
+And it was like yeah why are you in a hurry?
+
+48:42-48:44
+Like you're trying to get some work done.
+
+48:44-48:45
+Like have a couple of hours.
+
+48:45-48:46
+Take your time.
+
+48:46-48:47
+Be really comfortable.
+
+48:47-48:48
+Like we'll get rid of the plebs.
+
+48:48-48:49
+Like if you could Wi-Fi.
+
+48:49-48:58
+It's just like yeah that's way cheaper than pissing away a hundred billion dollars and still not having built a fucking train line to Birmingham.
+
+48:58-48:59
+Yeah.
+
+48:59-49:05
+But I mean there's something like there's something deeply psychological about the framing of that problem and the solution.
+
+49:05-49:09
+I think it's the like again like God fucking GG.
+
+49:09-49:15
+He's such a good thinker on this stuff but like he's been talking a lot in the recent No Solution stuff with Pablo about.
+
+49:15-49:20
+And he always references Viveki who I've heard talk a bit but I don't know too much about.
+
+49:20-49:25
+He talks about it as being like the embodiment of the of the human is the thing that makes the difference right.
+
+49:25-49:34
+Like you as an embodied person can have these experiences understand these emotions and actually pick up the difference between it's not actually about the speed.
+
+49:34-49:36
+The speed of the train.
+
+49:36-49:37
+It's about the comfort.
+
+49:37-49:38
+Yes.
+
+49:38-49:48
+It's like when I know there's another one where we talked about like there's a huge difference between waiting 10 minutes for a train that you know is going to be 10 minutes.
+
+49:48-49:49
+Yeah.
+
+49:49-49:52
+And waiting like five minutes for a train.
+
+49:52-49:53
+Yeah.
+
+49:53-49:54
+Four was two minutes.
+
+49:54-49:58
+And like one of them causes you like huge amounts of like anxiety and pain.
+
+49:58-50:00
+And like I know exactly what he's talking about.
+
+50:00-50:03
+I have this fucking trains all over the place.
+
+50:03-50:11
+But it's just one of them is like if you know it's going to be half now and it arrives at that time you can plan and you can you know you can figure out what you're going to do.
+
+50:11-50:12
+You can have a nice coffee.
+
+50:12-50:13
+You can have a nice little walk.
+
+50:13-50:15
+You're not hanging around worried about it.
+
+50:15-50:23
+But when you don't know when he talks about in terms of Uber and see the cars on the map and it looked like the cars as long as the car looks like it's moving towards you.
+
+50:23-50:27
+You're perfectly happy to just like relax and you'll just deal with it when it gets here.
+
+50:27-50:28
+Yeah.
+
+50:28-50:32
+And if you don't and you don't know like you're just going to throw it at exactly.
+
+50:32-50:37
+And I think these insights only come from the quality of the embodiment.
+
+50:37-50:38
+Right.
+
+50:38-50:39
+It's lived experience.
+
+50:39-50:40
+Right.
+
+50:40-50:41
+You can't substitute that.
+
+50:41-50:43
+Like I think it was kind of a polluted term these days.
+
+50:43-50:46
+But I think you but I think it works there.
+
+50:46-50:57
+I think the other aspect to it is like if we're trying to solve the elevator problem as an engineering problem we might go and like work through all of the stages to go and like operation lies like an increase in speed.
+
+50:57-51:00
+While maintaining safety in the elevator and what's the cost.
+
+51:00-51:03
+What's like the how do we project manage this out.
+
+51:03-51:06
+And that's just like the simple you know problem solution statement.
+
+51:06-51:09
+Let's just go and create a faster elevator.
+
+51:09-51:15
+That said I bet you can get a bunch of like nuts off the wall suggestions from a set of LLF.
+
+51:15-51:17
+So you go like you know they're pretty good.
+
+51:17-51:18
+You'd be like we need to solve train travel.
+
+51:18-51:19
+It's not fast enough.
+
+51:19-51:23
+Can you think outside the box and tell me a bunch of things that we could do instead.
+
+51:23-51:27
+The don't solve that problem but maybe help the situation.
+
+51:27-51:28
+Yeah.
+
+51:28-51:37
+And it would be it probably it gives you like why don't I remember this was one of his reasons like you know people say you're you're like the Euro tunnel takes too long.
+
+51:37-51:45
+It's not quick enough and it's quite expensive and I thought well why don't we just instead of trying to speed it up and that's going to cost like 100 million 100 billion dollars.
+
+51:45-51:49
+Why don't we just hire a bunch of playboy models to serve champagne to everybody.
+
+51:49-51:52
+And I bet you are everybody's going to ask for the train to be slow.
+
+51:52-51:53
+Yeah.
+
+51:53-51:55
+Just like yep.
+
+51:55-51:57
+Yeah exactly.
+
+51:57-52:07
+But I wonder like I think it's the point of inception right now there's like a body of work thinking outside outside the box where the LLM can tap into that.
+
+52:07-52:12
+Whereas at the time someone like Roy Sutherland is going do you know what let's just put a fucking mirror in the elevator.
+
+52:12-52:19
+It might it might be just such new thinking that there's just not enough context for an LLM to figure that out.
+
+52:19-52:23
+Like now we're looking at it going yeah we see it mirrors in every elevator everywhere.
+
+52:23-52:25
+So not a big deal.
+
+52:25-52:29
+Well that's what I think you could just I'm like I mean we talk about it all the time.
+
+52:29-52:34
+Like it's not obvious to me that it's not achievable that you can't just generate a bunch of crazy ideas.
+
+52:34-52:35
+Yeah.
+
+52:35-52:41
+And like the question will be like there's something about the human being the embodied soul.
+
+52:41-52:42
+Yeah.
+
+52:42-52:48
+There is the thing that reacts to it and goes as soon as you hear mirror in the elevator you go of course because everybody's just looking at themselves.
+
+52:48-52:49
+Yes.
+
+52:49-52:56
+And like you've got so much like but that's like how would I evaluate that if I was the LLM I just go the mirror in the elevator.
+
+52:56-53:00
+It's not obvious that it would be able to evaluate that like oh fuck that's genius.
+
+53:00-53:03
+They wouldn't have that gut reaction to something like that.
+
+53:03-53:06
+You know those strippers on the Euro tunnel.
+
+53:06-53:07
+Yeah.
+
+53:07-53:10
+Obviously like a bunch of people are going to start taking that that would work.
+
+53:10-53:11
+Yeah.
+
+53:11-53:15
+It's just there's I think you need the person in the world.
+
+53:15-53:16
+Yeah.
+
+53:16-53:20
+But I mean like it just flows back to like that's probably the last bit.
+
+53:20-53:21
+Yeah.
+
+53:21-53:23
+So I mean certainly then the generation of I mean.
+
+53:23-53:29
+But the crazy thinking is still valid I think with the language model because that can help you generate more thoughts as well.
+
+53:29-53:30
+Exactly.
+
+53:30-53:38
+So there is the simulating of the collaborative element as well I think but yeah I think you're right about quality.
+
+53:38-53:41
+I think this is going to become more and more like talked about.
+
+53:41-53:45
+I think more and more people are going to clue on to the fact that we just need to figure this out.
+
+53:45-53:48
+What is what is like the final frontier for the human.
+
+53:48-53:52
+It's just going to own that build businesses in that space.
+
+53:52-53:53
+Yeah.
+
+53:53-53:59
+You know it's funny I was thinking about this recently you know like because you kind of mentioned the the fear part right.
+
+53:59-54:04
+It's like everyone's just really fucking terrified about the loss of agency or like this.
+
+54:04-54:07
+You know it's the having agency.
+
+54:07-54:08
+Yes.
+
+54:08-54:12
+It's the like shit I need to decide what to do with my day.
+
+54:12-54:13
+Yeah.
+
+54:13-54:14
+Like it's.
+
+54:14-54:15
+This is the question.
+
+54:15-54:30
+It's like if you go back to like you know go back in the time machine you get the chance to speak to a few like medieval peasants and you go and tell them hey guys like in the not too distant future no one is going to farm their own food.
+
+54:30-54:33
+Like do you reckon they would just be like freaked out by that.
+
+54:33-54:44
+Like is that is that dystopian to them or is it just like oh wow I can be free and like I mean when you go back to those times like there's some like good books and like some of them had to be idle.
+
+54:44-54:46
+Good set of stuff.
+
+54:46-54:49
+I would analyze this and like they actually had a pretty nice life.
+
+54:49-54:51
+They would be in the fields but they meet the fields away.
+
+54:51-54:52
+Yeah.
+
+54:52-54:57
+Four hours a day but they spend most of their time basically hanging out with their mates and their family.
+
+54:57-54:58
+Yeah.
+
+54:58-55:02
+They're just eating and they're outside all day and you're like.
+
+55:02-55:14
+That's like so I was thinking that you go back to them and you go you know the not too distant future everybody's going to be like sitting in a bullshit office working for eight to ten hours a day and life.
+
+55:14-55:15
+Yeah.
+
+55:15-55:22
+For like a minute period of time in human society and then it all just disappears again and we go back to just being outside all the time.
+
+55:22-55:23
+Yeah.
+
+55:23-55:24
+Experiencing shit.
+
+55:24-55:25
+Like it's.
+
+55:25-55:26
+I don't even know.
+
+55:26-55:36
+It just seems like it's so far removed in some ways from how we live that I think it's just hard to figure out what that looks like.
+
+55:36-55:37
+But yeah.
+
+55:37-55:39
+But you almost want you do want something there right.
+
+55:39-55:46
+Like there's something about your interface into a agent world whatever that is.
+
+55:46-55:47
+I don't think it's an AI.
+
+55:47-55:51
+I think it's a set of stuff that you're going to need to own at some level.
+
+55:51-55:52
+Yeah.
+
+55:52-55:54
+You need your stuff to be recorded.
+
+55:54-56:02
+You need the thing that is helping you record stuff to understand what you know and what you don't know and where you were at and what you were trying to achieve.
+
+56:02-56:06
+Like it needs to know this stuff to be useful because that's how it's going to help you ramp up.
+
+56:06-56:12
+Like when you come back to a task and it's going to need to scaffold for you and say like OK this is what we were doing.
+
+56:12-56:13
+This is where we're going to get.
+
+56:13-56:15
+OK yeah I remember now I'm back in it.
+
+56:15-56:17
+Like it needs to augment you in that way.
+
+56:17-56:21
+But it needs to be somewhat omnipresent and follow you around.
+
+56:21-56:23
+To be aware of all of that stuff.
+
+56:23-56:27
+I mean it's going to have to be somewhat under your control.
+
+56:27-56:35
+I mean I still think like Paulie's talk about like just you know imagine like a PS3 or PS whatever PS whatever we're on whatever.
+
+56:35-56:37
+It's probably not free that for the old man.
+
+56:37-56:39
+Maybe like a five or ten or something.
+
+56:39-56:47
+But like you know this thing's got GPUs out the wazoo like we've been no strangers to putting GPUs in our house and like using it to run stuff.
+
+56:47-56:51
+There'll be something like that with a bunch of storage bolted on in everybody's house.
+
+56:51-56:58
+And then that runs your models and your graphs or whatever that you've got and you just feed back to it.
+
+56:58-57:00
+That makes a lot of sense to me.
+
+57:00-57:03
+That's like an end point.
+
+57:03-57:06
+And then how you interface with it is going to have to be auditory.
+
+57:06-57:08
+It's going to have to be visual.
+
+57:08-57:12
+Like it's going to have to it's going to need to know.
+
+57:12-57:20
+It is going to need to know so much because this is like you see it in the trying to stop doing.
+
+57:20-57:23
+I mean so the campfire stuff right.
+
+57:23-57:24
+Yeah.
+
+57:24-57:25
+You did it.
+
+57:25-57:26
+Yeah.
+
+57:26-57:27
+You moved on to other stuff.
+
+57:27-57:28
+Yeah.
+
+57:28-57:29
+You came back to it.
+
+57:29-57:30
+Yes.
+
+57:30-57:32
+Like how was how how hard was it to pick that.
+
+57:32-57:33
+It was seamless.
+
+57:33-57:34
+Really.
+
+57:34-57:38
+I think I think it was a lot easier than I thought it would be.
+
+57:38-57:41
+Is it because you got called to tell you what you were doing.
+
+57:41-57:42
+Well to some degree.
+
+57:42-57:43
+Yeah.
+
+57:43-57:46
+I mean I'm always working with a with a partner on this stuff and in some ways.
+
+57:46-57:51
+But I I think maybe this is the wrong example.
+
+57:51-57:56
+I would use like maybe other pieces of like other other products that I'm trying to build.
+
+57:56-57:58
+Like I definitely have this problem.
+
+57:58-57:59
+Yeah.
+
+57:59-58:03
+Where I lose track of I think maybe it's just my not.
+
+58:03-58:04
+No.
+
+58:04-58:05
+I totally get it.
+
+58:05-58:07
+I totally I absolutely get it.
+
+58:07-58:09
+I think that's like cancelling.
+
+58:09-58:11
+I just realized that my head is broken.
+
+58:11-58:12
+No.
+
+58:12-58:13
+No.
+
+58:13-58:14
+Not at all like the campfire.
+
+58:14-58:16
+I'm like the other products that I'm working on.
+
+58:16-58:17
+Just say like.
+
+58:17-58:23
+But I think like that is because there's like a heap of like there's the technical implementation
+
+58:23-58:29
+complexity but I'm also trying to rationalize through a set of problems that I have to think
+
+58:29-58:32
+through and that is like mentally taxing.
+
+58:32-58:36
+Whereas the campfire scene I was like all right I need to add a third person into this.
+
+58:36-58:40
+I've got a very clear idea of what it is I need to do and I've got the ability to figure
+
+58:40-58:42
+out how to implement those changes and I just did it.
+
+58:42-58:48
+And it was actually quite seem mostly mostly seamless but it also didn't really have any
+
+58:48-58:51
+mental load to go and execute on it.
+
+58:51-58:57
+But I think like with the other subset of problems are working around like with simulated
+
+58:57-59:02
+audiences like that.
+
+59:02-59:07
+Essentially the problem there is like how do I how do I get it how do I get the output
+
+59:07-59:11
+to match what a real world output would be because in my mind if there's like if there's
+
+59:11-59:18
+no causal link between the two output sets of outputs then like the product is useless
+
+59:18-59:20
+basically it's just paperwork.
+
+59:20-59:26
+So if you can get a simulated audience to actually track with a human cohort pretty similarly
+
+59:26-59:31
+pretty consistently then I think it's got real value and I'm sure people have solved
+
+59:31-59:36
+this problem and I'm just still trying to wrap my head around how to solve it.
+
+59:36-59:40
+But I feel like there's like a lot more mental load there so I tend to just drop off and
+
+59:40-59:44
+I'll go and do something else that's a bit easier and I'll come back to it and I get
+
+59:44-59:47
+very much depends on head state.
+
+59:47-59:51
+So I'd say that is like like a way better example of what you're describing and I don't
+
+59:51-59:52
+think that's subjective.
+
+59:52-59:54
+So it's not just me as well.
+
+59:54-59:58
+I absolutely have that to deal with as well.
+
+59:58-01:00:02
+But there's also like I mean we're also human there's a bunch of other like human elements
+
+01:00:02-01:00:05
+that just get in the way that take up that mental load as well.
+
+01:00:05-01:00:09
+It's not even that they get in the way they're the better bits.
+
+01:00:09-01:00:10
+That's true.
+
+01:00:10-01:00:16
+I've really enjoyed like being like way more connected with the kids in the last two weeks.
+
+01:00:16-01:00:22
+It's just that I have not done a ton of work on stuff that I wanted to progress which is
+
+01:00:22-01:00:24
+fine you know I've got all this stuff done.
+
+01:00:24-01:00:29
+But I do think it's fascinating because like to go full circle on this chat like I think
+
+01:00:29-01:00:32
+we've been super creative.
+
+01:00:32-01:00:39
+Like I actually feel like I spend the vast majority of my time doing creative doing creative
+
+01:00:39-01:00:43
+things almost to the detriment of doing the things that need to be done productively.
+
+01:00:43-01:00:44
+Yes.
+
+01:00:44-01:00:48
+And I've got like getting the balance right is actually really challenging at times because
+
+01:00:48-01:00:53
+I'll burn through a bunch of hours and go fuck should have done like some other things
+
+01:00:53-01:00:55
+because you know you need the.
+
+01:00:55-01:00:58
+So the way I rationalize this to myself.
+
+01:00:58-01:00:59
+Yes.
+
+01:00:59-01:01:05
+Is that I like whilst I might have like the big thing that I'm progressing that will take
+
+01:01:05-01:01:12
+like elements of that thing and then I'll go and like just creatively try out different
+
+01:01:12-01:01:18
+solutions to things like building blocks that I know I need over here.
+
+01:01:18-01:01:20
+I will be piloting over here.
+
+01:01:20-01:01:23
+It's still going.
+
+01:01:23-01:01:28
+It's in a way that I yeah I can like be creative with it.
+
+01:01:28-01:01:31
+I can just go off I can vibe code shit.
+
+01:01:31-01:01:32
+I don't need to keep it.
+
+01:01:32-01:01:34
+It's not going to derail this bigger thing.
+
+01:01:34-01:01:38
+But if I just go through that creative process I know that I'll come back to yeah.
+
+01:01:38-01:01:42
+I mean all the stuff that we've been doing recently with graphs around like just like
+
+01:01:42-01:01:47
+really trying to like just explore all the different use cases and like really get into
+
+01:01:47-01:01:54
+intuiting the use of them is like it's it's all just building that intuition and that
+
+01:01:54-01:01:55
+muscle memories.
+
+01:01:55-01:01:59
+Okay I know how I'm going to play this across so many more different use cases now than
+
+01:01:59-01:02:05
+I did previously I would know theoretically like okay well now I can intuit it a lot better
+
+01:02:05-01:02:07
+and it just makes a lot more sense.
+
+01:02:07-01:02:10
+And I think you just need that space to play.
+
+01:02:10-01:02:11
+Yes.
+
+01:02:11-01:02:17
+And to have a bunch of experiments that go yeah that didn't really teach me anything
+
+01:02:17-01:02:21
+with that one so I'll try a new one and then okay now I get it.
+
+01:02:21-01:02:25
+Yeah and eventually you break through and you find a thing that helps.
+
+01:02:25-01:02:32
+That's how I rationalize my spending time playing with tech that I find interesting.
+
+01:02:32-01:02:37
+Yeah I think the other aspect to it is like how easily can you pick it up and start again
+
+01:02:37-01:02:41
+which is what I like about being able to just code at the speed of thought.
+
+01:02:41-01:02:46
+You know like that's what's really been the unlock for me because otherwise there's this
+
+01:02:46-01:02:47
+I mean that's technical debt right.
+
+01:02:47-01:02:48
+Like you've just built up this.
+
+01:02:48-01:02:49
+Or do you even need to.
+
+01:02:49-01:02:52
+That's hopefully the end game is there.
+
+01:02:52-01:02:55
+You don't have to pick it up again you just throw it away and redo it.
+
+01:02:55-01:02:57
+Well when you're playing and someone else picks it up.
+
+01:02:57-01:02:59
+You tend to just break shit all the while I do.
+
+01:02:59-01:03:03
+This is probably just a me thing but I tend to break shit a lot but I don't mind so much
+
+01:03:03-01:03:06
+so long as I know why I've broken it because then there is this whole like lateral learning
+
+01:03:06-01:03:09
+piece that I can do something completely orthogonal to it.
+
+01:03:09-01:03:12
+I've got to be mindful of that thing that I did before.
+
+01:03:12-01:03:17
+This is why I try and create the sandboxes like and break stuff without being about it
+
+01:03:17-01:03:19
+breaking a bigger thing.
+
+01:03:19-01:03:20
+Yes.
+
+01:03:20-01:03:23
+It's like let's sandbox over here and break that over and over and over again until they
+
+01:03:23-01:03:25
+understand that and then bring it back in.
+
+01:03:25-01:03:28
+The problem is sometimes you go over there and you experiment enough and you go you know
+
+01:03:28-01:03:32
+what everything I did before is wrong.
+
+01:03:32-01:03:36
+Like I should redo all that again.
+
+01:03:36-01:03:41
+Is the idea here that work in the future resembles play more than work?
+
+01:03:41-01:03:42
+Um hopefully.
+
+01:03:42-01:03:45
+I mean it's kind of cool.
+
+01:03:45-01:03:48
+And it's way better for learning right?
+
+01:03:48-01:03:51
+Data on that.
+
+01:03:51-01:03:52
+It's interesting.
+
+01:03:52-01:03:59
+I don't know how we got there actually from like adaptive interfaces but yeah you know
+
+01:03:59-01:04:02
+like there's something there's something there.
+
+01:04:02-01:04:03
+I think that makes sense.
+
+01:04:03-01:04:09
+Like why like this is the it feels a bit like the whole you know like do a job you love
+
+01:04:09-01:04:13
+and you'll never work a day in your life sort of.
+
+01:04:13-01:04:14
+Approach the stuff.
+
+01:04:14-01:04:19
+Like you know maybe work just becomes play and we just do stuff we enjoy and then we
+
+01:04:19-01:04:24
+figure out the bits that are stopping us enjoying it and then we make those better and then
+
+01:04:24-01:04:26
+that's that's that's life and that sounds alright.
+
+01:04:26-01:04:30
+I think maybe we touched on this a little bit with Joel last week as well you know around
+
+01:04:30-01:04:32
+creativity or craft right.
+
+01:04:32-01:04:35
+It's like that's a question I think about sometimes is like what's like you were just
+
+01:04:35-01:04:38
+doing like a bit of a renovation at home using your hands right.
+
+01:04:38-01:04:43
+I mean I think that's like there's like an interesting set of skills that exists there
+
+01:04:43-01:04:50
+that are just super relevant and I just wonder like how do we figure out what craft means
+
+01:04:50-01:04:56
+along the lines of also like life's work you know like life's work always tended to be
+
+01:04:56-01:05:00
+like they tended to be like some implicit linearity baked in there where you're just
+
+01:05:00-01:05:05
+like you're going on like down a track and you're just like constantly stacking a bunch
+
+01:05:05-01:05:09
+of skills along that track and maybe there are some that are ancillary to either side
+
+01:05:09-01:05:16
+of it but generally there's a defined path and yeah I don't know what like life's work
+
+01:05:16-01:05:22
+looks like you know when you've got you know creative freedom to go and explore and you've
+
+01:05:22-01:05:28
+got agency and you can pick skills up probably a bit faster but there is the qualier aspect
+
+01:05:28-01:05:31
+that I don't think you can shortcut either.
+
+01:05:31-01:05:32
+No you have to go and do stuff.
+
+01:05:32-01:05:33
+You have to do stuff.
+
+01:05:33-01:05:34
+You have to do stuff.
+
+01:05:34-01:05:35
+Yeah.
+
+01:05:35-01:05:36
+To be stuff.
+
+01:05:36-01:05:37
+I don't know.
+
+01:05:37-01:05:39
+I mean maybe it is like the...
+
+01:05:39-01:05:43
+Ah, who's the quote?
+
+01:05:43-01:05:44
+William Gibson, I think.
+
+01:05:44-01:05:47
+Isn't that like the future's here it's just not evenly distributed.
+
+01:05:47-01:05:48
+Ah yeah.
+
+01:05:48-01:05:53
+And the future is here like for the Victorian gentlemen it was very very not evenly distributed
+
+01:05:53-01:05:54
+at that time.
+
+01:05:54-01:05:55
+Yeah.
+
+01:05:55-01:05:58
+But we'll end up as this sort of like alright we have leisure.
+
+01:05:58-01:05:59
+Mmm.
+
+01:05:59-01:06:05
+Like the cost of stuff falls and hopefully you know if you took our advice you buy it
+
+01:06:05-01:06:08
+because it's a tiny bit of Bitcoin and therefore you'll be fine and you'll eat forever so
+
+01:06:08-01:06:09
+that's good.
+
+01:06:09-01:06:10
+Yeah.
+
+01:06:10-01:06:12
+Like even with modest amounts I think.
+
+01:06:12-01:06:18
+But you know if the price of everything goes down to zero and nobody can do any work because
+
+01:06:18-01:06:22
+it's all being done for free effectively well okay well then your needs are probably taken
+
+01:06:22-01:06:27
+care of and now you have leisure and you need to figure out well what do you do and you'll
+
+01:06:27-01:06:30
+find hobbies.
+
+01:06:30-01:06:32
+Some of the hobbies might just fill your time.
+
+01:06:32-01:06:36
+Some of the hobbies might improve stuff for other people.
+
+01:06:36-01:06:37
+Yeah.
+
+01:06:37-01:06:40
+Even if you're just doing stuff that fills your time you're probably going to then become
+
+01:06:40-01:06:43
+better at it as a craft and then maybe you share that.
+
+01:06:43-01:06:44
+Mmm.
+
+01:06:44-01:06:45
+Yeah.
+
+01:06:45-01:06:51
+It sounds more like play to me is like you go and experience and do stuff that you have
+
+01:06:51-01:06:52
+energy towards.
+
+01:06:52-01:06:55
+I mean it might not be that.
+
+01:06:55-01:07:00
+I say that just because it might not be that it's about doing stuff that you actively enjoy
+
+01:07:00-01:07:06
+making because maybe your thing is that you just like going finding stuff out and it's
+
+01:07:06-01:07:07
+not that enjoyable.
+
+01:07:07-01:07:08
+Yeah.
+
+01:07:08-01:07:11
+Like I'm going to be the guy that puts his hand in the bees nest.
+
+01:07:11-01:07:12
+Yeah.
+
+01:07:12-01:07:17
+I think I do think and this is not something I necessarily agree with but I do think there's
+
+01:07:17-01:07:23
+this implied assumption here that AI is so effective that it can just go and do all of
+
+01:07:23-01:07:26
+the productive work for us and I think depending on who you speak to that's where the doubt
+
+01:07:26-01:07:30
+exists in most people's minds and I think this is maybe the other myth that we touched
+
+01:07:30-01:07:37
+on earlier was that like we have like an unrealistic expectation for error tolerance from AI which
+
+01:07:37-01:07:42
+I understand but we don't often apply the same lens to human work through the same
+
+01:07:42-01:07:43
+set of processes.
+
+01:07:43-01:07:44
+Yeah.
+
+01:07:44-01:07:48
+Human could get nine things out of ten correct but if that's what an AI does it's correct.
+
+01:07:48-01:07:49
+It's a problem.
+
+01:07:49-01:07:50
+Yeah.
+
+01:07:50-01:07:54
+I mean I yeah usually when I say stuff like oh and then the cost of everything goes to
+
+01:07:54-01:07:56
+zero and we don't have jobs.
+
+01:07:56-01:07:59
+I mean I'm thinking quite far in the future of undefined date.
+
+01:07:59-01:08:02
+But yeah I think that's a fair myth.
+
+01:08:02-01:08:05
+I mean I do hope that where it goes more like play that sounds nice.
+
+01:08:05-01:08:06
+It does sound nice.
+
+01:08:06-01:08:07
+Yeah.
+
+01:08:07-01:08:08
+Yeah.
+
+01:08:08-01:08:10
+I think I do think this is the this is the hold up though.
+
+01:08:10-01:08:13
+This is the challenge that people have wrapping their heads around it.
+
+01:08:13-01:08:14
+It's maybe twofold.
+
+01:08:14-01:08:16
+One is the interface is always the same.
+
+01:08:16-01:08:17
+I'm talking to chat GPT.
+
+01:08:17-01:08:20
+I'm asking it to do like the big thing it can't do.
+
+01:08:20-01:08:24
+It's not built for and then the other aspect is well it didn't do all of those things that
+
+01:08:24-01:08:25
+made a bunch of errors.
+
+01:08:25-01:08:27
+It made up a bunch of shit.
+
+01:08:27-01:08:32
+And so therefore it's just not accurate enough to use in any setting that will be able to
+
+01:08:32-01:08:36
+liberate me from the work that I do the productive busy work that I do.
+
+01:08:36-01:08:40
+And that's the disconnect that exists now that perpetuates that myth.
+
+01:08:40-01:08:46
+But I do just think it's a myth because we have unrealistic expectations for error tolerance
+
+01:08:46-01:08:49
+with with AI and agents.
+
+01:08:49-01:08:54
+So whereas like humans like we we're almost way more tolerant because we understand all
+
+01:08:54-01:08:59
+of the like the external drivers for why that mistake might have been made.
+
+01:08:59-01:09:00
+It's like oh they're not yet experienced.
+
+01:09:00-01:09:05
+They've got to learn you know or they're having a bad day or there's something going
+
+01:09:05-01:09:06
+on outside of the workplace.
+
+01:09:06-01:09:11
+And these are like a whole heap of reasons which are valid for why people make mistakes
+
+01:09:11-01:09:15
+and people just make mistakes like we all just make mistakes and that's fine you know
+
+01:09:15-01:09:19
+and they all have costs associated to them especially in commercial settings and we try
+
+01:09:19-01:09:24
+to mitigate them as much as possible with systems and processes.
+
+01:09:24-01:09:28
+And so you know when I think about this I'm like okay what are the systems and processes
+
+01:09:28-01:09:34
+we need to put in place to actually mitigate the error rate for AI and enable them to do
+
+01:09:34-01:09:39
+the things that we do at the kind of speed scale and velocity that we need them to rather
+
+01:09:39-01:09:43
+than just going I'm going to wait for AGI I'm going to wait for a better model.
+
+01:09:43-01:09:45
+I think that's the risk.
+
+01:09:45-01:09:50
+Yes and I think what we're going to find is that all those things that we put in place
+
+01:09:50-01:09:55
+are all the same things that we put in place for humans.
+
+01:09:55-01:09:58
+They're just going to be like niche and quicker.
+
+01:09:58-01:10:03
+You're going to process the intelligence in smaller blocks so you've got to do that thinking
+
+01:10:03-01:10:07
+and then you put the same sort of tools in but you've got to be aware that the loop on
+
+01:10:07-01:10:13
+this might have been like once a year and then now it's like every five minutes it's
+
+01:10:13-01:10:19
+going to be the speed of things is just different.
+
+01:10:19-01:10:25
+I feel like that's the title because it feels like it could be click baity enough to win.
+
+01:10:25-01:10:26
+Death of productivity.
+
+01:10:26-01:10:30
+We're bad at click baity titles.
+
+01:10:30-01:10:33
+I think something like in the future work is play.
+
+01:10:33-01:10:34
+Yeah.
+
+01:10:34-01:10:35
+I do like that.
+
+01:10:35-01:10:37
+It's also like that's optimistic I think.
+
+01:10:37-01:10:41
+I like that there's like for me anyway I'm speaking my book I would prefer work to feel
+
+01:10:41-01:10:42
+more like play.
+
+01:10:42-01:10:48
+Well if I feel like we've done one thing here like in the last sort of year and a half
+
+01:10:48-01:10:52
+visits that we just put ourselves in that world and said all right well let's just go
+
+01:10:52-01:10:54
+and work like that and see what it's like.
+
+01:10:54-01:10:55
+We're the guinea pigs.
+
+01:10:55-01:10:58
+And what we've done is we've ended up playing a lot more with work.
+
+01:10:58-01:11:00
+Yeah it's true.
+
+01:11:00-01:11:02
+So I end of two.
+
+01:11:02-01:11:03
+Yeah.
+
+01:11:03-01:11:04
+That's true.
+
+01:11:04-01:11:06
+I like that.
+
+01:11:06-01:11:08
+Have you done more work with play?
+
+01:11:08-01:11:14
+If you've found that your play is more like work on five squares why not tell us in the
+
+01:11:14-01:11:16
+comments like and subscribe.
+
+01:11:16-01:11:17
+Yeah very good.
+
+01:11:17-01:11:24
+Sometimes I remember that we're recording.
+
+01:11:24-01:11:25
+We're actually recording a podcast.
+
+01:11:25-01:11:26
+Yeah who knows.
+
+01:11:26-01:11:27
+All right.
+
+01:11:27-01:11:28
+Let's wrap that.
+
+01:11:28-01:11:31
+We're coming to the end but maybe before we wrap let's just do a quick.
+
+01:11:31-01:11:32
+Do we have a shout out to sportsmen?
+
+01:11:32-01:11:37
+Yeah I was just going to have a look in Fountain and see who I need to shout out.
+
+01:11:37-01:11:38
+Who I need to shout out.
+
+01:11:38-01:11:39
+Do we get any questions?
+
+01:11:39-01:11:41
+Well Crispy was asking about Flowwise.
+
+01:11:41-01:11:42
+Which you covered that.
+
+01:11:42-01:11:43
+Check.
+
+01:11:43-01:11:44
+Check done.
+
+01:11:44-01:11:46
+So I think we're still on the same same guy.
+
+01:11:46-01:11:50
+So we've got Crispy, Bundaberg, Hodl, BTC, Shelling Point and Sean.
+
+01:11:50-01:11:51
+So shout out guys.
+
+01:11:51-01:11:52
+Thank you for listening.
+
+01:11:52-01:11:53
+Brilliant.
+
+01:11:53-01:11:55
+Quite a lot of good feedback just in person from people.
+
+01:11:55-01:11:57
+Yeah just generally it's been good.
+
+01:11:57-01:12:01
+Apparently we're good on 2X speed because we just talk quite slow.
+
+01:12:01-01:12:02
+Yeah quite.
+
+01:12:02-01:12:03
+I've noticed that about myself actually.
+
+01:12:03-01:12:05
+Yesterday I heard from Alex.
+
+01:12:05-01:12:10
+He's like you know what you're just so calm like I can just put it on before bed and
+
+01:12:10-01:12:11
+it's like okay good to sleep too.
+
+01:12:11-01:12:12
+Soothing.
+
+01:12:12-01:12:13
+Solid.
+
+01:12:13-01:12:14
+Very good.
+
+01:12:14-01:12:17
+Soothing numbers right because then somebody can just put us on, fall asleep.
+
+01:12:17-01:12:18
+That's true.
+
+01:12:18-01:12:19
+Place through the whole thing.
+
+01:12:19-01:12:20
+Bang bang.
+
+01:12:20-01:12:21
+I'm like oh I need to go back to sleep.
+
+01:12:21-01:12:22
+Put it on again.
+
+01:12:22-01:12:23
+Yeah the ambient background I hope would help as well.
+
+01:12:23-01:12:26
+Just look at that scenic view of the beach.
+
+01:12:26-01:12:28
+Two dudes at the fire.
+
+01:12:28-01:12:30
+That might help you go to sleep.
+
+01:12:30-01:12:32
+But yeah that would be great for engagement.
+
+01:12:32-01:12:34
+Just sit and watch it for 12 hours.
+
+01:12:34-01:12:35
+8 hours.
+
+01:12:35-01:12:36
+How long do people sleep?
+
+01:12:36-01:12:37
+I don't know.
+
+01:12:37-01:12:39
+Maybe we need a long form sleep version.
+
+01:12:39-01:12:42
+Which is like all of the podcasts in one go.
+
+01:12:42-01:12:43
+In one go.
+
+01:12:43-01:12:46
+Soothing for like 10 hours and you can put that on.
+
+01:12:46-01:12:50
+And then you just fall asleep and we just rack up views on that one.
+
+01:12:50-01:12:52
+I must admit that feedback surprises me.
+
+01:12:52-01:12:54
+That someone puts it on before they go to bed.
+
+01:12:54-01:12:55
+Yeah.
+
+01:12:55-01:12:56
+I didn't.
+
+01:12:56-01:12:57
+I mean I don't.
+
+01:12:57-01:13:00
+You know you're always like really self critical when you hear your own voice played back to
+
+01:13:00-01:13:01
+you.
+
+01:13:01-01:13:02
+At least I am.
+
+01:13:02-01:13:03
+I'm like is that how I actually sound?
+
+01:13:03-01:13:07
+Like I wouldn't have thought soothing before bed was the vibe I was giving.
+
+01:13:07-01:13:09
+But it's definitely slow.
+
+01:13:09-01:13:10
+Like I thought that too.
+
+01:13:10-01:13:11
+I'm sped up.
+
+01:13:11-01:13:13
+I think we tend to be a little bit...
+
+01:13:13-01:13:14
+Yeah we don't talk fast.
+
+01:13:14-01:13:15
+It's quite laid back.
+
+01:13:15-01:13:18
+I think I get the vibe.
+
+01:13:18-01:13:20
+I think it's more that.
+
+01:13:20-01:13:21
+It's just not...
+
+01:13:21-01:13:22
+Some people you just...
+
+01:13:22-01:13:23
+It's just still recording.
+
+01:13:23-01:13:24
+Yeah we are.
+
+01:13:24-01:13:25
+It's still going.
+
+01:13:25-01:13:28
+I think some people you just don't want to listen to.
+
+01:13:28-01:13:30
+You're like oh my god this person is annoying.
+
+01:13:30-01:13:33
+I can't listen to them in this mood.
+
+01:13:33-01:13:37
+That's a car listen or a different sort of running listen.
+
+01:13:37-01:13:39
+But not here.
+
+01:13:39-01:13:44
+Alright so on that note feel free to listen to us while you're asleep and then for a
+
+01:13:44-01:13:46
+track up more of those.
+
+01:13:46-01:13:51
+If you know anybody that is into this sort of stuff tell them about it.
+
+01:13:51-01:13:53
+It is nice to see.
+
+01:13:53-01:13:57
+I like the feedback so yeah reach out and tell us what's going on.
+
+01:13:57-01:13:58
+It's fun.
+
+01:13:58-01:13:59
+Love to hear it.
+
+01:13:59-01:14:03
+I mean it's quite easy for us to just record a chat so I can see this going on for quite
+
+01:14:03-01:14:04
+a while.
+
+01:14:04-01:14:06
+Well it's wrapped there.
+
+01:14:06-01:14:07
+Alright.
+
+01:14:07-01:14:08
+It's the good stuff.
+

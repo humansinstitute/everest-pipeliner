@@ -1082,6 +1082,125 @@ if (isMain) {
     });
 }
 
+/**
+ * NostrMQ execution interface for facilitated dialogue pipeline
+ * @param {Object} parameters - Pipeline parameters from NostrMQ request
+ * @param {Object} jobLogger - Job-specific logger instance
+ * @returns {Promise<Object>} - Pipeline execution result
+ */
+export async function executeViaNostrMQ(parameters, jobLogger) {
+  jobLogger.info(
+    "Facilitated dialogue pipeline execution started via NostrMQ",
+    {
+      parameters,
+    }
+  );
+
+  try {
+    // Validate and prepare configuration
+    const config = {
+      sourceText: parameters.sourceText,
+      discussionPrompt: parameters.discussionPrompt,
+      iterations: parameters.iterations || 4,
+      summaryFocus:
+        parameters.summaryFocus ||
+        "Please provide a comprehensive summary of the key points, insights, and conclusions from this facilitated dialogue.",
+      facilitatorEnabled: parameters.facilitatorEnabled !== false, // Default to true
+    };
+
+    // Execute the pipeline
+    const result = await facilitatedDialoguePipeline(config);
+
+    jobLogger.info(
+      "Facilitated dialogue pipeline execution completed via NostrMQ",
+      {
+        runId: result.runId,
+        status: result.error ? "failed" : "completed",
+        conversationLength: result.conversation?.length || 0,
+        facilitatorInterventions:
+          result.pipeline?.facilitatorInterventions?.length || 0,
+      }
+    );
+
+    return result;
+  } catch (error) {
+    jobLogger.error(
+      "Facilitated dialogue pipeline execution failed via NostrMQ",
+      {
+        error: error.message,
+        stack: error.stack,
+      }
+    );
+    throw error;
+  }
+}
+
+/**
+ * Pipeline metadata for registry discovery
+ */
+export const pipelineInfo = {
+  name: "facilitatedDialogue",
+  description:
+    "Enhanced dialogue pipeline with facilitator intervention to improve discussion quality and prevent agreement bias",
+  version: "1.0.0",
+  parameters: {
+    required: ["sourceText", "discussionPrompt"],
+    optional: ["iterations", "summaryFocus", "facilitatorEnabled"],
+    schema: {
+      sourceText: {
+        type: "string",
+        description: "Source material for the dialogue",
+        minLength: 10,
+      },
+      discussionPrompt: {
+        type: "string",
+        description: "Prompt to guide the discussion",
+        minLength: 10,
+      },
+      iterations: {
+        type: "integer",
+        description:
+          "Number of dialogue iterations (should be even when facilitator enabled)",
+        minimum: 1,
+        maximum: 10,
+        default: 4,
+      },
+      summaryFocus: {
+        type: "string",
+        description: "Focus for the summary generation",
+        default:
+          "Please provide a comprehensive summary of the key points, insights, and conclusions from this facilitated dialogue.",
+      },
+      facilitatorEnabled: {
+        type: "boolean",
+        description: "Enable facilitator interventions during dialogue",
+        default: true,
+      },
+    },
+  },
+  capabilities: [
+    "multi-agent-dialogue",
+    "facilitator-intervention",
+    "conversation-summary",
+    "file-generation",
+    "cost-tracking",
+    "bias-prevention",
+  ],
+  outputs: {
+    conversation: "Array of dialogue exchanges with facilitator interventions",
+    summary: "Generated conversation summary",
+    files: "Generated output files (markdown, JSON)",
+    pipeline: "Execution metadata and statistics",
+    facilitatorInterventions: "Array of facilitator intervention details",
+  },
+  estimatedDuration: "90-240s",
+  resourceRequirements: {
+    memory: "medium",
+    cpu: "medium",
+    network: "high", // Due to Everest API calls including facilitator
+  },
+};
+
 export {
   facilitatedDialoguePipeline,
   validateFacilitatedDialogueConfig,
