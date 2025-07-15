@@ -21,7 +21,7 @@ function createPipelineData(runId = null) {
 
   initializePipelineCosts(pipelineData);
 
-  console.log(`[PipelineData] Created new pipeline: ${pipelineData.runId}`);
+  console.error(`[PipelineData] Created new pipeline: ${pipelineData.runId}`);
   return pipelineData;
 }
 
@@ -74,7 +74,7 @@ function addStepResult(
     });
   }
 
-  console.log(`[PipelineData] Added step ${stepId} with status: ${status}`);
+  console.error(`[PipelineData] Added step ${stepId} with status: ${status}`);
   return stepResult;
 }
 
@@ -117,12 +117,12 @@ function completePipeline(pipelineData, status = "completed") {
     durationSeconds: Math.round((pipelineData.duration / 1000) * 100) / 100,
   };
 
-  console.log(
+  console.error(
     `[PipelineData] Pipeline ${pipelineData.runId} completed with status: ${status}`
   );
-  console.log(`[PipelineData] Statistics:`, pipelineData.statistics);
-  console.log(`[PipelineData] Cost Summary:`);
-  console.log(formatCostSummary(pipelineData));
+  console.error(`[PipelineData] Statistics:`, pipelineData.statistics);
+  console.error(`[PipelineData] Cost Summary:`);
+  console.error(formatCostSummary(pipelineData));
 }
 
 /**

@@ -1082,6 +1082,134 @@ if (isMain) {
     });
 }
 
+// Universal Pipeline Interface Implementation
+export const pipelineInfo = {
+  name: "facilitatedDialogue",
+  description:
+    "Multi-agent facilitated dialogue pipeline with optional facilitator interventions for enhanced conversation quality and thorough exploration of ideas",
+  parameters: {
+    type: "object",
+    properties: {
+      sourceText: {
+        type: "string",
+        description: "Source text or content for dialogue analysis",
+        minLength: 1,
+      },
+      discussionPrompt: {
+        type: "string",
+        description: "Discussion prompt or question to guide the conversation",
+        minLength: 1,
+      },
+      iterations: {
+        type: "integer",
+        description:
+          "Number of dialogue iterations (should be even when facilitator is enabled)",
+        minimum: 1,
+        maximum: 10,
+        default: 4,
+      },
+      summaryFocus: {
+        type: "string",
+        description: "Focus or perspective for the final summary",
+        default:
+          "Please provide a comprehensive summary of the key points, insights, and conclusions from this facilitated dialogue.",
+      },
+      facilitatorEnabled: {
+        type: "boolean",
+        description:
+          "Enable facilitator interventions during dialogue to improve discussion quality",
+        default: false,
+      },
+    },
+    required: ["sourceText", "discussionPrompt"],
+  },
+  interfaces: ["mcp", "nostrmq", "cli"],
+};
+
+/**
+ * Executes facilitated dialogue pipeline via MCP interface
+ * @param {Object} parameters - Pipeline parameters
+ * @param {Object} logger - MCP logger instance
+ * @returns {Promise<Object>} Formatted result for MCP consumption
+ */
+export async function executeViaMCP(parameters, logger) {
+  logger.info("MCP facilitated dialogue execution started", { parameters });
+
+  try {
+    const result = await facilitatedDialoguePipeline({
+      sourceText: parameters.sourceText,
+      discussionPrompt: parameters.discussionPrompt,
+      iterations: parameters.iterations || 4,
+      summaryFocus:
+        parameters.summaryFocus ||
+        "Please provide a comprehensive summary of the key points, insights, and conclusions from this facilitated dialogue.",
+      facilitatorEnabled: parameters.facilitatorEnabled || false,
+    });
+
+    logger.info("MCP facilitated dialogue execution completed", {
+      success: !result.error,
+      runId: result.runId,
+    });
+
+    // Format for MCP consumption
+    return {
+      success: !result.error,
+      result: {
+        runId: result.runId,
+        status: result.error ? "failed" : "completed",
+        summary: result.summary?.content || "No summary available",
+        conversation: result.conversation?.slice(0, 3) || [], // Preview for Claude
+        facilitatorInterventions:
+          result.pipeline?.facilitatorInterventions?.length || 0,
+        files: result.files ? Object.values(result.files).flat() : [],
+        executionTime: result.pipeline?.statistics?.durationSeconds,
+        facilitatorEnabled: result.config?.facilitatorEnabled || false,
+        warnings: result.warnings || [],
+      },
+      error: result.error,
+    };
+  } catch (error) {
+    logger.error("MCP facilitated dialogue execution failed", error);
+    return {
+      success: false,
+      error: {
+        message: error.message,
+        type: "execution_error",
+      },
+    };
+  }
+}
+
+/**
+ * Executes facilitated dialogue pipeline via NostrMQ interface (stub for future implementation)
+ * @param {Object} parameters - Pipeline parameters
+ * @param {Object} jobLogger - NostrMQ job logger instance
+ * @returns {Promise<Object>} Result for NostrMQ consumption
+ */
+export async function executeViaNostrMQ(parameters, jobLogger) {
+  jobLogger.info("NostrMQ facilitated dialogue execution started", {
+    parameters,
+  });
+
+  // For now, delegate to the main pipeline function
+  // Future implementation will add NostrMQ-specific handling
+  const result = await facilitatedDialoguePipeline({
+    sourceText: parameters.sourceText,
+    discussionPrompt: parameters.discussionPrompt,
+    iterations: parameters.iterations || 4,
+    summaryFocus:
+      parameters.summaryFocus ||
+      "Please provide a comprehensive summary of the key points, insights, and conclusions from this facilitated dialogue.",
+    facilitatorEnabled: parameters.facilitatorEnabled || false,
+  });
+
+  jobLogger.info("NostrMQ facilitated dialogue execution completed", {
+    success: !result.error,
+    runId: result.runId,
+  });
+  return result;
+}
+
 export {
   facilitatedDialoguePipeline,
   validateFacilitatedDialogueConfig,

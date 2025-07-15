@@ -1,69 +1,168 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="32" failures="0" errors="0" time="0.214">
-  <testsuite name="Content Waterfall Pipeline - Comprehensive Test Suite" errors="0" failures="0" skipped="0" timestamp="2025-07-14T05:19:29" time="0.188" tests="32">
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Pipeline Configuration Validation" name="validateWaterfallConfig - valid configuration" time="0.002">
+<testsuites name="jest tests" tests="37" failures="11" errors="0" time="0.666">
+  <testsuite name="MCP Configuration" errors="0" failures="4" skipped="0" timestamp="2025-07-15T03:40:25" time="0.294" tests="30">
+    <testcase classname="MCP Configuration › loadMCPConfig" name="should load default configuration when no environment variables set" time="0.002">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Pipeline Configuration Validation" name="validateWaterfallConfig - missing source text" time="0.001">
+    <testcase classname="MCP Configuration › loadMCPConfig" name="should override defaults with environment variables" time="0">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Pipeline Configuration Validation" name="validateWaterfallConfig - empty source text" time="0">
+    <testcase classname="MCP Configuration › loadMCPConfig" name="should handle invalid numeric environment variables" time="0">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Pipeline Configuration Validation" name="validateWaterfallConfig - null source text" time="0">
+    <testcase classname="MCP Configuration › loadMCPConfig" name="should validate configuration and throw on invalid values" time="0.001">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Pipeline Configuration Validation" name="validateWaterfallConfig - invalid customFocus type" time="0.001">
+    <testcase classname="MCP Configuration › Configuration Validation" name="should validate valid configuration" time="0">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Pipeline Configuration Validation" name="validateWaterfallConfig - empty customFocus is ignored" time="0">
+    <testcase classname="MCP Configuration › Configuration Validation" name="should reject invalid port numbers" time="0.002">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Pipeline Configuration Validation" name="validateWaterfallConfig - sanitizes special characters" time="0.001">
+    <testcase classname="MCP Configuration › Configuration Validation" name="should reject invalid host values" time="0.002">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Waterfall Agents Configuration" name="contentAnalyzer - generates valid agent configuration" time="0.008">
+    <testcase classname="MCP Configuration › Configuration Validation" name="should reject invalid timeout values" time="0.001">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Waterfall Agents Configuration" name="linkedinCreator - generates valid configuration" time="0.001">
+    <testcase classname="MCP Configuration › Configuration Validation" name="should reject invalid log levels" time="0.003">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Waterfall Agents Configuration" name="reelsGenerator - generates valid configuration" time="0.001">
+    <testcase classname="MCP Configuration › Configuration Validation" name="should reject invalid directory paths" time="0.001">
+      <failure>Error: expect(received).toThrow(expected)
+
+Expected pattern: /directory must be a non-empty string/
+
+Received function did not throw
+    at /Users/pw/code/everest/pipeliner/tests/mcp/config.test.js:295:11
+    at Array.forEach (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (/Users/pw/code/everest/pipeliner/tests/mcp/config.test.js:280:22)
+    at Promise.then.completed (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/pw/code/everest/pipeliner/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/pw/code/everest/pipeliner/node_modules/jest-runner/build/runTest.js:444:34)</failure>
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Waterfall Agents Configuration" name="agents handle invalid input appropriately" time="0.001">
+    <testcase classname="MCP Configuration › Configuration Validation" name="should reject invalid allowed hosts" time="0.001">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › File System Integration" name="listWaterfallSourceFiles - finds available input files" time="0.004">
+    <testcase classname="MCP Configuration › Tool Name Functions" name="should create tool name correctly" time="0">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › File System Integration" name="readWaterfallSourceFile - reads file content correctly" time="0.002">
+    <testcase classname="MCP Configuration › Tool Name Functions" name="should extract pipeline name correctly" time="0.001">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › File System Integration" name="validateWaterfallSourceFile - validates file types and accessibility" time="0.007">
+    <testcase classname="MCP Configuration › Tool Name Functions" name="should return null for invalid tool names" time="0.001">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › File System Integration" name="generateWaterfallOutputFiles - creates complete file structure" time="0.005">
+    <testcase classname="MCP Configuration › Tool Name Functions" name="should handle custom tool prefix" time="0.001">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Content Quality Validation" name="mock data structures are valid" time="0.004">
+    <testcase classname="MCP Configuration › Pipeline Configuration" name="should return correct configuration for known pipelines" time="0.001">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Performance Tests" name="validation functions execute quickly" time="0.001">
+    <testcase classname="MCP Configuration › Pipeline Configuration" name="should return default configuration for unknown pipelines" time="0">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Performance Tests" name="agent configuration generation is efficient" time="0">
+    <testcase classname="MCP Configuration › Path Utilities" name="should return absolute path for relative paths" time="0">
+      <failure>TypeError: expect(...).not.toStartWith is not a function
+    at Object.&lt;anonymous&gt; (/Users/pw/code/everest/pipeliner/tests/mcp/config.test.js:424:32)
+    at Promise.then.completed (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/pw/code/everest/pipeliner/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/pw/code/everest/pipeliner/node_modules/jest-runner/build/runTest.js:444:34)</failure>
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Performance Tests" name="memory usage remains stable during validation" time="0.001">
+    <testcase classname="MCP Configuration › Path Utilities" name="should return unchanged path for absolute paths" time="0.001">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Error Handling and Security" name="handles malformed input gracefully" time="0">
+    <testcase classname="MCP Configuration › Path Utilities" name="should handle Windows-style paths" time="0.003">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;C:\\Users\\test\\pipelines&quot;
+Received: &quot;/Users/pw/code/everest/pipeliner/C:\\Users\\test\\pipelines&quot;
+    at Object.&lt;anonymous&gt; (/Users/pw/code/everest/pipeliner/tests/mcp/config.test.js:436:44)
+    at Promise.then.completed (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/pw/code/everest/pipeliner/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/pw/code/everest/pipeliner/node_modules/jest-runner/build/runTest.js:444:34)</failure>
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Error Handling and Security" name="handles empty source text" time="0.001">
+    <testcase classname="MCP Configuration › Environment Configuration" name="should return development config" time="0.001">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Error Handling and Security" name="sanitizes potentially malicious input" time="0">
+    <testcase classname="MCP Configuration › Environment Configuration" name="should return production config" time="0">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Error Handling and Security" name="validates file paths for security" time="0.001">
+    <testcase classname="MCP Configuration › Environment Configuration" name="should return test config" time="0.001">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Error Handling and Security" name="prevents directory traversal in file operations" time="0.001">
+    <testcase classname="MCP Configuration › Environment Configuration" name="should return empty config for unknown environment" time="0">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Agent Chain Integration" name="data flows correctly between agents" time="0.001">
+    <testcase classname="MCP Configuration › Environment Configuration" name="should apply environment config correctly" time="0.001">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Agent Chain Integration" name="agents maintain consistent data structure" time="0.001">
+    <testcase classname="MCP Configuration › MCP Capabilities" name="should return correct capabilities" time="0.001">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Regression Tests" name="maintains backward compatibility with existing configurations" time="0.001">
+    <testcase classname="MCP Configuration › MCP Capabilities" name="should use config log level" time="0">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Regression Tests" name="handles legacy data formats gracefully" time="0">
+    <testcase classname="MCP Configuration › getMCPConfig Integration" name="should return complete configuration with environment overrides" time="0.001">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Edge Cases" name="handles very short content" time="0.001">
+    <testcase classname="MCP Configuration › getMCPConfig Integration" name="should handle production environment" time="0.001">
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Edge Cases" name="handles content with only whitespace" time="0">
+    <testcase classname="MCP Configuration › Error Messages" name="should have all required error messages" time="0">
+      <failure>ReferenceError: require is not defined
+    at Object.&lt;anonymous&gt; (/Users/pw/code/everest/pipeliner/tests/mcp/config.test.js:570:33)
+    at Promise.then.completed (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/pw/code/everest/pipeliner/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/pw/code/everest/pipeliner/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/pw/code/everest/pipeliner/node_modules/jest-runner/build/runTest.js:444:34)</failure>
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Edge Cases" name="handles unicode and special characters" time="0">
+  </testsuite>
+  <testsuite name="Claude Desktop Workflow Simulation" errors="0" failures="7" skipped="0" timestamp="2025-07-15T03:40:25" time="0.08" tests="7">
+    <testcase classname="Claude Desktop Workflow Simulation › Claude Desktop Connection Simulation" name="should establish connection with Claude Desktop" time="0.001">
+      <failure>TypeError: Server.mockImplementation is not a function
+    at Object.&lt;anonymous&gt; (/Users/pw/code/everest/pipeliner/tests/mcp/claude-simulation.test.js:60:12)</failure>
     </testcase>
-    <testcase classname="Content Waterfall Pipeline - Comprehensive Test Suite › Edge Cases" name="handles extremely long content" time="0.001">
+    <testcase classname="Claude Desktop Workflow Simulation › Claude Desktop Connection Simulation" name="should handle Claude Desktop tool discovery request" time="0.001">
+      <failure>TypeError: Server.mockImplementation is not a function
+    at Object.&lt;anonymous&gt; (/Users/pw/code/everest/pipeliner/tests/mcp/claude-simulation.test.js:60:12)</failure>
+    </testcase>
+    <testcase classname="Claude Desktop Workflow Simulation › Realistic Claude Desktop Usage Scenarios" name="should handle Claude analyzing a research paper" time="0">
+      <failure>TypeError: Server.mockImplementation is not a function
+    at Object.&lt;anonymous&gt; (/Users/pw/code/everest/pipeliner/tests/mcp/claude-simulation.test.js:60:12)</failure>
+    </testcase>
+    <testcase classname="Claude Desktop Workflow Simulation › Realistic Claude Desktop Usage Scenarios" name="should handle Claude creating social media content" time="0.001">
+      <failure>TypeError: Server.mockImplementation is not a function
+    at Object.&lt;anonymous&gt; (/Users/pw/code/everest/pipeliner/tests/mcp/claude-simulation.test.js:60:12)</failure>
+    </testcase>
+    <testcase classname="Claude Desktop Workflow Simulation › Realistic Claude Desktop Usage Scenarios" name="should handle Claude error scenarios gracefully" time="0">
+      <failure>TypeError: Server.mockImplementation is not a function
+    at Object.&lt;anonymous&gt; (/Users/pw/code/everest/pipeliner/tests/mcp/claude-simulation.test.js:60:12)</failure>
+    </testcase>
+    <testcase classname="Claude Desktop Workflow Simulation › Claude Desktop Integration Patterns" name="should support Claude workflow chaining" time="0.001">
+      <failure>TypeError: Server.mockImplementation is not a function
+    at Object.&lt;anonymous&gt; (/Users/pw/code/everest/pipeliner/tests/mcp/claude-simulation.test.js:60:12)</failure>
+    </testcase>
+    <testcase classname="Claude Desktop Workflow Simulation › Claude Desktop Integration Patterns" name="should handle Claude context preservation across calls" time="0">
+      <failure>TypeError: Server.mockImplementation is not a function
+    at Object.&lt;anonymous&gt; (/Users/pw/code/everest/pipeliner/tests/mcp/claude-simulation.test.js:60:12)</failure>
     </testcase>
   </testsuite>
 </testsuites>

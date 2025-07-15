@@ -82,7 +82,7 @@ async function validateAgent(agentName) {
       );
     }
 
-    console.log(`[AgentLoader] Agent ${agentName} validation passed`);
+    console.error(`[AgentLoader] Agent ${agentName} validation passed`);
     return true;
   } catch (error) {
     console.error(`[AgentLoader] Agent ${agentName} validation failed:`, error);

@@ -16,16 +16,16 @@ dotenv.config();
 async function simpleChatPipeline(customMessage = null) {
   const pipelineData = createPipelineData();
 
-  console.log(`[SimpleChatPipeline] Starting pipeline ${pipelineData.runId}`);
-  console.log(
+  console.error(`[SimpleChatPipeline] Starting pipeline ${pipelineData.runId}`);
+  console.error(
     `[SimpleChatPipeline] Pipeline start time: ${pipelineData.startTime}`
   );
 
   try {
     // Step 1: Load conversation agent
-    console.log("[SimpleChatPipeline] Step 1: Loading conversationAgent...");
+    console.error("[SimpleChatPipeline] Step 1: Loading conversationAgent...");
     const conversationAgent = await loadAgent("conversationAgent");
-    console.log(
+    console.error(
       "[SimpleChatPipeline] ✅ ConversationAgent loaded successfully"
     );
 
@@ -35,18 +35,18 @@ async function simpleChatPipeline(customMessage = null) {
       "User is requesting creative content about Antarctic birds. Please write a creative and engaging poem.";
     const history = [];
 
-    console.log(
+    console.error(
       "[SimpleChatPipeline] Step 2: Configuring agent for request..."
     );
-    console.log(`[SimpleChatPipeline] Message: ${message}`);
-    console.log(`[SimpleChatPipeline] Context: ${context}`);
+    console.error(`[SimpleChatPipeline] Message: ${message}`);
+    console.error(`[SimpleChatPipeline] Context: ${context}`);
 
     const agentConfig = await conversationAgent(message, context, history);
-    console.log("[SimpleChatPipeline] ✅ Agent configuration created");
-    console.log(`[SimpleChatPipeline] Agent callID: ${agentConfig.callID}`);
+    console.error("[SimpleChatPipeline] ✅ Agent configuration created");
+    console.error(`[SimpleChatPipeline] Agent callID: ${agentConfig.callID}`);
 
     // Step 3: Call Everest API
-    console.log("[SimpleChatPipeline] Step 3: Calling Everest API...");
+    console.error("[SimpleChatPipeline] Step 3: Calling Everest API...");
     const response = await callEverest(
       agentConfig,
       pipelineData,
@@ -61,8 +61,8 @@ async function simpleChatPipeline(customMessage = null) {
       );
       completePipeline(pipelineData, "failed");
     } else {
-      console.log("[SimpleChatPipeline] ✅ Everest API call successful");
-      console.log(`[SimpleChatPipeline] Response callID: ${response.callID}`);
+      console.error("[SimpleChatPipeline] ✅ Everest API call successful");
+      console.error(`[SimpleChatPipeline] Response callID: ${response.callID}`);
 
       // Extract and display the poem if available
       if (response.response && response.response.content) {
@@ -236,6 +236,141 @@ if (isMain) {
       console.error("❌ Pipeline execution failed:", error);
       process.exit(1);
     });
+}
+
+// Universal Pipeline Interface Implementation
+export const pipelineInfo = {
+  name: "simpleChat",
+  description:
+    "Simple chat pipeline for basic conversational interactions and content generation requests",
+  parameters: {
+    type: "object",
+    properties: {
+      message: {
+        type: "string",
+        description: "Message or query for the chat pipeline",
+        minLength: 1,
+      },
+      context: {
+        type: "string",
+        description: "Additional context for the conversation",
+      },
+    },
+    required: ["message"],
+  },
+  interfaces: ["mcp", "nostrmq", "cli"],
+};
+
+/**
+ * Executes simple chat pipeline via MCP interface
+ * @param {Object} parameters - Pipeline parameters
+ * @param {Object} logger - MCP logger instance
+ * @returns {Promise<Object>} Formatted result for MCP consumption
+ */
+export async function executeViaMCP(parameters, logger) {
+  logger.info("MCP simple chat execution started", { parameters });
+
+  try {
+    const result = await simpleChatPipeline(parameters.message);
+
+    logger.info("MCP simple chat execution completed", {
+      success: result.status === "completed",
+      runId: result.runId,
+    });
+
+    // Extract the response content from pipeline steps
+    let responseContent = null;
+    if (result.steps && result.steps.length > 0) {
+      const chatStep = result.steps.find(
+        (step) =>
+          step.stepId.includes("chat") ||
+          step.stepId.includes("poem") ||
+          step.stepId.includes("penguin")
+      );
+      if (chatStep && chatStep.output) {
+        responseContent = extractResponseContent(chatStep.output);
+      }
+    }
+
+    // Format for MCP consumption
+    return {
+      success: result.status === "completed",
+      result: {
+        runId: result.runId,
+        status: result.status,
+        summary: responseContent
+          ? `Chat response generated successfully`
+          : "Chat response completed",
+        response: responseContent || "No response content available",
+        executionTime: result.statistics?.durationSeconds,
+        stepsCompleted: result.statistics?.completedSteps || 0,
+        successRate: result.statistics?.successRate || 0,
+      },
+      error: result.error,
+    };
+  } catch (error) {
+    logger.error("MCP simple chat execution failed", error);
+    return {
+      success: false,
+      error: {
+        message: error.message,
+        type: "execution_error",
+      },
+    };
+  }
+}
+
+/**
+ * Executes simple chat pipeline via NostrMQ interface (stub for future implementation)
+ * @param {Object} parameters - Pipeline parameters
+ * @param {Object} jobLogger - NostrMQ job logger instance
+ * @returns {Promise<Object>} Result for NostrMQ consumption
+ */
+export async function executeViaNostrMQ(parameters, jobLogger) {
+  jobLogger.info("NostrMQ simple chat execution started", { parameters });
+
+  // For now, delegate to the main pipeline function
+  // Future implementation will add NostrMQ-specific handling
+  const result = await simpleChatPipeline(parameters.message);
+
+  jobLogger.info("NostrMQ simple chat execution completed", {
+    success: result.status === "completed",
+    runId: result.runId,
+  });
+
+  return result;
+}
+
+/**
+ * Extracts response content from various API response formats
+ * @param {Object} response - API response object
+ * @returns {string|null} - Extracted content or null if not found
+ */
+function extractResponseContent(response) {
+  // Check for error first
+  if (response.error) {
+    return null;
+  }
+
+  // Try different response formats
+  if (response.response && response.response.content) {
+    return response.response.content;
+  } else if (
+    response.choices &&
+    response.choices[0] &&
+    response.choices[0].message &&
+    response.choices[0].message.content
+  ) {
+    return response.choices[0].message.content;
+  } else if (
+    response.message &&
+    typeof response.message === "string" &&
+    response.message.length > 0
+  ) {
+    return response.message;
+  }
+
+  return null;
 }
 
 export { simpleChatPipeline, validatePipelineResult };

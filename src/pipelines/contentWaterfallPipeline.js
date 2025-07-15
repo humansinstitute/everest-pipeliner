@@ -1197,6 +1197,120 @@ Success in remote work requires investment in people, processes, and technology.
     });
 }
 
+// Universal Pipeline Interface Implementation
+export const pipelineInfo = {
+  name: "contentWaterfall",
+  description:
+    "Content waterfall pipeline that transforms long-form content into structured social media outputs including LinkedIn posts and Reels concepts",
+  parameters: {
+    type: "object",
+    properties: {
+      sourceText: {
+        type: "string",
+        description:
+          "Source content for waterfall processing and social media transformation",
+        minLength: 1,
+      },
+      customFocus: {
+        type: "string",
+        description: "Custom focus for content analysis and topic extraction",
+      },
+      outputFormat: {
+        type: "string",
+        description: "Desired output format for generated content",
+      },
+    },
+    required: ["sourceText"],
+  },
+  interfaces: ["mcp", "nostrmq", "cli"],
+};
+
+/**
+ * Executes content waterfall pipeline via MCP interface
+ * @param {Object} parameters - Pipeline parameters
+ * @param {Object} logger - MCP logger instance
+ * @returns {Promise<Object>} Formatted result for MCP consumption
+ */
+export async function executeViaMCP(parameters, logger) {
+  logger.info("MCP content waterfall execution started", { parameters });
+
+  try {
+    const result = await contentWaterfallPipeline({
+      sourceText: parameters.sourceText,
+      customFocus: parameters.customFocus,
+      outputFormat: parameters.outputFormat,
+    });
+
+    logger.info("MCP content waterfall execution completed", {
+      success: !result.error,
+      runId: result.runId,
+    });
+
+    // Format for MCP consumption
+    return {
+      success: !result.error,
+      result: {
+        runId: result.runId,
+        status: result.error ? "failed" : "completed",
+        summary: `Content waterfall completed: ${
+          result.topics?.topics?.length || 0
+        } topics, ${
+          result.linkedinPosts?.linkedinPosts?.length || 0
+        } LinkedIn posts, ${
+          result.reelsConcepts?.reelsConcepts?.length || 0
+        } Reels concepts`,
+        topics: result.topics?.topics?.slice(0, 3) || [], // Preview for Claude
+        linkedinPosts: result.linkedinPosts?.linkedinPosts?.slice(0, 2) || [], // Preview for Claude
+        reelsConcepts: result.reelsConcepts?.reelsConcepts?.slice(0, 2) || [], // Preview for Claude
+        files: result.files ? Object.values(result.files).flat() : [],
+        executionTime: result.pipeline?.statistics?.durationSeconds,
+        contentStats: {
+          topicsExtracted: result.topics?.topics?.length || 0,
+          linkedinPostsGenerated:
+            result.linkedinPosts?.linkedinPosts?.length || 0,
+          reelsConceptsGenerated:
+            result.reelsConcepts?.reelsConcepts?.length || 0,
+        },
+      },
+      error: result.error,
+    };
+  } catch (error) {
+    logger.error("MCP content waterfall execution failed", error);
+    return {
+      success: false,
+      error: {
+        message: error.message,
+        type: "execution_error",
+      },
+    };
+  }
+}
+
+/**
+ * Executes content waterfall pipeline via NostrMQ interface (stub for future implementation)
+ * @param {Object} parameters - Pipeline parameters
+ * @param {Object} jobLogger - NostrMQ job logger instance
+ * @returns {Promise<Object>} Result for NostrMQ consumption
+ */
+export async function executeViaNostrMQ(parameters, jobLogger) {
+  jobLogger.info("NostrMQ content waterfall execution started", { parameters });
+
+  // For now, delegate to the main pipeline function
+  // Future implementation will add NostrMQ-specific handling
+  const result = await contentWaterfallPipeline({
+    sourceText: parameters.sourceText,
+    customFocus: parameters.customFocus,
+    outputFormat: parameters.outputFormat,
+  });
+
+  jobLogger.info("NostrMQ content waterfall execution completed", {
+    success: !result.error,
+    runId: result.runId,
+  });
+
+  return result;
+}
+
 export {
   contentWaterfallPipeline,
   validateWaterfallConfig,

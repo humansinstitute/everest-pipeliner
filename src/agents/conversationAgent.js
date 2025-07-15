@@ -40,11 +40,11 @@ async function conversationAgent(message, context, history) {
 
   // Sanitize the message content to prevent JSON serialization issues
   const sanitizedMessage = sanitizeMessageContent(message);
-  console.log(
+  console.error(
     "[ConversationAgent] DEBUG - Original message:",
     JSON.stringify(message)
   );
-  console.log(
+  console.error(
     "[ConversationAgent] DEBUG - Sanitized message:",
     JSON.stringify(sanitizedMessage)
   );

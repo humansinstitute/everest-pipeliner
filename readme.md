@@ -6,6 +6,7 @@ A comprehensive AI-powered pipeline framework for Everest Agent workflows featur
 
 ### Core Capabilities
 
+- **MCP Server Integration**: Model Context Protocol server for Claude Desktop and other MCP clients
 - **Content Waterfall Pipeline**: Transform long-form content into LinkedIn posts and YouTube Reels concepts
 - **Dialogue Processing**: AI-powered conversation generation with optional facilitator intervention
 - **Parallel Test Execution**: Run multiple integration tests simultaneously with up to 60-80% performance improvement
@@ -14,8 +15,11 @@ A comprehensive AI-powered pipeline framework for Everest Agent workflows featur
 - **Memory Optimization**: Real-time memory monitoring and automatic garbage collection
 - **Performance Analytics**: Detailed performance metrics, trend analysis, and optimization recommendations
 
-### Phase 4 Enhancements
+### Latest Enhancements
 
+- **MCP Server**: Full Model Context Protocol implementation for AI agent integration
+- **Claude Desktop Ready**: Pre-configured for seamless Claude Desktop integration
+- **Service Management**: Dual service orchestration (MCP + NostrMQ) with unified status monitoring
 - **Jest Integration**: Full compatibility with Jest test framework and existing test suites
 - **CI/CD Ready**: Production-ready scripts with proper exit codes and reporting
 - **Resource Monitoring**: Intelligent resource allocation and conflict detection
@@ -26,6 +30,7 @@ A comprehensive AI-powered pipeline framework for Everest Agent workflows featur
 
 - [Installation](#installation)
 - [Quick Start](#quick-start)
+- [MCP Server Integration](#mcp-server-integration)
 - [Pipeline Features](#pipeline-features)
   - [Content Waterfall Pipeline](#content-waterfall-pipeline)
   - [Dialogue Pipelines](#dialogue-pipelines)
@@ -75,6 +80,9 @@ node index.js
 # 3. Run Facilitated Dialogue Pipeline
 # 4. Run Content Waterfall Pipeline
 # 5. Manage Agents (Coming Soon)
+# 6. Start MCP Server
+# 7. Start Both Services (MCP + NostrMQ)
+# 8. Service Status
 # 0. Exit
 ```
 
@@ -115,6 +123,77 @@ npm run test:benchmark
 # Health check
 npm run health-check
 ```
+
+## 🔌 MCP Server Integration
+
+Pipeliner includes a comprehensive Model Context Protocol (MCP) server that exposes all pipeline capabilities as tools for AI agents like Claude Desktop.
+
+### Quick MCP Setup
+
+1. **Enable MCP Server:**
+
+   ```bash
+   # Add to your .env file
+   ENABLE_MCP_SERVER=true
+   MCP_SERVER_PORT=3001
+   MCP_SERVER_HOST=localhost
+   ```
+
+2. **Start MCP Server:**
+
+   ```bash
+   # Via CLI menu
+   node index.js
+   # Select option 6: Start MCP Server
+
+   # Or directly
+   node src/mcp/server.js
+   ```
+
+3. **Configure Claude Desktop:**
+   ```json
+   {
+     "mcpServers": {
+       "pipeliner": {
+         "command": "node",
+         "args": ["src/mcp/server.js"],
+         "cwd": "/absolute/path/to/your/pipeliner/project"
+       }
+     }
+   }
+   ```
+
+### Available MCP Tools
+
+- **`run_pipeliner_dialogue`**: Execute dialogue between two agents for content analysis
+- **`run_pipeliner_facilitatedDialogue`**: Run facilitated dialogue with AI moderator
+- **`run_pipeliner_contentWaterfall`**: Transform content into social media posts
+- **`run_pipeliner_simpleChat`**: Simple AI chat interactions
+
+### Claude Desktop Usage Examples
+
+**Content Analysis:**
+
+```
+Use the dialogue pipeline to analyze this research paper:
+[paste content]
+
+Discussion prompt: "Analyze the methodology and discuss key findings"
+```
+
+**Social Media Creation:**
+
+```
+Transform this blog post using the content waterfall pipeline:
+[paste blog post]
+
+Custom focus: "Highlight actionable tips for developers"
+```
+
+### Documentation
+
+- **[MCP Server Integration Guide](MCP_SERVER_INTEGRATION_GUIDE.md)**: Comprehensive setup and usage guide
+- **[Claude Desktop Integration](docs/mcp-claude-integration.md)**: Step-by-step Claude Desktop setup
 
 ## 🌊 Pipeline Features
 

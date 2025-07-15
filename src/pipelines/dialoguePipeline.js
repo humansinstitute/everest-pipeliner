@@ -929,6 +929,83 @@ async function validateSourceFile(filePath) {
   }
 }
 
+// Pipeline information for universal interface
+export const pipelineInfo = {
+  name: "dialogue",
+  description:
+    "Multi-agent dialogue pipeline for structured conversation analysis",
+  parameters: {
+    type: "object",
+    properties: {
+      sourceText: {
+        type: "string",
+        description: "Source text or content to analyze through dialogue",
+        minLength: 1,
+      },
+      discussionPrompt: {
+        type: "string",
+        description: "Discussion prompt or question to guide the conversation",
+        minLength: 1,
+      },
+      iterations: {
+        type: "integer",
+        description: "Number of dialogue iterations",
+        minimum: 1,
+        maximum: 10,
+        default: 3,
+      },
+      summaryFocus: {
+        type: "string",
+        description: "Focus or perspective for the final summary",
+      },
+    },
+    required: ["sourceText", "discussionPrompt"],
+  },
+  interfaces: ["mcp", "nostrmq", "cli"],
+};
+
+// MCP execution interface
+export async function executeViaMCP(parameters, logger) {
+  logger.info("MCP dialogue execution started", {
+    parameters: Object.keys(parameters),
+  });
+
+  const result = await dialoguePipeline({
+    sourceText: parameters.sourceText,
+    discussionPrompt: parameters.discussionPrompt,
+    iterations: parameters.iterations || 3,
+    summaryFocus: parameters.summaryFocus,
+  });
+
+  logger.info("MCP dialogue execution completed", {
+    success: !result.error,
+    runId: result.runId,
+  });
+
+  return result;
+}
+
+// NostrMQ execution interface (for future compatibility)
+export async function executeViaNostrMQ(parameters, jobLogger) {
+  jobLogger.info("NostrMQ dialogue execution started", {
+    parameters: Object.keys(parameters),
+  });
+
+  const result = await dialoguePipeline({
+    sourceText: parameters.sourceText,
+    discussionPrompt: parameters.discussionPrompt,
+    iterations: parameters.iterations || 3,
+    summaryFocus: parameters.summaryFocus,
+  });
+
+  jobLogger.info("NostrMQ dialogue execution completed", {
+    success: !result.error,
+    runId: result.runId,
+  });
+
+  return result;
+}
+
 export {
   dialoguePipeline,
   validateDialogueConfig,

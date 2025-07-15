@@ -69,7 +69,7 @@ function extractCostData(apiResponse) {
     billingID: apiResponse.billingID || "unknown",
   };
 
-  console.log(
+  console.error(
     `[PipelineCost] Extracted cost data: $${costData.cost}, tokens: ${costData.totalTokens}`
   );
   return costData;
@@ -87,7 +87,9 @@ function extractCostData(apiResponse) {
  */
 function initializePipelineCosts(pipelineData) {
   if (!pipelineData) {
-    console.log("[PipelineCost] No pipeline data provided for initialization");
+    console.error(
+      "[PipelineCost] No pipeline data provided for initialization"
+    );
     return;
   }
 
@@ -100,7 +102,7 @@ function initializePipelineCosts(pipelineData) {
     stepCosts: [],
   };
 
-  console.log(
+  console.error(
     `[PipelineCost] Initialized cost tracking for pipeline: ${pipelineData.runId}`
   );
 }
@@ -118,7 +120,7 @@ function initializePipelineCosts(pipelineData) {
  */
 function addStepCost(pipelineData, stepId, apiResponse) {
   if (!pipelineData || !stepId) {
-    console.log("[PipelineCost] Missing pipeline data or step ID");
+    console.error("[PipelineCost] Missing pipeline data or step ID");
     return;
   }
 
@@ -132,7 +134,7 @@ function addStepCost(pipelineData, stepId, apiResponse) {
 
   // Handle backwards compatibility - no cost data available
   if (!costData) {
-    console.log(`[PipelineCost] No cost data available for step ${stepId}`);
+    console.error(`[PipelineCost] No cost data available for step ${stepId}`);
     return;
   }
 
@@ -156,7 +158,7 @@ function addStepCost(pipelineData, stepId, apiResponse) {
 
   pipelineData.costs.stepCosts.push(stepCostEntry);
 
-  console.log(
+  console.error(
     `[PipelineCost] Added step cost for ${stepId}: $${costData.cost}, total pipeline cost: $${pipelineData.costs.totalCost}`
   );
 }
@@ -177,7 +179,7 @@ function addStepCost(pipelineData, stepId, apiResponse) {
  */
 function formatCostSummary(pipelineData) {
   if (!pipelineData || !pipelineData.costs) {
-    console.log("[PipelineCost] No cost data available for formatting");
+    console.error("[PipelineCost] No cost data available for formatting");
     return "Total Cost USD $ 0.0000\nTotalTokens In: 0\nTotalTokens Out: 0";
   }
 

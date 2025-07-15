@@ -27,7 +27,7 @@ async function callEverest(agentConfig, pipelineData, stepId, fetchFn = fetch) {
 
   const url = `${baseUrl.replace(/\/$/, "")}/v2/agent`;
 
-  console.log(`[Everest Service] Starting step ${stepId}`);
+  console.error(`[Everest Service] Starting step ${stepId}`);
   const stepStartTime = Date.now();
 
   // Create step input summary for pipeline tracking
@@ -56,7 +56,7 @@ async function callEverest(agentConfig, pipelineData, stepId, fetchFn = fetch) {
   let requestBody;
   try {
     requestBody = JSON.stringify(agentConfig);
-    console.log(
+    console.error(
       `[Everest Service] DEBUG - Step ${stepId} - JSON serialization successful`
     );
   } catch (jsonError) {

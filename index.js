@@ -12,6 +12,8 @@ import {
   listWaterfallSourceFiles,
   readWaterfallSourceFile,
 } from "./src/pipelines/contentWaterfallPipeline.js";
+import { PipelinerMCPServer } from "./src/mcp/server.js";
+import { getMCPConfig } from "./src/mcp/config.js";
 
 // Load environment variables
 dotenv.config();
@@ -32,6 +34,9 @@ function displayMenu() {
   console.log("3. Run Facilitated Dialogue Pipeline");
   console.log("4. Run Content Waterfall Pipeline");
   console.log("5. Manage Agents");
+  console.log("6. Start MCP Server");
+  console.log("7. Start Both Services (MCP + NostrMQ)");
+  console.log("8. Service Status");
   console.log("0. Exit");
   console.log("======================");
 }
@@ -54,6 +59,15 @@ function handleMenuChoice(choice) {
     case "5":
       console.log("\n🤖 Manage Agents - Coming soon!");
       showMenu();
+      break;
+    case "6":
+      startMCPServer();
+      break;
+    case "7":
+      startBothServices();
+      break;
+    case "8":
+      showServiceStatus();
       break;
     case "0":
       console.log("\nGoodbye!");
@@ -774,6 +788,171 @@ async function runContentWaterfallPipeline() {
   }
 
   // Return to menu
+  console.log("\nPress Enter to return to menu...");
+  rl.question("", () => {
+    showMenu();
+  });
+}
+
+// Global variable to track MCP server instance
+let mcpServerInstance = null;
+
+/**
+ * Starts the MCP server
+ */
+async function startMCPServer() {
+  try {
+    console.log("\n🚀 === Starting MCP Server ===");
+
+    const config = getMCPConfig();
+
+    if (!config.enabled) {
+      console.log("❌ MCP server is disabled.");
+      console.log("💡 To enable: Set ENABLE_MCP_SERVER=true in your .env file");
+      console.log("\nPress Enter to return to menu...");
+      rl.question("", () => {
+        showMenu();
+      });
+      return;
+    }
+
+    if (mcpServerInstance) {
+      console.log("⚠️  MCP server is already running.");
+      console.log("💡 Use option 8 to check service status");
+      console.log("\nPress Enter to return to menu...");
+      rl.question("", () => {
+        showMenu();
+      });
+      return;
+    }
+
+    console.log("📋 Initializing MCP server...");
+    mcpServerInstance = new PipelinerMCPServer(config);
+    await mcpServerInstance.initialize();
+
+    console.log("🔧 Available tools:");
+    const tools = mcpServerInstance.listTools();
+    tools.forEach((tool) => {
+      console.log(`   - ${tool.name}: ${tool.description}`);
+    });
+
+    console.log("\n🎯 Starting MCP server...");
+    await mcpServerInstance.start();
+
+    console.log("✅ MCP server started successfully!");
+    console.log("📡 Server is ready for Claude Desktop integration");
+    console.log(
+      "📖 See MCP_SERVER_INTEGRATION_GUIDE.md for setup instructions"
+    );
+  } catch (error) {
+    console.error("❌ Failed to start MCP server:", error.message);
+    mcpServerInstance = null;
+  }
+
+  console.log("\nPress Enter to return to menu...");
+  rl.question("", () => {
+    showMenu();
+  });
+}
+
+/**
+ * Starts both MCP and NostrMQ services (placeholder for future implementation)
+ */
+async function startBothServices() {
+  console.log("\n🚀 === Starting Both Services ===");
+  console.log("🔧 MCP + NostrMQ dual service mode");
+
+  try {
+    // Start MCP server first
+    console.log("📋 Starting MCP server...");
+    const config = getMCPConfig();
+
+    if (!config.enabled) {
+      console.log("❌ MCP server is disabled.");
+      console.log("💡 To enable: Set ENABLE_MCP_SERVER=true in your .env file");
+      console.log("\nPress Enter to return to menu...");
+      rl.question("", () => {
+        showMenu();
+      });
+      return;
+    }
+
+    if (!mcpServerInstance) {
+      mcpServerInstance = new PipelinerMCPServer(config);
+      await mcpServerInstance.initialize();
+      await mcpServerInstance.start();
+      console.log("✅ MCP server started");
+    } else {
+      console.log("✅ MCP server already running");
+    }
+
+    // NostrMQ service placeholder
+    console.log("📋 NostrMQ service...");
+    console.log("⚠️  NostrMQ service not yet implemented");
+    console.log("💡 Currently only MCP server is running");
+
+    console.log("\n✅ Service startup completed!");
+    console.log("📡 MCP server ready for Claude Desktop integration");
+  } catch (error) {
+    console.error("❌ Failed to start services:", error.message);
+  }
+
+  console.log("\nPress Enter to return to menu...");
+  rl.question("", () => {
+    showMenu();
+  });
+}
+
+/**
+ * Shows the status of all services
+ */
+async function showServiceStatus() {
+  console.log("\n📊 === Service Status ===");
+
+  // MCP Server Status
+  console.log("\n🔧 MCP Server:");
+  if (mcpServerInstance) {
+    try {
+      const status = mcpServerInstance.getStatus();
+      console.log(`   Status: ✅ Running`);
+      console.log(`   Enabled: ${status.enabled ? "✅" : "❌"}`);
+      console.log(`   Initialized: ${status.initialized ? "✅" : "❌"}`);
+      console.log(`   Tools: ${status.toolCount}`);
+      console.log(`   Host: ${status.config.host}`);
+      console.log(`   Port: ${status.config.port}`);
+      console.log(`   Log Level: ${status.config.logLevel}`);
+      console.log(`   Local Only: ${status.config.localOnly ? "✅" : "❌"}`);
+
+      if (status.tools.length > 0) {
+        console.log("   Available Tools:");
+        status.tools.forEach((tool) => {
+          console.log(`     - ${tool}`);
+        });
+      }
+    } catch (error) {
+      console.log(`   Status: ❌ Error - ${error.message}`);
+    }
+  } else {
+    console.log("   Status: ❌ Not running");
+  }
+
+  // NostrMQ Service Status (placeholder)
+  console.log("\n📡 NostrMQ Service:");
+  console.log("   Status: ❌ Not implemented");
+  console.log("   💡 Future implementation planned");
+
+  // Configuration Status
+  console.log("\n⚙️  Configuration:");
+  try {
+    const config = getMCPConfig();
+    console.log(`   MCP Enabled: ${config.enabled ? "✅" : "❌"}`);
+    console.log(`   Pipeline Directory: ${config.pipelineDirectory}`);
+    console.log(`   Output Directory: ${config.outputDirectory}`);
+    console.log(`   Auto Discovery: ${config.autoDiscovery ? "✅" : "❌"}`);
+  } catch (error) {
+    console.log(`   Configuration Error: ❌ ${error.message}`);
+  }
+
   console.log("\nPress Enter to return to menu...");
   rl.question("", () => {
     showMenu();
