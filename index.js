@@ -7,6 +7,7 @@ import {
   readSourceFile,
 } from "./src/pipelines/dialoguePipeline.js";
 import { facilitatedDialoguePipeline } from "./src/pipelines/facilitatedDialoguePipeline.js";
+import { moderatedPanelPipeline } from "./src/pipelines/moderatedPanelPipeline.js";
 import {
   contentWaterfallPipeline,
   listWaterfallSourceFiles,
@@ -34,6 +35,7 @@ function displayMenu() {
   console.log("4. Run Content Waterfall Pipeline");
   console.log("5. Manage Agents");
   console.log("6. Start NostrMQ Service");
+  console.log("7. Run Moderated Panel Pipeline");
   console.log("0. Exit");
   console.log("======================");
 }
@@ -59,6 +61,9 @@ function handleMenuChoice(choice) {
       break;
     case "6":
       startNostrMQServiceFromCLI();
+      break;
+    case "7":
+      runModeratedPanelPipeline();
       break;
     case "0":
       console.log("\nGoodbye!");
@@ -773,6 +778,130 @@ async function runContentWaterfallPipeline() {
   } catch (error) {
     console.error(
       "\n❌ Error running Content Waterfall Pipeline:",
+      error.message
+    );
+    console.log("Returning to menu.");
+  }
+
+  // Return to menu
+  console.log("\nPress Enter to return to menu...");
+  rl.question("", () => {
+    showMenu();
+  });
+}
+
+/**
+ * Runs the moderated panel pipeline with user input collection
+ */
+async function runModeratedPanelPipeline() {
+  try {
+    console.log("\n🎭 === Moderated Panel Pipeline ===");
+    console.log(
+      "4-agent moderated discussion system with intelligent flow control"
+    );
+    console.log("Panel Members:");
+    console.log(
+      "• Panel 1 (Challenger): Questions assumptions, high disagreeableness"
+    );
+    console.log("• Panel 2 (Analyst): Balanced, evidence-based approach");
+    console.log("• Panel 3 (Explorer): Creative, unconventional thinking");
+    console.log(
+      "• Moderator: Controls conversation flow and speaker selection"
+    );
+
+    // Collect source text (either from file or manual input)
+    const sourceText = await collectSourceText();
+
+    if (!sourceText) {
+      console.log("❌ No source text provided. Returning to menu.");
+      showMenu();
+      return;
+    }
+
+    // Collect discussion subject
+    const discussionSubject = await collectSingleLineInput(
+      "Enter discussion subject/question"
+    );
+
+    if (!discussionSubject.trim()) {
+      console.log("❌ Discussion subject cannot be empty. Returning to menu.");
+      showMenu();
+      return;
+    }
+
+    // Collect panel interactions
+    const panelInteractions = await collectNumberInput(
+      "Number of panel interactions",
+      4,
+      2,
+      15
+    );
+
+    // Collect summary focus (optional)
+    const summaryFocus = await collectSingleLineInput(
+      "Summary focus (press Enter for default)",
+      "Summarize key insights and conclusions from this panel discussion"
+    );
+
+    // Calculate estimated API calls and time
+    const estimatedApiCalls = 2 * panelInteractions + 1;
+    const estimatedMinutes = Math.ceil(estimatedApiCalls * 0.5); // Rough estimate
+
+    // Display configuration summary
+    console.log("\n📋 Configuration Summary:");
+    console.log(
+      `Source text: ${sourceText.substring(0, 100)}${
+        sourceText.length > 100 ? "..." : ""
+      }`
+    );
+    console.log(`Discussion subject: ${discussionSubject}`);
+    console.log(
+      `Panel interactions: ${panelInteractions} (estimated ${estimatedApiCalls} API calls, ~${estimatedMinutes} minutes)`
+    );
+    console.log(
+      `Summary focus: ${summaryFocus.substring(0, 80)}${
+        summaryFocus.length > 80 ? "..." : ""
+      }`
+    );
+
+    console.log("\nPanel Members:");
+    console.log(
+      "• Panel 1 (Challenger): Questions assumptions, high disagreeableness"
+    );
+    console.log("• Panel 2 (Analyst): Balanced, evidence-based approach");
+    console.log("• Panel 3 (Explorer): Creative, unconventional thinking");
+    console.log(
+      "• Moderator: Controls conversation flow and speaker selection"
+    );
+
+    // Ask for confirmation
+    const confirmed = await confirmAction(
+      "\nProceed with moderated panel pipeline?"
+    );
+
+    if (!confirmed) {
+      console.log("❌ Pipeline cancelled. Returning to menu.");
+      showMenu();
+      return;
+    }
+
+    // Run the pipeline
+    console.log("\n🚀 Starting moderated panel pipeline...");
+
+    const config = {
+      sourceText,
+      discussionSubject,
+      panelInteractions,
+      summaryFocus,
+    };
+
+    const result = await moderatedPanelPipeline(config);
+
+    // Display results
+    displayPipelineResults(result);
+  } catch (error) {
+    console.error(
+      "\n❌ Error running moderated panel pipeline:",
       error.message
     );
     console.log("Returning to menu.");
