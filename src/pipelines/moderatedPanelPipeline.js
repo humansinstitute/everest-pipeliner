@@ -5,12 +5,47 @@ import {
   completePipeline,
   addStepResult,
 } from "../utils/pipelineData.js";
+import { formatCostSummary } from "../utils/pipelineCost.js";
 import { fileURLToPath } from "url";
-import fs from "fs";
+import { promises as fs } from "fs";
 import path from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+/**
+ * Generates a unique timestamped folder name with collision handling
+ * @param {string} baseDir - Base directory path
+ * @returns {Promise<string>} - Unique folder name in format YY_MM_DD_HH_MM_SS_ID
+ */
+async function generateTimestampedFolderName(baseDir) {
+  const now = new Date();
+  const yy = now.getFullYear().toString().slice(-2);
+  const mm = (now.getMonth() + 1).toString().padStart(2, "0");
+  const dd = now.getDate().toString().padStart(2, "0");
+  const hh = now.getHours().toString().padStart(2, "0");
+  const min = now.getMinutes().toString().padStart(2, "0");
+  const ss = now.getSeconds().toString().padStart(2, "0");
+
+  const baseTimestamp = `${yy}_${mm}_${dd}_${hh}_${min}_${ss}`;
+
+  // Handle collisions by incrementing ID
+  for (let id = 1; id <= 100; id++) {
+    const folderName = `${baseTimestamp}_${id}`;
+    const fullPath = path.join(baseDir, folderName);
+
+    try {
+      await fs.access(fullPath);
+      // Folder exists, try next ID
+      continue;
+    } catch (error) {
+      // Folder doesn't exist, we can use this name
+      return folderName;
+    }
+  }
+
+  throw new Error("Unable to generate unique folder name after 100 attempts");
+}
 
 export const pipelineInfo = {
   name: "Moderated Panel Pipeline",
@@ -327,15 +362,43 @@ Please provide a comprehensive summary of this moderated panel discussion that c
     };
 
     // Complete pipeline
-    const completed = completePipeline(pipeline, result);
+    completePipeline(pipeline, "completed");
+
+    // Add result to pipeline
+    pipeline.result = result;
 
     // Save outputs
-    await saveOutputs(completed, result);
+    const fileGenerationResult = await saveOutputs(pipeline, result, {
+      sourceText: config.sourceText,
+      discussionSubject: config.discussionSubject,
+      panelInteractions,
+      summaryFocus,
+    });
 
-    console.log("✅ Moderated panel pipeline completed successfully");
-    console.log(`📊 Final stats: ${JSON.stringify(panelStats, null, 2)}`);
+    if (fileGenerationResult.success) {
+      console.log("✅ Moderated panel pipeline completed successfully");
+      console.log(`📊 Final stats: ${JSON.stringify(panelStats, null, 2)}`);
+      console.log(`📁 Outputs saved to: ${fileGenerationResult.outputDir}`);
 
-    return completed;
+      // Add file generation result to pipeline
+      addStepResult(pipeline, "file_generation", {
+        status: "success",
+        files: fileGenerationResult.files,
+        timestamp: fileGenerationResult.timestamp,
+      });
+    } else {
+      console.warn(
+        "⚠️ File generation failed (non-critical):",
+        fileGenerationResult.error
+      );
+      addStepResult(pipeline, "file_generation", {
+        status: "failed",
+        error: fileGenerationResult.error,
+        timestamp: fileGenerationResult.timestamp,
+      });
+    }
+
+    return pipeline;
   } catch (error) {
     console.error("❌ Pipeline failed:", error);
     pipeline.status = "failed";
@@ -350,21 +413,49 @@ export function parseModeratorResponse(content, context) {
     // Try to parse as JSON
     const parsed = JSON.parse(content);
 
-    // Validate required fields
-    if (!parsed.next_speaker || !parsed.speaking_prompt) {
-      throw new Error("Missing required fields");
-    }
+    // Handle both old and new JSON formats
+    let next_speaker, moderator_comment, speaking_prompt;
 
-    // Validate speaker
-    if (!["challenger", "analyst", "explorer"].includes(parsed.next_speaker)) {
-      throw new Error(`Invalid speaker: ${parsed.next_speaker}`);
+    // New format: {moderator_response, next_speaker: "panel_1|panel_2|panel_3", moderator_responds}
+    if (parsed.next_speaker && parsed.next_speaker.startsWith("panel_")) {
+      const speakerMapping = {
+        panel_1: "challenger",
+        panel_2: "analyst",
+        panel_3: "explorer",
+      };
+
+      next_speaker = speakerMapping[parsed.next_speaker];
+      if (!next_speaker) {
+        throw new Error(
+          `Invalid speaker: ${parsed.next_speaker}. Expected panel_1, panel_2, or panel_3`
+        );
+      }
+
+      moderator_comment = parsed.moderator_response || "";
+      speaking_prompt = `Please continue the discussion based on the context provided.`;
+    }
+    // Old format: {moderator_comment, next_speaker: "challenger|analyst|explorer", speaking_prompt}
+    else if (
+      parsed.next_speaker &&
+      ["challenger", "analyst", "explorer"].includes(parsed.next_speaker)
+    ) {
+      next_speaker = parsed.next_speaker;
+      moderator_comment = parsed.moderator_comment || "";
+      speaking_prompt =
+        parsed.speaking_prompt ||
+        `Please continue the discussion based on the context provided.`;
+    }
+    // Invalid or missing next_speaker
+    else {
+      throw new Error("Missing or invalid next_speaker field");
     }
 
     return {
-      moderator_comment: parsed.moderator_comment || "",
-      next_speaker: parsed.next_speaker,
-      speaking_prompt: parsed.speaking_prompt || "",
+      moderator_comment,
+      next_speaker,
+      speaking_prompt,
       reasoning: parsed.reasoning || "",
+      moderator_responds: parsed.moderator_responds || false,
       context,
       timestamp: new Date().toISOString(),
     };
@@ -376,10 +467,17 @@ export function parseModeratorResponse(content, context) {
     console.warn("Raw content:", content);
 
     // Fallback logic - try to extract speaker from content
+    const panelMatch = content.match(/panel_([123])/i);
     const speakerMatch = content.match(/(?:challenger|analyst|explorer)/i);
-    const fallbackSpeaker = speakerMatch
-      ? speakerMatch[0].toLowerCase()
-      : "analyst";
+
+    let fallbackSpeaker = "analyst"; // default
+
+    if (panelMatch) {
+      const speakerMapping = { 1: "challenger", 2: "analyst", 3: "explorer" };
+      fallbackSpeaker = speakerMapping[panelMatch[1]] || "analyst";
+    } else if (speakerMatch) {
+      fallbackSpeaker = speakerMatch[0].toLowerCase();
+    }
 
     return {
       moderator_comment: `Continuing discussion... (fallback mode)`,
@@ -393,43 +491,221 @@ export function parseModeratorResponse(content, context) {
   }
 }
 
-async function saveOutputs(pipeline, result) {
-  const outputDir = path.join(process.cwd(), "output", "panel", pipeline.id);
+/**
+ * Generates conversation markdown file with metadata
+ * @param {Array} conversation - Array of conversation entries
+ * @param {Array} moderatorDecisions - Array of moderator decisions
+ * @param {Object} panelStats - Panel participation statistics
+ * @param {Object} config - Pipeline configuration
+ * @param {string} runId - Pipeline run ID
+ * @param {string} timestamp - Formatted timestamp
+ * @param {Object} pipelineData - Pipeline execution data
+ * @returns {string} - Markdown content
+ */
+function generateConversationMarkdown(
+  conversation,
+  moderatorDecisions,
+  panelStats,
+  config,
+  runId,
+  timestamp,
+  pipelineData
+) {
+  const { sourceText, discussionSubject, panelInteractions, summaryFocus } =
+    config;
 
-  // Create output directory
-  fs.mkdirSync(outputDir, { recursive: true });
+  let markdown = `# Panel Discussion Conversation
 
-  // Save conversation as markdown
-  const conversationMd = result.conversation
-    .map((msg) => {
-      const role =
-        msg.role === "moderator"
-          ? "Moderator"
-          : msg.role.charAt(0).toUpperCase() + msg.role.slice(1);
-      return `## ${role}${msg.type ? ` (${msg.type})` : ""}\n\n${
-        msg.content
-      }\n\n---\n`;
-    })
-    .join("\n");
+## Metadata
+- **Run ID**: ${runId}
+- **Generated**: ${timestamp}
+- **Discussion Subject**: ${discussionSubject}
+- **Panel Interactions**: ${panelInteractions}
+- **Summary Focus**: ${summaryFocus}
 
-  fs.writeFileSync(path.join(outputDir, "conversation.md"), conversationMd);
+## Cost Summary
+${formatCostSummary(pipelineData)}
 
-  // Save summary
-  fs.writeFileSync(path.join(outputDir, "summary.md"), result.summary);
+## Panel Statistics
+- **Challenger**: ${panelStats.challenger} contributions
+- **Analyst**: ${panelStats.analyst} contributions
+- **Explorer**: ${panelStats.explorer} contributions
+- **Total Messages**: ${conversation.length}
+- **Moderator Decisions**: ${moderatorDecisions.length}
 
-  // Save moderator decisions
-  fs.writeFileSync(
-    path.join(outputDir, "moderator_decisions.json"),
-    JSON.stringify(result.moderatorDecisions, null, 2)
+## Source Material
+${sourceText}
+
+## Conversation
+
+`;
+
+  conversation.forEach((msg) => {
+    const role =
+      msg.role === "moderator"
+        ? "Moderator"
+        : msg.role.charAt(0).toUpperCase() + msg.role.slice(1);
+    markdown += `## ${role}${msg.type ? ` (${msg.type})` : ""}
+
+${msg.content}
+
+---
+
+`;
+  });
+
+  return markdown;
+}
+
+/**
+ * Generates summary markdown file with metadata
+ * @param {string} summary - Summary content
+ * @param {Object} panelStats - Panel participation statistics
+ * @param {Object} config - Pipeline configuration
+ * @param {string} runId - Pipeline run ID
+ * @param {string} timestamp - Formatted timestamp
+ * @param {Object} pipelineData - Pipeline execution data
+ * @returns {string} - Markdown content
+ */
+function generateSummaryMarkdown(
+  summary,
+  panelStats,
+  config,
+  runId,
+  timestamp,
+  pipelineData
+) {
+  const { sourceText, discussionSubject, panelInteractions, summaryFocus } =
+    config;
+
+  return `# Panel Discussion Summary
+
+## Metadata
+- **Run ID**: ${runId}
+- **Generated**: ${timestamp}
+- **Discussion Subject**: ${discussionSubject}
+- **Panel Interactions**: ${panelInteractions}
+- **Summary Focus**: ${summaryFocus}
+
+## Cost Summary
+${formatCostSummary(pipelineData)}
+
+## Panel Statistics
+- **Challenger**: ${panelStats.challenger} contributions
+- **Analyst**: ${panelStats.analyst} contributions
+- **Explorer**: ${panelStats.explorer} contributions
+- **Total Moderator Decisions**: ${Object.values(panelStats).reduce(
+    (a, b) => a + b,
+    0
+  )}
+
+## Summary
+
+${summary}
+
+## Context
+- **Source Material Length**: ${sourceText.length} characters
+- **Panel Interactions**: ${panelInteractions}
+- **Summary Model**: Generated via Everest API
+`;
+}
+
+async function saveOutputs(pipeline, result, config) {
+  const runId = pipeline.runId;
+  const timestamp = new Date().toISOString();
+  const baseOutputDir = path.join(process.cwd(), "output", "panel");
+
+  console.log(
+    `[FileGeneration] Starting file generation for panel run ${runId}`
   );
 
-  // Save complete data as JSON
-  fs.writeFileSync(
-    path.join(outputDir, "data.json"),
-    JSON.stringify(result, null, 2)
-  );
+  try {
+    // Ensure base output directory exists
+    await fs.mkdir(baseOutputDir, { recursive: true });
 
-  console.log(`📁 Outputs saved to: ${outputDir}`);
+    // Generate unique timestamped folder name
+    const timestampedFolder = await generateTimestampedFolderName(
+      baseOutputDir
+    );
+    const outputDir = path.join(baseOutputDir, timestampedFolder);
+
+    // Create the timestamped directory
+    await fs.mkdir(outputDir, { recursive: true });
+    console.log(
+      `[FileGeneration] ✅ Timestamped directory created: ${outputDir}`
+    );
+
+    // Generate conversation markdown with metadata
+    const conversationMd = generateConversationMarkdown(
+      result.conversation,
+      result.moderatorDecisions,
+      result.panelStats,
+      config,
+      runId,
+      timestamp,
+      pipeline
+    );
+
+    // Generate summary markdown with metadata
+    const summaryMd = generateSummaryMarkdown(
+      result.summary,
+      result.panelStats,
+      config,
+      runId,
+      timestamp,
+      pipeline
+    );
+
+    // Define file paths
+    const conversationPath = path.join(outputDir, "conversation.md");
+    const summaryPath = path.join(outputDir, "summary.md");
+    const moderatorDecisionsPath = path.join(
+      outputDir,
+      "moderator_decisions.json"
+    );
+    const dataPath = path.join(outputDir, "data.json");
+
+    // Write all files
+    await Promise.all([
+      fs.writeFile(conversationPath, conversationMd, "utf8"),
+      fs.writeFile(summaryPath, summaryMd, "utf8"),
+      fs.writeFile(
+        moderatorDecisionsPath,
+        JSON.stringify(result.moderatorDecisions, null, 2),
+        "utf8"
+      ),
+      fs.writeFile(dataPath, JSON.stringify(result, null, 2), "utf8"),
+    ]);
+
+    console.log(`[FileGeneration] ✅ All files generated successfully`);
+    console.log(`[FileGeneration] - Folder: ${outputDir}`);
+    console.log(`[FileGeneration] - Conversation: ${conversationPath}`);
+    console.log(`[FileGeneration] - Summary: ${summaryPath}`);
+    console.log(
+      `[FileGeneration] - Moderator Decisions: ${moderatorDecisionsPath}`
+    );
+    console.log(`[FileGeneration] - Data: ${dataPath}`);
+
+    return {
+      success: true,
+      folder: timestampedFolder,
+      outputDir,
+      files: {
+        conversation: conversationPath,
+        summary: summaryPath,
+        moderatorDecisions: moderatorDecisionsPath,
+        data: dataPath,
+      },
+      timestamp,
+    };
+  } catch (error) {
+    console.error(`[FileGeneration] ❌ File generation failed:`, error);
+    return {
+      success: false,
+      error: error.message,
+      timestamp,
+    };
+  }
 }
 
 // Main execution when run directly
