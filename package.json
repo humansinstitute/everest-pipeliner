@@ -40,6 +40,7 @@
     "health-check": "node --experimental-vm-modules -e \"import('./src/utils/testRunner.js').then(m => console.log('✅ Test runner health check passed'))\""
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.5.0",
     "bech32": "^2.0.0",
     "dotenv": "^16.3.1",
     "node-fetch": "^3.3.2",
