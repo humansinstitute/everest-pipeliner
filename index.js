@@ -14,6 +14,10 @@ import {
   readWaterfallSourceFile,
 } from "./src/pipelines/contentWaterfallPipeline.js";
 import { startNostrMQService } from "./src/nostrmq/index.js";
+import {
+  getAvailablePanelTypes,
+  createPanelConfig,
+} from "./src/services/panelTypeConfig.js";
 
 // Load environment variables
 dotenv.config();
@@ -35,7 +39,7 @@ function displayMenu() {
   console.log("4. Run Content Waterfall Pipeline");
   console.log("5. Manage Agents");
   console.log("6. Start NostrMQ Service");
-  console.log("7. Run Moderated Panel Pipeline");
+  console.log("7. Run Panel Pipeline");
   console.log("0. Exit");
   console.log("======================");
 }
@@ -63,7 +67,7 @@ function handleMenuChoice(choice) {
       startNostrMQServiceFromCLI();
       break;
     case "7":
-      runModeratedPanelPipeline();
+      showPanelTypeMenu();
       break;
     case "0":
       console.log("\nGoodbye!");
@@ -186,6 +190,78 @@ async function selectSourceFile(pipelineType = "dialogue") {
       sourceFiles = await listWaterfallSourceFiles();
       readFileFunction = readWaterfallSourceFile;
       directoryPath = "output/waterfall/ip";
+    } else if (pipelineType === "discussion") {
+      // For discussion panels, we need to use a custom file listing since listSourceFiles expects output directory
+      const fs = await import("fs/promises");
+
+      try {
+        const files = await fs.readdir("input/dialogue");
+        sourceFiles = files
+          .filter((file) => file.endsWith(".txt") || file.endsWith(".md"))
+          .map((file, index) => ({
+            index: index + 1,
+            name: file.replace(/\.(txt|md)$/, ""),
+            extension: `.${file.split(".").pop()}`,
+            path: `input/dialogue/${file}`,
+          }));
+        readFileFunction = readSourceFile;
+        directoryPath = "input/dialogue";
+      } catch (error) {
+        console.log(
+          `❌ Error reading input/dialogue directory: ${error.message}`
+        );
+        sourceFiles = [];
+        readFileFunction = readSourceFile;
+        directoryPath = "input/dialogue";
+      }
+    } else if (pipelineType === "security") {
+      // For security panels, read from input/security directory
+      const fs = await import("fs/promises");
+
+      try {
+        const files = await fs.readdir("input/security");
+        sourceFiles = files
+          .filter((file) => file.endsWith(".txt") || file.endsWith(".md"))
+          .map((file, index) => ({
+            index: index + 1,
+            name: file.replace(/\.(txt|md)$/, ""),
+            extension: `.${file.split(".").pop()}`,
+            path: `input/security/${file}`,
+          }));
+        readFileFunction = readSourceFile;
+        directoryPath = "input/security";
+      } catch (error) {
+        console.log(
+          `❌ Error reading input/security directory: ${error.message}`
+        );
+        sourceFiles = [];
+        readFileFunction = readSourceFile;
+        directoryPath = "input/security";
+      }
+    } else if (pipelineType === "techreview") {
+      // For tech review panels, read from input/techreview directory
+      const fs = await import("fs/promises");
+
+      try {
+        const files = await fs.readdir("input/techreview");
+        sourceFiles = files
+          .filter((file) => file.endsWith(".txt") || file.endsWith(".md"))
+          .map((file, index) => ({
+            index: index + 1,
+            name: file.replace(/\.(txt|md)$/, ""),
+            extension: `.${file.split(".").pop()}`,
+            path: `input/techreview/${file}`,
+          }));
+        readFileFunction = readSourceFile;
+        directoryPath = "input/techreview";
+      } catch (error) {
+        console.log(
+          `❌ Error reading input/techreview directory: ${error.message}`
+        );
+        sourceFiles = [];
+        readFileFunction = readSourceFile;
+        directoryPath = "input/techreview";
+      }
     } else {
       sourceFiles = await listSourceFiles();
       readFileFunction = readSourceFile;
@@ -914,6 +990,690 @@ async function runModeratedPanelPipeline() {
   });
 }
 
+/**
+ * Displays panel type selection menu
+ */
+function displayPanelTypeMenu() {
+  console.log("\n🎭 === Panel Pipeline Types ===");
+  console.log("1. Discussion Panel (tl;dr podcast format)");
+  console.log("   • Host, Sarah (Challenger), Mike (Analyst), Lisa (Explorer)");
+  console.log("   • Podcast-style conversation format");
+  console.log("2. Security Review Panel");
+  console.log("   • Security Lead, Red Team, Blue Team, Risk Assessment");
+  console.log("   • Security-focused vulnerability analysis");
+  console.log("3. Tech Review Panel");
+  console.log(
+    "   • Tech Lead, System Architect, Performance Engineer, Innovation Engineer"
+  );
+  console.log(
+    "   • Technical architecture review with 70% conservative, 30% innovation balance"
+  );
+  console.log("0. Back to main menu");
+  console.log("===============================");
+}
+
+/**
+ * Handles panel type menu selection
+ */
+function handlePanelTypeChoice(choice) {
+  switch (choice.trim()) {
+    case "1":
+      runPanelDiscussion();
+      break;
+    case "2":
+      runSecurityPanel();
+      break;
+    case "3":
+      runTechReviewPanel();
+      break;
+    case "0":
+      showMenu();
+      break;
+    default:
+      console.log("\nInvalid option. Please try again.");
+      showPanelTypeMenu();
+      break;
+  }
+}
+
+/**
+ * Shows the panel type selection menu
+ */
+function showPanelTypeMenu() {
+  displayPanelTypeMenu();
+  rl.question("Please select a panel type: ", handlePanelTypeChoice);
+}
+
+/**
+ * Runs the discussion panel pipeline with user input collection
+ */
+async function runPanelDiscussion() {
+  try {
+    console.log("\n🎭 === Discussion Panel Pipeline ===");
+    console.log("tl;dr podcast format with named participants");
+    console.log("Panel Members:");
+    console.log("• Host: Podcast host and conversation facilitator");
+    console.log(
+      "• Sarah (The Challenger): Questions assumptions, high disagreeableness"
+    );
+    console.log("• Mike (The Analyst): Balanced, evidence-based approach");
+    console.log("• Lisa (The Explorer): Creative, unconventional thinking");
+
+    // Get panel configuration
+    const panelConfig = createPanelConfig("discussion");
+
+    // Collect source text from discussion input directory
+    const sourceText = await collectSourceText("discussion");
+
+    if (!sourceText) {
+      console.log("❌ No source text provided. Returning to panel menu.");
+      showPanelTypeMenu();
+      return;
+    }
+
+    // Collect discussion subject
+    const discussionSubject = await collectSingleLineInput(
+      "Enter discussion subject/question"
+    );
+
+    if (!discussionSubject.trim()) {
+      console.log(
+        "❌ Discussion subject cannot be empty. Returning to panel menu."
+      );
+      showPanelTypeMenu();
+      return;
+    }
+
+    // Collect panel interactions
+    const panelInteractions = await collectNumberInput(
+      "Number of panel interactions",
+      panelConfig.defaultInteractions,
+      2,
+      15
+    );
+
+    // Collect summary focus (optional)
+    const summaryFocus = await collectSingleLineInput(
+      "Summary focus (press Enter for default)",
+      panelConfig.summaryFocus
+    );
+
+    // Calculate estimated API calls and time
+    const estimatedApiCalls = 2 * panelInteractions + 1;
+    const estimatedMinutes = Math.ceil(estimatedApiCalls * 0.5); // Rough estimate
+
+    // Display configuration summary
+    console.log("\n📋 Configuration Summary:");
+    console.log(
+      `Source text: ${sourceText.substring(0, 100)}${
+        sourceText.length > 100 ? "..." : ""
+      }`
+    );
+    console.log(`Discussion subject: ${discussionSubject}`);
+    console.log(
+      `Panel interactions: ${panelInteractions} (estimated ${estimatedApiCalls} API calls, ~${estimatedMinutes} minutes)`
+    );
+    console.log(
+      `Summary focus: ${summaryFocus.substring(0, 80)}${
+        summaryFocus.length > 80 ? "..." : ""
+      }`
+    );
+
+    console.log("\nPanel Members:");
+    console.log("• Host: Podcast host and conversation facilitator");
+    console.log(
+      "• Sarah (The Challenger): Questions assumptions, high disagreeableness"
+    );
+    console.log("• Mike (The Analyst): Balanced, evidence-based approach");
+    console.log("• Lisa (The Explorer): Creative, unconventional thinking");
+
+    // Ask for confirmation
+    const confirmed = await confirmAction(
+      "\nProceed with discussion panel pipeline?"
+    );
+
+    if (!confirmed) {
+      console.log("❌ Pipeline cancelled. Returning to panel menu.");
+      showPanelTypeMenu();
+      return;
+    }
+
+    // Run the pipeline
+    console.log("\n🚀 Starting discussion panel pipeline...");
+
+    const config = {
+      sourceText,
+      discussionSubject,
+      panelInteractions,
+      summaryFocus,
+      panelType: "discussion",
+    };
+
+    const result = await moderatedPanelPipeline(config);
+
+    // Display results
+    displayPipelineResults(result);
+  } catch (error) {
+    console.error(
+      "\n❌ Error running discussion panel pipeline:",
+      error.message
+    );
+    console.log("Returning to panel menu.");
+  }
+
+  // Return to panel menu
+  console.log("\nPress Enter to return to panel menu...");
+  rl.question("", () => {
+    showPanelTypeMenu();
+  });
+}
+
+/**
+ * Collects security framework files from input/security directory
+ * @returns {Promise<string|null>} - Selected framework content or null if cancelled
+ */
+async function selectSecurityFramework() {
+  try {
+    console.log("\n📋 Loading available security frameworks...");
+
+    const fs = await import("fs/promises");
+
+    try {
+      const files = await fs.readdir("input/security");
+      const frameworkFiles = files
+        .filter((file) => file.endsWith(".txt") || file.endsWith(".md"))
+        .map((file, index) => ({
+          index: index + 1,
+          name: file.replace(/\.(txt|md)$/, ""),
+          extension: `.${file.split(".").pop()}`,
+          path: `input/security/${file}`,
+        }));
+
+      if (frameworkFiles.length === 0) {
+        console.log(
+          "❌ No security framework files found in input/security directory."
+        );
+        console.log(
+          "💡 Tip: Place .txt or .md files in input/security/ to use framework input."
+        );
+        return null;
+      }
+
+      console.log("\n📋 Available security frameworks:");
+      frameworkFiles.forEach((file) => {
+        console.log(`${file.index}. ${file.name} (${file.extension})`);
+      });
+      console.log("0. Skip framework selection");
+
+      const choice = await collectNumberInput(
+        "Select a security framework",
+        1,
+        0,
+        frameworkFiles.length
+      );
+
+      if (choice === 0) {
+        console.log("⏭️  Skipping framework selection...");
+        return null;
+      }
+
+      const selectedFile = frameworkFiles[choice - 1];
+      console.log(`\n📖 Reading framework: ${selectedFile.name}`);
+
+      const fileContent = await fs.readFile(selectedFile.path, "utf-8");
+
+      // Show preview of framework content
+      const preview =
+        fileContent.length > 300
+          ? fileContent.substring(0, 300) + "..."
+          : fileContent;
+
+      console.log(`\n📄 Framework preview (${fileContent.length} characters):`);
+      console.log("-".repeat(50));
+      console.log(preview);
+      console.log("-".repeat(50));
+
+      const confirmed = await confirmAction("Use this security framework?");
+
+      if (!confirmed) {
+        console.log("❌ Framework selection cancelled.");
+        return null;
+      }
+
+      console.log(`✅ Using framework: ${selectedFile.name}`);
+      return fileContent;
+    } catch (error) {
+      console.log(
+        `❌ Error reading input/security directory: ${error.message}`
+      );
+      return null;
+    }
+  } catch (error) {
+    console.error(`❌ Error selecting security framework: ${error.message}`);
+    return null;
+  }
+}
+
+/**
+ * Collects codebase content for security analysis
+ * @returns {Promise<string|null>} - Codebase content or null if cancelled
+ */
+async function collectCodebaseContent() {
+  console.log("\n💻 === Codebase Content Input ===");
+  console.log("1. Select from available files");
+  console.log("2. Input code/content directly");
+  console.log("0. Cancel");
+
+  const inputChoice = await collectNumberInput("Choose input method", 1, 0, 2);
+
+  switch (inputChoice) {
+    case 0:
+      return null; // User cancelled
+
+    case 1:
+      // File selection - use security input directory
+      const fileContent = await selectSourceFile("security");
+      if (fileContent) {
+        return fileContent;
+      }
+      // If file selection failed/cancelled, fall through to manual input
+      console.log("\n📝 === Manual Code Input ===");
+
+    case 2:
+      // Manual code input
+      const codeContent = await collectMultilineInput(
+        "Enter your codebase content or system description (end with '###' on a new line):"
+      );
+
+      if (!codeContent.trim()) {
+        console.log("❌ Codebase content cannot be empty.");
+        return null;
+      }
+
+      return codeContent;
+
+    default:
+      console.log("❌ Invalid choice.");
+      return null;
+  }
+}
+
+/**
+ * Runs the security panel pipeline with user input collection
+ */
+async function runSecurityPanel() {
+  try {
+    console.log("\n🔒 === Security Review Panel ===");
+    console.log(
+      "Comprehensive security assessment with attack/defend dynamics"
+    );
+    console.log("Panel Members:");
+    console.log(
+      "• Security Lead: Orchestrates attack/defend flow and risk assessment"
+    );
+    console.log(
+      "• Red Team: Offensive security expert - identifies vulnerabilities and attack vectors"
+    );
+    console.log(
+      "• Blue Team: Defensive security expert - provides protection strategies and mitigation"
+    );
+    console.log(
+      "• Risk Assessment: Evaluates business impact and strategic priorities"
+    );
+
+    // Get panel configuration
+    const panelConfig = createPanelConfig("security");
+
+    // Collect security framework (optional)
+    console.log("\n📋 === Security Framework Selection ===");
+    console.log(
+      "Security frameworks provide assessment criteria and guidelines."
+    );
+    console.log(
+      "Available frameworks include ASD Essential 8, OWASP Top 10, and custom frameworks."
+    );
+
+    const frameworkContent = await selectSecurityFramework();
+
+    // Collect codebase content for security analysis
+    console.log("\n💻 === Codebase Content for Security Analysis ===");
+    console.log(
+      "Provide the codebase, system architecture, or application details to analyze."
+    );
+
+    const codebaseContent = await collectCodebaseContent();
+
+    if (!codebaseContent) {
+      console.log("❌ No codebase content provided. Returning to panel menu.");
+      showPanelTypeMenu();
+      return;
+    }
+
+    // Collect security focus specification
+    const securityFocus = await collectSingleLineInput(
+      "Enter security focus areas (e.g., 'authentication, data protection, API security') or press Enter for comprehensive analysis",
+      "comprehensive security assessment"
+    );
+
+    // Collect panel interactions
+    const panelInteractions = await collectNumberInput(
+      "Number of panel interactions",
+      panelConfig.defaultInteractions,
+      3,
+      20
+    );
+
+    // Collect summary focus (optional)
+    const summaryFocus = await collectSingleLineInput(
+      "Summary focus (press Enter for default)",
+      panelConfig.summaryFocus
+    );
+
+    // Calculate estimated API calls and time
+    const estimatedApiCalls = 2 * panelInteractions + 1;
+    const estimatedMinutes = Math.ceil(estimatedApiCalls * 0.7); // Security analysis takes longer
+
+    // Display configuration summary
+    console.log("\n📋 Configuration Summary:");
+    console.log(
+      `Codebase content: ${codebaseContent.substring(0, 100)}${
+        codebaseContent.length > 100 ? "..." : ""
+      }`
+    );
+    if (frameworkContent) {
+      console.log("Security framework: Selected");
+    } else {
+      console.log(
+        "Security framework: None (using default assessment criteria)"
+      );
+    }
+    console.log(`Security focus: ${securityFocus}`);
+    console.log(
+      `Panel interactions: ${panelInteractions} (estimated ${estimatedApiCalls} API calls, ~${estimatedMinutes} minutes)`
+    );
+    console.log(
+      `Summary focus: ${summaryFocus.substring(0, 80)}${
+        summaryFocus.length > 80 ? "..." : ""
+      }`
+    );
+
+    console.log("\nSecurity Panel Members:");
+    console.log(
+      "• Security Lead: Orchestrates attack/defend flow and risk assessment"
+    );
+    console.log(
+      "• Red Team: Offensive security expert - identifies vulnerabilities and attack vectors"
+    );
+    console.log(
+      "• Blue Team: Defensive security expert - provides protection strategies and mitigation"
+    );
+    console.log(
+      "• Risk Assessment: Evaluates business impact and strategic priorities"
+    );
+
+    // Ask for confirmation
+    const confirmed = await confirmAction(
+      "\nProceed with security review panel?"
+    );
+
+    if (!confirmed) {
+      console.log("❌ Pipeline cancelled. Returning to panel menu.");
+      showPanelTypeMenu();
+      return;
+    }
+
+    // Prepare source text combining codebase and framework
+    let sourceText = codebaseContent;
+    if (frameworkContent) {
+      sourceText = `SECURITY FRAMEWORK:\n${frameworkContent}\n\nCODEBASE TO ANALYZE:\n${codebaseContent}`;
+    }
+
+    // Run the pipeline
+    console.log("\n🚀 Starting security review panel...");
+
+    const config = {
+      sourceText,
+      discussionSubject: `Security assessment focusing on: ${securityFocus}`,
+      panelInteractions,
+      summaryFocus,
+      panelType: "security",
+    };
+
+    const result = await moderatedPanelPipeline(config);
+
+    // Display results
+    displayPipelineResults(result);
+  } catch (error) {
+    console.error("\n❌ Error running security review panel:", error.message);
+    console.log("Returning to panel menu.");
+  }
+
+  // Return to panel menu
+  console.log("\nPress Enter to return to panel menu...");
+  rl.question("", () => {
+    showPanelTypeMenu();
+  });
+}
+
+/**
+ * Collects multi-file input for tech review panel (PRD + Design Doc + Codebase)
+ * @returns {Promise<Object|null>} - Object with all three file contents or null if cancelled
+ */
+async function collectTechReviewInputs() {
+  console.log("\n📋 === Tech Review Multi-File Input ===");
+  console.log("Tech Review Panel requires three input files:");
+  console.log("1. PRD (Product Requirements Document)");
+  console.log("2. Design Document (Technical Design)");
+  console.log("3. Codebase (Implementation Code)");
+  console.log("");
+
+  const inputs = {};
+
+  // Collect PRD
+  console.log("📄 === PRD (Product Requirements Document) ===");
+  const prdContent = await selectSourceFile("techreview");
+  if (!prdContent) {
+    console.log("❌ PRD is required for tech review. Returning to panel menu.");
+    return null;
+  }
+  inputs.prd = prdContent;
+
+  // Collect Design Document
+  console.log("\n🏗️  === Design Document ===");
+  const designContent = await selectSourceFile("techreview");
+  if (!designContent) {
+    console.log(
+      "❌ Design Document is required for tech review. Returning to panel menu."
+    );
+    return null;
+  }
+  inputs.designDoc = designContent;
+
+  // Collect Codebase
+  console.log("\n💻 === Codebase Content ===");
+  const codebaseContent = await selectSourceFile("techreview");
+  if (!codebaseContent) {
+    console.log(
+      "❌ Codebase is required for tech review. Returning to panel menu."
+    );
+    return null;
+  }
+  inputs.codebase = codebaseContent;
+
+  // Show summary of collected inputs
+  console.log("\n📋 === Input Summary ===");
+  console.log(`PRD: ${inputs.prd.length} characters`);
+  console.log(`Design Doc: ${inputs.designDoc.length} characters`);
+  console.log(`Codebase: ${inputs.codebase.length} characters`);
+  console.log(
+    `Total content: ${
+      inputs.prd.length + inputs.designDoc.length + inputs.codebase.length
+    } characters`
+  );
+
+  const confirmed = await confirmAction(
+    "Proceed with these inputs for tech review?"
+  );
+  if (!confirmed) {
+    console.log("❌ Input collection cancelled. Returning to panel menu.");
+    return null;
+  }
+
+  return inputs;
+}
+
+/**
+ * Runs the tech review panel pipeline with multi-file input collection
+ */
+async function runTechReviewPanel() {
+  try {
+    console.log("\n🔧 === Tech Review Panel ===");
+    console.log(
+      "Comprehensive technical architecture review with balanced expert perspectives"
+    );
+    console.log("Panel Members:");
+    console.log(
+      "• Tech Lead: Technical review coordinator (70% conservative, 30% innovation balance)"
+    );
+    console.log(
+      "• System Architect: Design patterns, best practices, maintainability focus"
+    );
+    console.log(
+      "• Performance Engineer: Code quality, performance, reliability focus"
+    );
+    console.log(
+      "• Innovation Engineer: Creative solutions and alternatives (strategic input)"
+    );
+
+    // Get panel configuration
+    const panelConfig = createPanelConfig("techreview");
+
+    // Collect multi-file inputs (PRD + Design Doc + Codebase)
+    const inputs = await collectTechReviewInputs();
+    if (!inputs) {
+      showPanelTypeMenu();
+      return;
+    }
+
+    // Collect review focus specification
+    const reviewFocus = await collectSingleLineInput(
+      "Enter technical review focus areas (e.g., 'architecture, performance, scalability') or press Enter for comprehensive review",
+      "comprehensive technical architecture review"
+    );
+
+    // Collect panel interactions
+    const panelInteractions = await collectNumberInput(
+      "Number of panel interactions",
+      panelConfig.defaultInteractions,
+      3,
+      20
+    );
+
+    // Collect summary focus (optional)
+    const summaryFocus = await collectSingleLineInput(
+      "Summary focus (press Enter for default)",
+      panelConfig.summaryFocus
+    );
+
+    // Calculate estimated API calls and time
+    const estimatedApiCalls = 2 * panelInteractions + 1;
+    const estimatedMinutes = Math.ceil(estimatedApiCalls * 0.8); // Tech review takes longer
+
+    // Display configuration summary
+    console.log("\n📋 Configuration Summary:");
+    console.log(
+      `PRD: ${inputs.prd.substring(0, 100)}${
+        inputs.prd.length > 100 ? "..." : ""
+      }`
+    );
+    console.log(
+      `Design Doc: ${inputs.designDoc.substring(0, 100)}${
+        inputs.designDoc.length > 100 ? "..." : ""
+      }`
+    );
+    console.log(
+      `Codebase: ${inputs.codebase.substring(0, 100)}${
+        inputs.codebase.length > 100 ? "..." : ""
+      }`
+    );
+    console.log(`Review focus: ${reviewFocus}`);
+    console.log(
+      `Panel interactions: ${panelInteractions} (estimated ${estimatedApiCalls} API calls, ~${estimatedMinutes} minutes)`
+    );
+    console.log(
+      `Summary focus: ${summaryFocus.substring(0, 80)}${
+        summaryFocus.length > 80 ? "..." : ""
+      }`
+    );
+
+    console.log("\nTech Review Panel Members:");
+    console.log(
+      "• Tech Lead: Technical review coordinator (70% conservative, 30% innovation balance)"
+    );
+    console.log(
+      "• System Architect: Design patterns, best practices, maintainability focus"
+    );
+    console.log(
+      "• Performance Engineer: Code quality, performance, reliability focus"
+    );
+    console.log(
+      "• Innovation Engineer: Creative solutions and alternatives (strategic input)"
+    );
+
+    console.log("\nConversation Balance:");
+    console.log(
+      "• 70% Conservative Discussion: System Architect ↔ Performance Engineer"
+    );
+    console.log(
+      "• 30% Innovation Input: Innovation Engineer (strategic inclusion by moderator)"
+    );
+
+    // Ask for confirmation
+    const confirmed = await confirmAction("\nProceed with tech review panel?");
+
+    if (!confirmed) {
+      console.log("❌ Pipeline cancelled. Returning to panel menu.");
+      showPanelTypeMenu();
+      return;
+    }
+
+    // Prepare combined source text
+    const sourceText = `PRODUCT REQUIREMENTS DOCUMENT (PRD):
+${inputs.prd}
+
+TECHNICAL DESIGN DOCUMENT:
+${inputs.designDoc}
+
+CODEBASE IMPLEMENTATION:
+${inputs.codebase}`;
+
+    // Run the pipeline
+    console.log("\n🚀 Starting tech review panel...");
+
+    const config = {
+      sourceText,
+      discussionSubject: `Technical architecture review focusing on: ${reviewFocus}`,
+      panelInteractions,
+      summaryFocus,
+      panelType: "techreview",
+    };
+
+    const result = await moderatedPanelPipeline(config);
+
+    // Display results
+    displayPipelineResults(result);
+  } catch (error) {
+    console.error("\n❌ Error running tech review panel:", error.message);
+    console.log("Returning to panel menu.");
+  }
+
+  // Return to panel menu
+  console.log("\nPress Enter to return to panel menu...");
+  rl.question("", () => {
+    showPanelTypeMenu();
+  });
+}
+
 // Add new function for NostrMQ service startup
 async function startNostrMQServiceFromCLI() {
   try {
@@ -938,7 +1698,6 @@ function main() {
   console.log("Welcome to Pipeliner!");
   showMenu();
 }
-
 // Handle readline close
 rl.on("close", () => {
   process.exit(0);
