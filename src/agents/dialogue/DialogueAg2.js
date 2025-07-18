@@ -1,48 +1,9 @@
-// This agent will be setup to conduct a dialogue with a second agent to disucss a specific discussion point with a source material.
-import { v4 as uuidv4 } from "uuid";
+// This agent will be setup to conduct a dialogue with a second agent to discuss a specific discussion point with a source material.
+import agentLoader from "../../utils/agentLoader.js";
 
-// Get current date in a readable format if required for agent.
-const dayToday = new Date().toLocaleDateString("en-AU", {
-  weekday: "long",
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
-
-/**
- * Sanitizes message content to prevent JSON serialization issues
- * @param {string} message - The message content to sanitize
- * @returns {string} - Sanitized message content
- */
-function sanitizeMessageContent(message) {
-  if (typeof message !== "string") {
-    return message;
-  }
-
-  // Escape backslashes and other problematic characters for JSON
-  return message
-    .replace(/\\/g, "\\\\") // Escape backslashes
-    .replace(/"/g, '\\"') // Escape double quotes
-    .replace(/\n/g, "\\n") // Escape newlines
-    .replace(/\r/g, "\\r") // Escape carriage returns
-    .replace(/\t/g, "\\t"); // Escape tabs
-}
-
-async function conversationAgent(message, context, history) {
-  //FILL IN VARIABLES
-
-  // Sanitize the message content to prevent JSON serialization issues
-  const sanitizedMessage = sanitizeMessageContent(message);
-  console.log(
-    "[ConversationAgent] DEBUG - Original message:",
-    JSON.stringify(message)
-  );
-  console.log(
-    "[ConversationAgent] DEBUG - Sanitized message:",
-    JSON.stringify(sanitizedMessage)
-  );
-
-  const systemPromptInput = `You are AGENT 2. Your goal is to explore an INTERESTING TOPIC and SOURCE MATERIAL with AGENT 1. AGENT 1 will setup the discussiona dn you will given access tthe full (SOURCE MATERIAL) and discussion so far in message history. You should:
+async function DialogueAg2(message, context, history) {
+  const config = {
+    systemPrompt: `You are AGENT 2. Your goal is to explore an INTERESTING TOPIC and SOURCE MATERIAL with AGENT 1. AGENT 1 will setup the discussion and you will be given access to the full (SOURCE MATERIAL) and discussion so far in message history. You should:
   
   Respond & Share:
   - Acknowledge the topic AGENT1 introduces.
@@ -55,7 +16,7 @@ async function conversationAgent(message, context, history) {
   - If a line of enquiry is a dead end shut it down.
   
   Discuss & Deepen:
-  - Listen carefully to Agent 1. Ask clarifying questions and questions that challenge their reasoning or explore alternatives.  
+  - Listen carefully to Agent 1. Ask clarifying questions and questions that challenge their reasoning or explore alternatives.
   
   Mindset: Be curious, analytical, and open to different perspectives. Aim for a thorough understanding, and exploration of the point.
   
@@ -63,60 +24,29 @@ async function conversationAgent(message, context, history) {
   
   You are **Referee**, a firm but civil analyst whose job is to keep discussion rigorous and on-scope.
 
-  • Big-Five aspects: Compassion ≈ 25th percentile (task-centred); Politeness ≈ 65th percentile (courteous but unapologetically direct).  
-  • Tone: concise, analytical, impartial; speaks in first-person plural for shared ownership (“Lets verify…”).
+  • Big-Five aspects: Compassion ≈ 25th percentile (task-centred); Politeness ≈ 65th percentile (courteous but unapologetically direct).
+  • Tone: concise, analytical, impartial; speaks in first-person plural for shared ownership ("Lets verify…").
 
   BEHAVIOUR RULES
-  1. **Scope Guard** Before replying, state the current goal in one sentence; flag anything off-track.  
-  2. **Critical Questions** Challenge ideas via criteria not identity—e.g., “Which metric shows this works?”  
-  3. **Structured Summaries** Present findings in numbered lists; tag open issues and assign clear next steps.  
-  4. **Time-Checks** Every N exchanges (configurable), post a brief progress audit and suggest course-corrections.  
-  5. **Civility Buffer** Always pair critique with a rationale (“to save rework later”) and invite counter-evidence.
+  1. **Scope Guard** Before replying, state the current goal in one sentence; flag anything off-track.
+  2. **Critical Questions** Challenge ideas via criteria not identity—e.g., "Which metric shows this works?"
+  3. **Structured Summaries** Present findings in numbered lists; tag open issues and assign clear next steps.
+  4. **Time-Checks** Every N exchanges (configurable), post a brief progress audit and suggest course-corrections.
+  5. **Civility Buffer** Always pair critique with a rationale ("to save rework later") and invite counter-evidence.
 
-  FAIL CONDITIONS  
-  • Personal attacks or sarcasm.  
+  FAIL CONDITIONS
+  • Personal attacks or sarcasm.
   • Rejecting novel ideas without offering a refinement path.
-  `;
-
-  context = context + "The date today is: " + dayToday;
-
-  const callDetails = {
-    callID: uuidv4(),
-    model: {
-      provider: "openrouter", // *** SET THIS FOR AN AGENT - will tell call which SDK client to pick. "groq" | "openai | openrouter"
-      // model: "meta-llama/llama-4-scout-17b-16e-instruct",
-      model: "x-ai/grok-4", // // *** SET THIS FOR AN AGENT "gpt-4o" "meta-llama/llama-4-scout-17b-16e-instruct" default model can be overridden at run time.
-      callType: "chat", // *** SET THIS FOR AN AGENT
-      type: "completion",
-      // max_tokens: 4096,
-      temperature: 0.8, // *** SET THIS FOR AN AGENT
-    },
-    chat: {
-      // *** THIS IS SET ON THE FLY per CHAT - except for system input
-      userPrompt: sanitizedMessage,
-      systemPrompt: systemPromptInput, // *** SET THIS FOR AN AGENT
-      messageContext: context,
-      messageHistory: history,
-    },
-    origin: {
-      originID: "1111-2222-3333-4444",
-      callTS: new Date().toISOString(),
-      channel: "string",
-      gatewayUserID: "string",
-      gatewayMessageID: "string",
-      gatewayReplyTo: "string|null",
-      gatewayNpub: "string",
-      response: "now",
-      webhook_url: "https://hook.otherstuff.ai/hook",
-      conversationID: "mock-1738", // mock data for quick inegration
-      channel: "mock", // mock data for quick inegration
-      channelSpace: "MOCK", // mock data for quick inegration
-      userID: "mock user", // mock data for quick inegration
-      billingID: "testIfNotSet", // Represents the billing identity
-    },
+  `,
+    provider: "openrouter",
+    model: "x-ai/grok-4",
+    callType: "chat",
+    type: "completion",
+    temperature: 0.8,
+    debugPrefix: "[DialogueAg2]",
+    includeDateContext: true,
   };
 
-  // console.log(callDetails);
-  return callDetails;
+  return agentLoader(config, message, context, history);
 }
-export default conversationAgent;
+export default DialogueAg2;

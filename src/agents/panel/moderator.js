@@ -8,15 +8,7 @@
  * CRITICAL: Must return valid JSON with schema: {moderator_response: string, next_speaker: "panel_1|panel_2|panel_3", moderator_responds: boolean}
  */
 
-/**
- * Simple message sanitization function
- * @param {string} message - Message to sanitize
- * @returns {string} - Sanitized message
- */
-function sanitizeMessage(message) {
-  if (typeof message !== "string") return "";
-  return message.trim().replace(/[\r\n]+/g, "\n");
-}
+import agentLoader from "../../utils/agentLoader.js";
 
 /**
  * Panel Moderator agent configuration generator
@@ -27,9 +19,7 @@ function sanitizeMessage(message) {
  */
 async function moderatorAgent(message, context, messageHistory = []) {
   // Sanitize input message
-  const sanitizedMessage = sanitizeMessage(message);
-
-  if (!sanitizedMessage) {
+    if (!message) {
     throw new Error("Moderator requires conversation context to analyze");
   }
 
@@ -37,7 +27,7 @@ async function moderatorAgent(message, context, messageHistory = []) {
   const systemPrompt = `You are a skilled panel moderator facilitating a dynamic conversation between three panelists with distinct personalities:
 
 - panel_1 (The Challenger): Questions assumptions, challenges ideas, high disagreeableness
-- panel_2 (The Analyst): Balanced, evidence-based, synthesizes perspectives  
+- panel_2 (The Analyst): Balanced, evidence-based, synthesizes perspectives
 - panel_3 (The Explorer): Creative, unconventional thinking, thought experiments
 
 Your role is to:
@@ -68,7 +58,7 @@ ${context ? `Discussion Topic: ${context}` : ""}`;
   // User prompt for moderation decision
   const userPrompt = `Current conversation state:
 
-${sanitizedMessage}
+${message}
 
 Please analyze this conversation state and provide your moderation decision as a JSON response with the required format:
 - moderator_response: Your guidance/transition/question (or empty string)
@@ -77,38 +67,29 @@ Please analyze this conversation state and provide your moderation decision as a
 
 Consider the flow, balance, and which panelist would add the most value at this point in the discussion.`;
 
-  // Return agent configuration
-  return {
-    callID: `panel-moderator-${Date.now()}`,
-    model: {
-      provider: "openrouter",
-      model: "openai/gpt-4.1",
-      callType: "chat",
-      type: "completion",
-      temperature: 0.7,
-      response_format: { type: "json_object" },
-    },
-    chat: {
-      systemPrompt,
-      userPrompt,
-      messageHistory, // Moderator uses conversation history for flow control
-    },
-    origin: {
-      originID: "1111-2222-3333-4444",
-      callTS: new Date().toISOString(),
+  // Agent configuration for agentLoader
+  const agentConfig = {
+    systemPrompt,
+    provider: "openrouter",
+    model: "openai/gpt-4.1",
+    callType: "chat",
+    type: "completion",
+    temperature: 0.7,
+    response_format: { type: "json_object" },
+    includeDateContext: false,
+    originOverrides: {
       channel: "panel-pipeline",
       gatewayUserID: "panel-moderator",
       gatewayMessageID: "panel-moderator-message",
-      gatewayReplyTo: null,
       gatewayNpub: "panel-moderator-npub",
-      response: "now",
-      webhook_url: "https://hook.otherstuff.ai/hook",
       conversationID: "panel-moderated-discussion",
       channelSpace: "PANEL",
       userID: "panel-pipeline-user",
-      billingID: "testIfNotSet",
     },
   };
+
+  // Use agentLoader to generate the call details
+  return agentLoader(agentConfig, userPrompt, "", messageHistory);
 }
 
 export default moderatorAgent;

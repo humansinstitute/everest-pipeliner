@@ -2,21 +2,15 @@
  * Content Analyzer Agent for Waterfall Pipeline
  *
  * Purpose: Extract exactly 4 distinct topics from source material with context and insights
- * Model: anthropic/claude-sonnet-4, Temperature: 0.7
+ * Model: openai/gpt-4.1 via openrouter, Temperature: 0.7
  *
- * Phase 2 Implementation: Complete logic with embedded system prompt as specified
- * in the technical design document.
+ * Migrated to use agentLoader utility for consistency and maintainability.
  */
 
-/**
- * Simple message sanitization function
- * @param {string} message - Message to sanitize
- * @returns {string} - Sanitized message
- */
-function sanitizeMessage(message) {
-  if (typeof message !== "string") return "";
-  return message.trim().replace(/[\r\n]+/g, "\n");
-}
+import agentLoader, {
+  generateCallDetails,
+  generateOriginObject,
+} from "../../utils/agentLoader.js";
 
 /**
  * Content Analyzer agent configuration generator
@@ -27,9 +21,7 @@ function sanitizeMessage(message) {
  */
 async function contentAnalyzer(message, context, messageHistory = []) {
   // Sanitize input message
-  const sanitizedMessage = sanitizeMessage(message);
-
-  if (!sanitizedMessage) {
+    if (!message) {
     throw new Error("Content Analyzer requires source material text");
   }
 
@@ -74,42 +66,51 @@ ${context ? `Focus Areas: ${context}` : ""}`;
   // User prompt for content analysis
   const userPrompt = `Please analyze this source material and extract exactly 4 distinct topics following the specified structure:
 
-${sanitizedMessage}
+${message}
 
 Return the analysis as a properly formatted JSON object with all required fields.`;
 
-  // Return agent configuration
-  return {
-    callID: `content-analyzer-${Date.now()}`,
-    model: {
-      provider: "openrouter",
-      model: "openai/gpt-4.1",
-      callType: "chat",
-      type: "completion",
-      temperature: 0.7,
-      response_format: { type: "json_object" },
-    },
-    chat: {
-      systemPrompt,
-      userPrompt,
-      messageHistory: [], // Content analyzer doesn't use conversation history
-    },
-    origin: {
-      originID: "1111-2222-3333-4444",
-      callTS: new Date().toISOString(),
-      channel: "waterfall-pipeline",
-      gatewayUserID: "waterfall-user",
-      gatewayMessageID: "waterfall-message",
-      gatewayReplyTo: null,
-      gatewayNpub: "waterfall-npub",
-      response: "now",
-      webhook_url: "https://hook.otherstuff.ai/hook",
-      conversationID: "waterfall-content-analyzer",
-      channelSpace: "WATERFALL",
-      userID: "waterfall-pipeline-user",
-      billingID: "testIfNotSet",
-    },
+  // Agent configuration for waterfall-specific requirements
+  const config = {
+    provider: "openrouter",
+    model: "openai/gpt-4.1",
+    callType: "chat",
+    type: "completion",
+    temperature: 0.7,
+    response_format: { type: "json_object" },
+    systemPrompt,
   };
+
+  // Generate origin with waterfall-specific overrides
+  const origin = generateOriginObject({
+    originID: "1111-2222-3333-4444",
+    conversationID: "waterfall-content-analyzer",
+    channel: "waterfall-pipeline",
+    gatewayUserID: "waterfall-user",
+    gatewayMessageID: "waterfall-message",
+    gatewayReplyTo: null,
+    gatewayNpub: "waterfall-npub",
+    response: "now",
+    webhook_url: "https://hook.otherstuff.ai/hook",
+    channelSpace: "WATERFALL",
+    userID: "waterfall-pipeline-user",
+    billingID: "testIfNotSet",
+  });
+
+  // Generate callDetails using agentLoader helper but with unsanitized userPrompt
+  const callDetails = generateCallDetails(
+    config,
+    userPrompt,
+    "",
+    messageHistory
+  );
+
+  // Override with waterfall-specific values
+  callDetails.callID = `content-analyzer-${Date.now()}`;
+  callDetails.origin = origin;
+  callDetails.chat.messageHistory = []; // Content analyzer doesn't use conversation history
+
+  return callDetails;
 }
 
 export default contentAnalyzer;
