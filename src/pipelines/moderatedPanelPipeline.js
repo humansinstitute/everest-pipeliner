@@ -6,6 +6,8 @@ import {
   addStepResult,
 } from "../utils/pipelineData.js";
 import { formatCostSummary } from "../utils/pipelineCost.js";
+import { createAgentLoader } from "../services/dynamicAgentLoader.js";
+import { performanceMonitor } from "../services/performanceMonitor.js";
 import { fileURLToPath } from "url";
 import { promises as fs } from "fs";
 import path from "path";
@@ -28,6 +30,41 @@ async function generateTimestampedFolderName(baseDir) {
   const ss = now.getSeconds().toString().padStart(2, "0");
 
   const baseTimestamp = `${yy}_${mm}_${dd}_${hh}_${min}_${ss}`;
+
+  // Handle collisions by incrementing ID
+  for (let id = 1; id <= 100; id++) {
+    const folderName = `${baseTimestamp}_${id}`;
+    const fullPath = path.join(baseDir, folderName);
+
+    try {
+      await fs.access(fullPath);
+      // Folder exists, try next ID
+      continue;
+    } catch (error) {
+      // Folder doesn't exist, we can use this name
+      return folderName;
+    }
+  }
+
+  throw new Error("Unable to generate unique folder name after 100 attempts");
+}
+
+/**
+ * Generates a unique timestamped folder name with panel type and collision handling
+ * @param {string} baseDir - Base directory path
+ * @param {string} panelType - Panel type (discussion, security, techreview)
+ * @returns {Promise<string>} - Unique folder name in format YY_MM_DD_HH_MM_SS_panelType_ID
+ */
+async function generateTimestampedFolderNameWithType(baseDir, panelType) {
+  const now = new Date();
+  const yy = now.getFullYear().toString().slice(-2);
+  const mm = (now.getMonth() + 1).toString().padStart(2, "0");
+  const dd = now.getDate().toString().padStart(2, "0");
+  const hh = now.getHours().toString().padStart(2, "0");
+  const min = now.getMinutes().toString().padStart(2, "0");
+  const ss = now.getSeconds().toString().padStart(2, "0");
+
+  const baseTimestamp = `${yy}_${mm}_${dd}_${hh}_${min}_${ss}_${panelType}`;
 
   // Handle collisions by incrementing ID
   for (let id = 1; id <= 100; id++) {
@@ -105,6 +142,11 @@ export const pipelineInfo = {
 
 export async function runPipeline(config) {
   const pipeline = createPipelineData();
+  const panelType = config.panelType || "discussion"; // Default to discussion for backward compatibility
+
+  // Start performance monitoring
+  const pipelineOperationId = `${panelType}_pipeline_execution_${Date.now()}`;
+  performanceMonitor.startTimer(pipelineOperationId);
 
   try {
     // Validate input
@@ -123,7 +165,7 @@ export async function runPipeline(config) {
     }
 
     console.log(
-      `🎯 Starting moderated panel with ${panelInteractions} interactions`
+      `🎯 Starting ${panelType} panel with ${panelInteractions} interactions`
     );
     console.log(
       `📊 Expected API calls: ${
@@ -131,12 +173,30 @@ export async function runPipeline(config) {
       } (${panelInteractions} panel + ${panelInteractions} moderator + 1 summary)`
     );
 
-    // Load agents
-    const moderator = await loadAgent("panel/moderator");
-    const challenger = await loadAgent("panel/panel1_challenger");
-    const analyst = await loadAgent("panel/panel2_analyst");
-    const explorer = await loadAgent("panel/panel3_explorer");
-    const summarizer = await loadAgent("panel/summarizePanel");
+    // Load agents using dynamic agent loader with performance monitoring
+    const agentLoadOperationId = `${panelType}_agent_loading_${Date.now()}`;
+    performanceMonitor.startTimer(agentLoadOperationId);
+
+    const agentLoader = createAgentLoader(panelType);
+
+    console.log(`🤖 Loading ${panelType} panel agents...`);
+    const moderator = await agentLoader.loadModerator();
+    const challenger = await agentLoader.loadPanel1();
+    const analyst = await agentLoader.loadPanel2();
+    const explorer = await agentLoader.loadPanel3();
+    const summarizer = await agentLoader.loadSummarizer();
+
+    const agentLoadTime = performanceMonitor.endTimer(agentLoadOperationId, {
+      panelType,
+      agentCount: 5,
+    });
+
+    performanceMonitor.monitorPanelTypeOperation(
+      panelType,
+      "agent_loading",
+      agentLoadTime.duration,
+      { agentCount: 5 }
+    );
 
     // Agent mapping for easy lookup
     const panelAgents = {
@@ -346,18 +406,33 @@ Please provide a comprehensive summary of this moderated panel discussion that c
       "panel_summary"
     );
 
-    // Create final result
+    // Create final result with enhanced metadata
     const result = {
       conversation,
       summary: summaryResponse.message,
       moderatorDecisions,
       panelStats,
       metadata: {
+        panelType,
         panelInteractions,
         summaryFocus,
         totalMessages: conversation.length,
         apiCalls: 2 * panelInteractions + 1,
         actualApiCalls: pipeline.steps.length,
+        configuration: {
+          panelType,
+          sourceTextLength: config.sourceText.length,
+          discussionSubject: config.discussionSubject,
+          summaryFocus,
+          panelInteractions,
+        },
+        performance: {
+          expectedDuration: `${panelInteractions * 45}s`, // Rough estimate: 45s per interaction
+          actualDuration: pipeline.endTime
+            ? new Date(pipeline.endTime).getTime() -
+              new Date(pipeline.startTime).getTime()
+            : null,
+        },
       },
     };
 
@@ -367,18 +442,46 @@ Please provide a comprehensive summary of this moderated panel discussion that c
     // Add result to pipeline
     pipeline.result = result;
 
+    // End performance monitoring for pipeline execution
+    const pipelineTime = performanceMonitor.endTimer(pipelineOperationId, {
+      panelType,
+      panelInteractions,
+      totalMessages: conversation.length,
+      apiCalls: pipeline.steps.length
+    });
+
+    // Monitor overall pipeline performance
+    performanceMonitor.monitorPanelTypeOperation(
+      panelType,
+      'pipeline_execution',
+      pipelineTime.duration,
+      {
+        panelInteractions,
+        totalMessages: conversation.length,
+        apiCalls: pipeline.steps.length
+      }
+    );
+
+    // Validate performance is within expected bounds
+    const performanceValidation = performanceMonitor.validatePerformance(panelType);
+    if (!performanceValidation.valid) {
+      console.warn(`⚠️ Performance warning: ${performanceValidation.message}`);
+    }
+
     // Save outputs
     const fileGenerationResult = await saveOutputs(pipeline, result, {
       sourceText: config.sourceText,
       discussionSubject: config.discussionSubject,
       panelInteractions,
       summaryFocus,
+      panelType,
     });
 
     if (fileGenerationResult.success) {
       console.log("✅ Moderated panel pipeline completed successfully");
       console.log(`📊 Final stats: ${JSON.stringify(panelStats, null, 2)}`);
       console.log(`📁 Outputs saved to: ${fileGenerationResult.outputDir}`);
+      console.log(`⚡ Performance: ${(pipelineTime.duration/1000).toFixed(1)}s (${performanceValidation.message})`);
 
       // Add file generation result to pipeline
       addStepResult(pipeline, "file_generation", {
@@ -397,6 +500,11 @@ Please provide a comprehensive summary of this moderated panel discussion that c
         timestamp: fileGenerationResult.timestamp,
       });
     }
+
+    // Add performance metrics to pipeline result
+    result.metadata.performance.actualDuration = pipelineTime.duration;
+    result.metadata.performance.performanceValidation = performanceValidation;
+    result.metadata.performance.cacheStats = performanceMonitor.getCacheStats();
 
     return pipeline;
   } catch (error) {
@@ -511,10 +619,43 @@ function generateConversationMarkdown(
   timestamp,
   pipelineData
 ) {
-  const { sourceText, discussionSubject, panelInteractions, summaryFocus } =
-    config;
+  const {
+    sourceText,
+    discussionSubject,
+    panelInteractions,
+    summaryFocus,
+    panelType,
+  } = config;
 
-  let markdown = `# Panel Discussion Conversation
+  // Panel type specific context
+  const panelTypeInfo = {
+    discussion: {
+      title: "Discussion Panel Conversation",
+      description: "tl;dr podcast format with named participants",
+      participants: "Sarah (Challenger), Mike (Analyst), Lisa (Explorer)",
+    },
+    security: {
+      title: "Security Review Panel Conversation",
+      description: "Security-focused analysis with offensive/defensive experts",
+      participants:
+        "Red Team (Offensive), Blue Team (Defensive), Risk Assessment (Compliance)",
+    },
+    techreview: {
+      title: "Technical Review Panel Conversation",
+      description: "Technical architecture review with specialized experts",
+      participants:
+        "Systems Architect, Performance Engineer, Innovation Specialist",
+    },
+  };
+
+  const typeInfo = panelTypeInfo[panelType] || panelTypeInfo.discussion;
+
+  let markdown = `# ${typeInfo.title}
+
+## Panel Type Information
+- **Panel Type**: ${panelType || "discussion"}
+- **Format**: ${typeInfo.description}
+- **Participants**: ${typeInfo.participants}
 
 ## Metadata
 - **Run ID**: ${runId}
@@ -575,10 +716,40 @@ function generateSummaryMarkdown(
   timestamp,
   pipelineData
 ) {
-  const { sourceText, discussionSubject, panelInteractions, summaryFocus } =
-    config;
+  const {
+    sourceText,
+    discussionSubject,
+    panelInteractions,
+    summaryFocus,
+    panelType,
+  } = config;
 
-  return `# Panel Discussion Summary
+  // Panel type specific context
+  const panelTypeInfo = {
+    discussion: {
+      title: "Discussion Panel Summary",
+      focus:
+        "Key insights, diverse perspectives, and actionable recommendations",
+    },
+    security: {
+      title: "Security Review Panel Summary",
+      focus:
+        "Security vulnerabilities, risk assessment, and remediation strategies",
+    },
+    techreview: {
+      title: "Technical Review Panel Summary",
+      focus:
+        "Architectural improvements, performance optimizations, and innovation opportunities",
+    },
+  };
+
+  const typeInfo = panelTypeInfo[panelType] || panelTypeInfo.discussion;
+
+  return `# ${typeInfo.title}
+
+## Panel Type Information
+- **Panel Type**: ${panelType || "discussion"}
+- **Focus**: ${typeInfo.focus}
 
 ## Metadata
 - **Run ID**: ${runId}
@@ -606,6 +777,7 @@ ${summary}
 ## Context
 - **Source Material Length**: ${sourceText.length} characters
 - **Panel Interactions**: ${panelInteractions}
+- **Panel Type**: ${panelType || "discussion"}
 - **Summary Model**: Generated via Everest API
 `;
 }
@@ -613,19 +785,23 @@ ${summary}
 async function saveOutputs(pipeline, result, config) {
   const runId = pipeline.runId;
   const timestamp = new Date().toISOString();
+  const panelType = config.panelType || "discussion";
+
+  // Type-specific output directory naming: output/panel/{timestamp}_{panelType}/
   const baseOutputDir = path.join(process.cwd(), "output", "panel");
 
   console.log(
-    `[FileGeneration] Starting file generation for panel run ${runId}`
+    `[FileGeneration] Starting file generation for ${panelType} panel run ${runId}`
   );
 
   try {
     // Ensure base output directory exists
     await fs.mkdir(baseOutputDir, { recursive: true });
 
-    // Generate unique timestamped folder name
-    const timestampedFolder = await generateTimestampedFolderName(
-      baseOutputDir
+    // Generate unique timestamped folder name with panel type
+    const timestampedFolder = await generateTimestampedFolderNameWithType(
+      baseOutputDir,
+      panelType
     );
     const outputDir = path.join(baseOutputDir, timestampedFolder);
 

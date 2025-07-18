@@ -233,12 +233,33 @@ export class JobManager {
       status: "completed",
     };
 
-    if (result.conversation) {
+    // Include panel type information if available
+    if (result.result?.metadata?.panelType) {
+      summary.panelType = result.result.metadata.panelType;
+      summary.panelInteractions = result.result.metadata.panelInteractions;
+    }
+
+    if (result.result?.conversation) {
+      summary.exchangeCount = result.result.conversation.length;
+    } else if (result.conversation) {
       summary.exchangeCount = result.conversation.length;
     }
 
-    if (result.summary?.content) {
-      summary.conclusion = result.summary.content.substring(0, 200) + "...";
+    // Enhanced summary extraction
+    let summaryContent = null;
+    if (result.result?.summary) {
+      summaryContent = result.result.summary;
+    } else if (result.summary?.content) {
+      summaryContent = result.summary.content;
+    }
+
+    if (summaryContent) {
+      summary.conclusion = summaryContent.substring(0, 200) + "...";
+    }
+
+    // Include panel statistics if available
+    if (result.result?.panelStats) {
+      summary.panelStats = result.result.panelStats;
     }
 
     return summary;

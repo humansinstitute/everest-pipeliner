@@ -56,7 +56,8 @@ Act:
 - Note all aspects of the system are run from the PM2 ecosystem.config.cjs
 - Please be aware that processes may already be running and need stopping / restarting to test effectively
 - if you need to create tempoary files creat them inside the tempoary directory strucutre at temp/ this will ensure they do not get copied to git
-  c
+- If you need ot write documentation alwyas do it inside the mcp-obsidian not in the source code repos
+
   DevOps:
 
 - The project uses PM2 to manage services, start, end, restart logging etc.
