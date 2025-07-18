@@ -2,21 +2,15 @@
  * LinkedIn Creator Agent for Waterfall Pipeline
  *
  * Purpose: Transform topic chunks into optimized LinkedIn posts following embedded style guide
- * Model: anthropic/claude-sonnet-4, Temperature: 0.8
+ * Model: openai/gpt-4.1 via openrouter, Temperature: 0.8
  *
- * Phase 2 Implementation: Complete logic with embedded style guide as specified
- * in the technical design document.
+ * Migrated to use agentLoader utility for consistency and maintainability.
  */
 
-/**
- * Simple message sanitization function
- * @param {string} message - Message to sanitize
- * @returns {string} - Sanitized message
- */
-function sanitizeMessage(message) {
-  if (typeof message !== "string") return "";
-  return message.trim().replace(/[\r\n]+/g, "\n");
-}
+import {
+  generateCallDetails,
+  generateOriginObject,
+} from "../../utils/agentLoader.js";
 
 /**
  * Embedded LinkedIn Style Guide - Complete specification from technical design
@@ -53,9 +47,7 @@ const LINKEDIN_STYLE_GUIDE = {
  */
 async function linkedinCreator(message, context, messageHistory = []) {
   // Sanitize input message
-  const sanitizedMessage = sanitizeMessage(message);
-
-  if (!sanitizedMessage) {
+    if (!message) {
     throw new Error(
       "LinkedIn Creator requires topic chunks from Content Analyzer"
     );
@@ -64,7 +56,7 @@ async function linkedinCreator(message, context, messageHistory = []) {
   // Parse topic chunks
   let topicChunks;
   try {
-    topicChunks = JSON.parse(sanitizedMessage);
+    topicChunks = JSON.parse(message);
   } catch (error) {
     throw new Error("LinkedIn Creator requires valid JSON topic chunks");
   }
@@ -121,42 +113,51 @@ ${context ? `Context: ${context}` : ""}`;
   // User prompt for LinkedIn post creation
   const userPrompt = `Please create 4 optimized LinkedIn posts from these topic chunks, following the embedded style guide and varying approaches:
 
-${sanitizedMessage}
+${message}
 
 Return the posts as a properly formatted JSON object with all required fields.`;
 
-  // Return agent configuration
-  return {
-    callID: `linkedin-creator-${Date.now()}`,
-    model: {
-      provider: "openrouter",
-      model: "openai/gpt-4.1",
-      callType: "chat",
-      type: "completion",
-      temperature: 0.8,
-      response_format: { type: "json_object" },
-    },
-    chat: {
-      systemPrompt,
-      userPrompt,
-      messageHistory: [], // LinkedIn creator doesn't use conversation history
-    },
-    origin: {
-      originID: "1111-2222-3333-4444",
-      callTS: new Date().toISOString(),
-      channel: "waterfall-pipeline",
-      gatewayUserID: "waterfall-user",
-      gatewayMessageID: "waterfall-message",
-      gatewayReplyTo: null,
-      gatewayNpub: "waterfall-npub",
-      response: "now",
-      webhook_url: "https://hook.otherstuff.ai/hook",
-      conversationID: "waterfall-linkedin-creator",
-      channelSpace: "WATERFALL",
-      userID: "waterfall-pipeline-user",
-      billingID: "testIfNotSet",
-    },
+  // Agent configuration for waterfall-specific requirements
+  const config = {
+    provider: "openrouter",
+    model: "openai/gpt-4.1",
+    callType: "chat",
+    type: "completion",
+    temperature: 0.8,
+    response_format: { type: "json_object" },
+    systemPrompt,
   };
+
+  // Generate origin with waterfall-specific overrides
+  const origin = generateOriginObject({
+    originID: "1111-2222-3333-4444",
+    conversationID: "waterfall-linkedin-creator",
+    channel: "waterfall-pipeline",
+    gatewayUserID: "waterfall-user",
+    gatewayMessageID: "waterfall-message",
+    gatewayReplyTo: null,
+    gatewayNpub: "waterfall-npub",
+    response: "now",
+    webhook_url: "https://hook.otherstuff.ai/hook",
+    channelSpace: "WATERFALL",
+    userID: "waterfall-pipeline-user",
+    billingID: "testIfNotSet",
+  });
+
+  // Generate callDetails using agentLoader helper but with unsanitized userPrompt
+  const callDetails = generateCallDetails(
+    config,
+    userPrompt,
+    "",
+    messageHistory
+  );
+
+  // Override with waterfall-specific values
+  callDetails.callID = `linkedin-creator-${Date.now()}`;
+  callDetails.origin = origin;
+  callDetails.chat.messageHistory = []; // LinkedIn creator doesn't use conversation history
+
+  return callDetails;
 }
 
 export default linkedinCreator;

@@ -8,15 +8,7 @@
  * Personality: Balanced, evidence-based, synthesizes perspectives, references studies and established principles
  */
 
-/**
- * Simple message sanitization function
- * @param {string} message - Message to sanitize
- * @returns {string} - Sanitized message
- */
-function sanitizeMessage(message) {
-  if (typeof message !== "string") return "";
-  return message.trim().replace(/[\r\n]+/g, "\n");
-}
+import agentLoader from "../../utils/agentLoader.js";
 
 /**
  * Panel Analyst agent configuration generator
@@ -26,10 +18,7 @@ function sanitizeMessage(message) {
  * @returns {Promise<Object>} - Agent configuration for Everest API call
  */
 async function analystAgent(message, context, messageHistory = []) {
-  // Sanitize input message
-  const sanitizedMessage = sanitizeMessage(message);
-
-  if (!sanitizedMessage) {
+  if (!message || typeof message !== "string" || !message.trim()) {
     throw new Error(
       "Analyst requires discussion content to analyze and synthesize"
     );
@@ -76,41 +65,32 @@ ${context ? `Discussion Context: ${context}` : ""}`;
   // User prompt for analyst response
   const userPrompt = `Current discussion point:
 
-${sanitizedMessage}
+${message}
 
 As "The Analyst," provide your evidence-based perspective on this discussion. Reference relevant data, research, or established principles. Synthesize the different viewpoints presented and offer a balanced, analytical assessment.`;
 
-  // Return agent configuration
-  return {
-    callID: `panel-analyst-${Date.now()}`,
-    model: {
-      provider: "openrouter",
-      model: "anthropic/claude-3-5-sonnet",
-      callType: "chat",
-      type: "completion",
-      temperature: 0.7,
-    },
-    chat: {
-      systemPrompt,
-      userPrompt,
-      messageHistory,
-    },
-    origin: {
-      originID: "1111-2222-3333-4444",
-      callTS: new Date().toISOString(),
+  // Agent configuration for agentLoader
+  const agentConfig = {
+    systemPrompt,
+    provider: "openrouter",
+    model: "anthropic/claude-3-5-sonnet",
+    callType: "chat",
+    type: "completion",
+    temperature: 0.7,
+    includeDateContext: false,
+    originOverrides: {
       channel: "panel-pipeline",
       gatewayUserID: "panel-analyst",
       gatewayMessageID: "panel-analyst-message",
-      gatewayReplyTo: null,
       gatewayNpub: "panel-analyst-npub",
-      response: "now",
-      webhook_url: "https://hook.otherstuff.ai/hook",
       conversationID: "panel-moderated-discussion",
       channelSpace: "PANEL",
       userID: "panel-pipeline-user",
-      billingID: "testIfNotSet",
     },
   };
+
+  // Use agentLoader to generate the call details
+  return agentLoader(agentConfig, userPrompt, "", messageHistory);
 }
 
 export default analystAgent;

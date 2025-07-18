@@ -8,15 +8,7 @@
  * Personality: Creative, unconventional thinking, uses "What if..." questions and analogies
  */
 
-/**
- * Simple message sanitization function
- * @param {string} message - Message to sanitize
- * @returns {string} - Sanitized message
- */
-function sanitizeMessage(message) {
-  if (typeof message !== "string") return "";
-  return message.trim().replace(/[\r\n]+/g, "\n");
-}
+import agentLoader from "../../utils/agentLoader.js";
 
 /**
  * Panel Explorer agent configuration generator
@@ -27,9 +19,7 @@ function sanitizeMessage(message) {
  */
 async function explorerAgent(message, context, messageHistory = []) {
   // Sanitize input message
-  const sanitizedMessage = sanitizeMessage(message);
-
-  if (!sanitizedMessage) {
+    if (!message) {
     throw new Error(
       "Explorer requires discussion content to explore and expand upon"
     );
@@ -78,41 +68,32 @@ ${context ? `Discussion Context: ${context}` : ""}`;
   // User prompt for explorer response
   const userPrompt = `Current discussion point:
 
-${sanitizedMessage}
+${message}
 
 As "The Explorer," provide your creative perspective on this discussion. Use thought experiments, analogies, and "What if..." scenarios to expand thinking. Find unexpected connections and explore unconventional possibilities.`;
 
-  // Return agent configuration
-  return {
-    callID: `panel-explorer-${Date.now()}`,
-    model: {
-      provider: "openrouter",
-      model: "x-ai/grok-4",
-      callType: "chat",
-      type: "completion",
-      temperature: 0.9,
-    },
-    chat: {
-      systemPrompt,
-      userPrompt,
-      messageHistory,
-    },
-    origin: {
-      originID: "1111-2222-3333-4444",
-      callTS: new Date().toISOString(),
+  // Agent configuration for agentLoader
+  const agentConfig = {
+    systemPrompt,
+    provider: "openrouter",
+    model: "x-ai/grok-4",
+    callType: "chat",
+    type: "completion",
+    temperature: 0.9,
+    includeDateContext: false,
+    originOverrides: {
       channel: "panel-pipeline",
       gatewayUserID: "panel-explorer",
       gatewayMessageID: "panel-explorer-message",
-      gatewayReplyTo: null,
       gatewayNpub: "panel-explorer-npub",
-      response: "now",
-      webhook_url: "https://hook.otherstuff.ai/hook",
       conversationID: "panel-moderated-discussion",
       channelSpace: "PANEL",
       userID: "panel-pipeline-user",
-      billingID: "testIfNotSet",
     },
   };
+
+  // Use agentLoader to generate the call details
+  return agentLoader(agentConfig, userPrompt, "", messageHistory);
 }
 
 export default explorerAgent;

@@ -2,21 +2,15 @@
  * Reels Generator Agent for Waterfall Pipeline
  *
  * Purpose: Create 2 YouTube Reels concepts per LinkedIn post (8 total) with production guidance
- * Model: anthropic/claude-sonnet-4, Temperature: 0.8
+ * Model: openai/gpt-4.1 via openrouter, Temperature: 0.8
  *
- * Phase 2 Implementation: Complete logic with embedded Reels guidelines as specified
- * in the technical design document.
+ * Migrated to use agentLoader utility for consistency and maintainability.
  */
 
-/**
- * Simple message sanitization function
- * @param {string} message - Message to sanitize
- * @returns {string} - Sanitized message
- */
-function sanitizeMessage(message) {
-  if (typeof message !== "string") return "";
-  return message.trim().replace(/[\r\n]+/g, "\n");
-}
+import {
+  generateCallDetails,
+  generateOriginObject,
+} from "../../utils/agentLoader.js";
 
 /**
  * Embedded Reels Format Guide - Complete specification from technical design
@@ -50,9 +44,7 @@ const REELS_FORMAT_GUIDE = {
  */
 async function reelsGenerator(message, context, messageHistory = []) {
   // Sanitize input message
-  const sanitizedMessage = sanitizeMessage(message);
-
-  if (!sanitizedMessage) {
+    if (!message) {
     throw new Error(
       "Reels Generator requires LinkedIn posts from LinkedIn Creator"
     );
@@ -61,7 +53,7 @@ async function reelsGenerator(message, context, messageHistory = []) {
   // Parse LinkedIn posts
   let linkedinPosts;
   try {
-    linkedinPosts = JSON.parse(sanitizedMessage);
+    linkedinPosts = JSON.parse(message);
   } catch (error) {
     throw new Error("Reels Generator requires valid JSON LinkedIn posts");
   }
@@ -122,42 +114,51 @@ ${context ? `Context: ${context}` : ""}`;
   // User prompt for Reels concept generation
   const userPrompt = `Please create 2 YouTube Reels concepts for each of these LinkedIn posts (8 total concepts), following the embedded format guide:
 
-${sanitizedMessage}
+${message}
 
 Return the concepts as a properly formatted JSON object with all required fields.`;
 
-  // Return agent configuration
-  return {
-    callID: `reels-generator-${Date.now()}`,
-    model: {
-      provider: "openrouter",
-      model: "openai/gpt-4.1",
-      callType: "chat",
-      type: "completion",
-      temperature: 0.8,
-      response_format: { type: "json_object" },
-    },
-    chat: {
-      systemPrompt,
-      userPrompt,
-      messageHistory: [], // Reels generator doesn't use conversation history
-    },
-    origin: {
-      originID: "1111-2222-3333-4444",
-      callTS: new Date().toISOString(),
-      channel: "waterfall-pipeline",
-      gatewayUserID: "waterfall-user",
-      gatewayMessageID: "waterfall-message",
-      gatewayReplyTo: null,
-      gatewayNpub: "waterfall-npub",
-      response: "now",
-      webhook_url: "https://hook.otherstuff.ai/hook",
-      conversationID: "waterfall-reels-generator",
-      channelSpace: "WATERFALL",
-      userID: "waterfall-pipeline-user",
-      billingID: "testIfNotSet",
-    },
+  // Agent configuration for waterfall-specific requirements
+  const config = {
+    provider: "openrouter",
+    model: "openai/gpt-4.1",
+    callType: "chat",
+    type: "completion",
+    temperature: 0.8,
+    response_format: { type: "json_object" },
+    systemPrompt,
   };
+
+  // Generate origin with waterfall-specific overrides
+  const origin = generateOriginObject({
+    originID: "1111-2222-3333-4444",
+    conversationID: "waterfall-reels-generator",
+    channel: "waterfall-pipeline",
+    gatewayUserID: "waterfall-user",
+    gatewayMessageID: "waterfall-message",
+    gatewayReplyTo: null,
+    gatewayNpub: "waterfall-npub",
+    response: "now",
+    webhook_url: "https://hook.otherstuff.ai/hook",
+    channelSpace: "WATERFALL",
+    userID: "waterfall-pipeline-user",
+    billingID: "testIfNotSet",
+  });
+
+  // Generate callDetails using agentLoader helper but with unsanitized userPrompt
+  const callDetails = generateCallDetails(
+    config,
+    userPrompt,
+    "",
+    messageHistory
+  );
+
+  // Override with waterfall-specific values
+  callDetails.callID = `reels-generator-${Date.now()}`;
+  callDetails.origin = origin;
+  callDetails.chat.messageHistory = []; // Reels generator doesn't use conversation history
+
+  return callDetails;
 }
 
 export default reelsGenerator;
